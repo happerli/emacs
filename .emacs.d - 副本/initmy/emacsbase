@@ -1,0 +1,2553 @@
+
+
+
+
+;;---------------------------------------c和cpp环境设定------------------------------------------
+(add-hook ’c-mode-hook ’linux-c-mode)
+(add-hook ’c++-mode-hook ’linux-cpp-mode)
+(defun linux-c-mode()
+  ;; 将回车代替C-j的功能，换行的同时对齐
+  (define-key c-mode-map [return] ’newline-and-indent)
+  (interactive)
+  ;; 设置C程序的对齐风格
+  (c-set-style "K&R")
+  ;; 自动模式，在此种模式下当你键入{时，会自动根据你设置的对齐风格对齐
+  (c-toggle-auto-state)
+  ;; 此模式下，当按Backspace时会删除最多的空格
+  (c-toggle-hungry-state)
+  ;; TAB键的宽度设置为8
+  (setq c-basic-offset 8)
+  ;; 在菜单中加入当前Buffer的函数索引
+  (imenu-add-menubar-index)
+  ;; 在状态条上显示当前光标在哪个函数体内部
+  (which-function-mode)
+  )
+(defun linux-cpp-mode()
+  (define-key c++-mode-map [return] ’newline-and-indent)
+  (define-key c++-mode-map [(control c) (c)] ’compile)
+  (interactive)
+  (c-set-style "K&R")
+  (c-toggle-auto-state)
+  (c-toggle-hungry-state)
+  (setq c-basic-offset 8)
+  (imenu-add-menubar-index)
+  (which-function-mode)
+  )
+;;智能编译
+(defun smart-compile()
+  ;;  "比较智能的C/C++编译命令,如果当前目录有makefile则用make -k编译，否则，如果是
+  ;;处于c-mode，就用gcc -Wall编译，如果是c++-mode就用g++ -Wall编译"
+  (interactive)
+  ;; 查找 Makefile
+  (let ((candidate-make-file-name ’("makefile" "Makefile" "GNUmakefile"))
+        (command nil))
+    (if (not (null
+              (find t candidate-make-file-name :key
+                    ’(lambda (f) (file-readable-p f)))))
+        (setq command "make -k ")
+      ;; 没有找到 Makefile ，查看当前 mode 是否是已知的可编译的模式
+      (if (null (buffer-file-name (current-buffer)))
+          (message "Buffer not attached to a file, won’t compile!")
+        (if (eq major-mode ’c-mode)
+            (setq command
+                  (concat "gcc -g -Wall -o "
+                          (file-name-sans-extension
+                           (file-name-nondirectory buffer-file-name))
+                          " "
+                          (file-name-nondirectory buffer-file-name)
+                          ;;               " -lm "
+                          ))
+          (if (eq major-mode ’c++-mode)
+              (setq command
+                    (concat "g++ -g -Wall -o "
+                            (file-name-sans-extension
+                             (file-name-nondirectory buffer-file-name))
+                            " "
+                            (file-name-nondirectory buffer-file-name)
+                            ;;             " -lm "
+                            ))
+            (if (eq major-mode ’fortran-mode)
+                (setq command
+                      (concat "ifort "
+                              ;;                (file-name-nondirectory buffer-file-name))
+                              ;;                (file-name-sans-extension
+                              (file-name-nondirectory buffer-file-name)
+                              " -o "
+                              ))
+              (message "Unknow mode, won’t compile!"))))))
+    (if (not (null command))
+        (let ((command (read-from-minibuffer "Compile command: " command)))
+          (compile command)))))
+;;----------------------------------------extentions-------------------------------------------
+(setq load-path (append load-path (list "~/emacs/extension/")))
+;;;;speedbar
+;;(add-to-list ’load-path "e:/emacs/site-lisp/cedet-1.0beta3b/speedbar")
+(autoload ’speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
+(autoload ’speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
+(global-set-key [(f4)] ’speedbar-get-focus)
+;;menu
+;;(define-key-after (lookup-key global-map [menu-bar tools])
+;;[speedbar] ’("Speedbar" . speedbar-frame-mode) [calendar])
+;;(setq speedbar-update-speed 3)
+;;(setq speedbar-use-images nil)  ;; clean face, :)
+
+;;使用这个，你就可以方便的在最近编辑的 buffer 之间切换了。切换的时候会出现一个小窗口显示附近的buffer，就像翻页一样
+(require ’swbuff)
+(global-set-key (kbd "s-") ’swbuff-switch-to-previous-buffer)
+(global-set-key (kbd "s-") ’swbuff-switch-to-next-buffer)
+(setq swbuff-exclude-buffer-regexps 
+      ’("^ " "＼*.*＼*"))
+(setq swbuff-status-window-layout ’scroll)
+(setq swbuff-clear-delay 2)
+(setq swbuff-separator "|")
+(setq swbuff-window-min-text-height 1)
+;;ecb
+;;(add-to-list ’load-path "/usr/share/emacs/site-lisp/ecb")
+;;(require ’ecb)
+;;browse-kill-ring.el
+;; C-c k: kill-ring 里的内容都可以方便的浏览，粘贴。具体操作请在这个 buffer 里 C-h m 或者 ?.
+(require ’browse-kill-ring)
+(global-set-key [(control c)(k)] ’browse-kill-ring)
+(browse-kill-ring-default-keybindings)
+;;table.el
+;;非常酷的一个扩展。可以“所见即所得”的编辑一个文本模式的表格。就跟很多字处理程序那样操作，可以识别文本文件里本来就存在的表格，而且可以把表格输出为 HTML 和 TeX。看看我的抓图吧。 
+(autoload ’table-insert "table" "WYGIWYS table editor")
+;;recentf.el
+;;这个扩展可以帮你保存一个“最近打开的文件”列表。在 .emacs 文件里加入：
+;;       (require ’recentf)
+;;       (recentf-mode 1)
+;;这个是 Emacs 自带的功能，可是知道它的人不多。很多人用的是M-/ (dabbrev-expand) 这样的东西。 hippie-expand 要强大的多。因为它可以使用扩展函数任意扩充！你可以把你的 M-/ 绑定到 hippie-expand，马上就可以体会到它的方便。
+;;你可以设置以下 hippie-expand 的补全方式。它是一个优先列表， hippie-expand 会优先使用表最前面的函数来补全。通常我的设置是：
+(global-set-key [(meta ?/)] ’hippie-expand)
+(setq hippie-expand-try-functions-list 
+      ’(try-expand-dabbrev
+    try-expand-dabbrev-visible
+    try-expand-dabbrev-all-buffers
+    try-expand-dabbrev-from-kill
+    try-complete-file-name-partially
+    try-complete-file-name
+    try-expand-all-abbrevs
+    try-expand-list
+    try-expand-line
+    try-complete-lisp-symbol-partially
+    try-complete-lisp-symbol))
+    
+;;rect-mark.el
+(require ’rect-mark)
+;;一个很巧妙的解决方案就是，当 % 在括号上按下时，那么匹配括号，否则输入一个 %。你只需要在 .emacs 文件里加入这些东西就可以达到目的：
+(global-set-key "%" ’match-paren)          
+(defun match-paren (arg)
+  "Go to the matching paren if on a paren; otherwise insert %."
+  (interactive "p")
+  (cond ((looking-at "＼＼s＼(") (forward-list 1) (backward-char 1))
+    ((looking-at "＼＼s＼)") (forward-char 1) (backward-list 1))
+    (t (self-insert-command (or arg 1)))))
+;;临时记号
+;;有时你需要跳到另一个文件进行一些操作，然后很快的跳回来。你当然可以使用 bookmark 或者寄存器。但是这些实在是太慢了。你多想拥有vi那样的 ma, mb, ’a, ’b 的操作。现在你可以用几行 elisp 达到类似的目的：
+(global-set-key [(control ?＼.)] ’ska-point-to-register)
+(global-set-key [(control ?＼,)] ’ska-jump-to-register)
+(defun ska-point-to-register()
+  "Store cursorposition _fast_ in a register. 
+Use ska-jump-to-register to jump back to the stored 
+position."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (point-to-register 8))
+(defun ska-jump-to-register()
+  "Switches between current cursorposition and position
+that was stored with ska-point-to-register."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (let ((tmp (point-marker)))
+    (jump-to-register 8)
+    (set-register 8 tmp)))
+;;go-to-char
+;;有了这段代码之后，当你按 C-c a x (x 是任意一个字符) 时，光标就会到下一个 x 处。再次按 x，光标就到下一个 x。比如 C-c a w w w w ..., C-c a b b b b b b ...
+(defun wy-go-to-char (n char)
+  "Move forward to Nth occurence of CHAR.
+Typing `wy-go-to-char-key’ again will move forwad to the next Nth
+occurence of CHAR."
+  (interactive "p＼ncGo to char: ")
+  (search-forward (string char) nil nil n)
+  (while (char-equal (read-char)
+             char)
+    (search-forward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+(define-key global-map (kbd "C-c a") ’wy-go-to-char)
+;; to automatically turn on line numbering when enterting text-mode.
+;;(add-hook ’text-mode-hook ’turn-on-setnu-mode)
+;;hide-region.el  hide-lines.el
+;;这两个函数可以分别把一个区域和匹配某个regexp的行都藏起来，就跟不存在一样……这样你就可以对某些内容进行任意的操作而不会影响到其它的部分。
+;;hide-lines 在操作某些行的时候用起来特别方便。加一个前缀参数可以把不匹配的行都藏起来，只看到匹配的！看看我只显示这个文件里含有global-set-key 的行：
+;;hide region
+(require ’hide-region)
+(global-set-key (kbd "C-c r") ’hide-region-hide)
+(global-set-key (kbd "C-c R") ’hide-region-unhide)
+;; hide lines
+(require ’hide-lines)
+(global-set-key (kbd "C-c l") ’hide-lines)
+(global-set-key (kbd "C-c L") ’show-all-invisible)
+(global-set-key (kbd "C-c o") ’hide-non-matching-lines)
+;;ctypes.el
+;;ctypes 可以识别你的 C 文件里的类型定义 (typedef)。自动对它们进行语法加亮。
+(require ’ctypes)
+(ctypes-auto-parse-mode 1)
+;;mmm
+;;你想过一个 buffer 里同时存在很多个 major mode 吗？现在用 MMM 就可以办到了。在不同的区域拥有对应键绑定，变量，缩进 ……
+;;HTML, Emacs Lisp, Perl, C 和 LaTeX 全都都在同一个 buffer 里被正确的语法加亮了！而且TAB在不同的区域都可以进行正确缩进。在 LaTeX 的区域还可以使用 AUC TeX 来处理某个部分。
+(autoload ’mmm-mode "mmm-mode" "Multiple Major Modes" t)
+(autoload ’mmm-parse-buffer "mmm-mode" "Automatic MMM-ification" t)
+;;tramp
+(setq tramp-default-method "scp")
+(setq tramp-auto-save-directory "/tmp")
+(setq auto-save-file-name-transforms
+      ’(("＼＼`/[^/]*:＼＼(.+/＼＼)*＼＼(.*＼＼)" "/tmp/＼＼2")))
+(setq tramp-chunksize 328)
+(require ’ange-ftp)
+(require ’tramp)
+;;----------------------------------------extentions ends---------------------------------------
+;;(plan)
+(custom-set-variables
+  ;; custom-set-variables was added by Custom -- don’t edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+’(auto-compression-mode t nil (jka-compr))
+’(case-fold-search t)
+’(current-language-environment "Chinese-GBK")
+’(default-input-method "chinese-py")
+’(global-font-lock-mode t nil (font-lock))
+’(show-paren-mode t nil (paren))
+’(tex-alt-dvi-print-command "dvips")
+’(tex-dvi-print-command "dvipdf")
+’(tex-dvi-view-command "xdvi")
+;; ’(tex-dvi-view-command "evince")
+’(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
+’(transient-mark-mode t))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom -- don’t edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+)
+(ispell-change-dictionary "american")
+
+
+=====================================================
+
+
+
+;======================= cscope 设置 =======================
+;;使用 cscope 浏览源代码,这个xcscope是个改进版，为每一次查找的结果使用不同 buffer ，
+;;这样就可以保存以前的结果。
+
+(add-to-list 'load-path  "~/lisp/xcscope") ;; 将软件包所在的路径加到 EMACS 的 load-path
+(require 'xcscope) ;; 加载相应的软件
+
+;; C-c s a             设定初始化的目录，一般是你代码的根目录
+;; C-s s I             对目录中的相关文件建立列表并进行索引
+;; C-c s s             序找符号
+;; C-c s g             寻找全局的定义
+;; C-c s c             看看指定函数被哪些函数所调用
+;; C-c s C             看看指定函数调用了哪些函数
+;; C-c s e             寻找正则表达式
+;; C-c s f             寻找文件
+;; C-c s i             看看指定的文件被哪些文件include
+
+
+;===================== cscope 设置结束 ======================
+
+
+
+;======================== tabbar设置 ========================
+(add-to-list 'load-path  "~/lisp/tabbar")
+(require 'tabbar)
+(tabbar-mode)
+;========================tabbar设置结束=======================
+
+
+
+;===================== 文件头header设置 ===========================
+;;当我们保存文件的时候,有很多信息可以自动更新.如何自动更新信息, 更新那些信息,
+;也是可以完全自己配置. 包括文件名称,最后一次修改时间,文件保存次数,最后一次修改的作者等等.
+;;可以用 M-x make-header 自动生成文件头信息. 
+(add-to-list 'load-path  "~/lisp/header")
+(require 'header)
+(setq make-header-hooks '(header-mode-line
+                            header-blank
+                            header-file-name
+                            header-blank
+                            header-copyright
+                            header-blank
+                            header-author
+                            header-creation-date
+                            header-modification-author
+                            header-modification-date
+                            header-update-count
+                            header-blank
+                            header-history
+                            header-blank
+                            ))
+(setq header-copyright-notice "  源成工作室 作品" )
+(make-local-variable 'user-full-name)
+(make-local-variable 'user-mail-address)
+
+;===================== 文件头header设置结束 ==========================
+
+
+;===================== template设置 =================================
+(add-to-list 'load-path  "~/lisp/template")
+(require 'template)
+(template-initialize)
+
+;===================== template设置结束===============================
+
+;===================== cedet设置 =====================================
+
+(add-to-list 'load-path "~/lisp/cedet-1.0pre3/speedbar")
+(add-to-list 'load-path "~/lisp/cedet-1.0pre3/eieio")
+(add-to-list 'load-path "~/lisp/cedet-1.0pre3/semantic")
+(add-to-list 'load-path "~/lisp/cedet-1.0pre3/common")
+(require 'cedet)
+;; (add-to-list 'load-path "~/lisp/ecb-2.32")
+;; (require 'ecb)
+
+;; Ecb的操作:
+;; C-c . g d 目录列表窗口
+;; C-c . g s 源码窗口
+;; C-c . g m 方法和变量窗口
+;; C-c . g h 历史窗口
+;; C-c . g l 最后选择过的编辑窗口
+;; C-c . g 1 编辑窗口1
+;; C-c . g n 编辑窗口n
+;; C-c . l c 选择版面
+;; C-c . l r 重画版面
+;; C-c . l t 拴牢版面(锁定版面)
+;; C-c . l w 拴牢可见的ecb窗口
+;; C-c . \   拴牢编绎窗口
+
+;; 其中l为小写字母(L),大家别看错!!
+
+;======================cedet设置结束==================================
+
+ 
+
+;;=========================== 方便编程操作的设置=====================================
+
+(setq compile-command "make")
+;;emacs的默认compile命令是调用make -k，我把它改成了make。你也可以把它改成其他的，比如gcc之类的.
+
+;;把c语言风格设置为k&r风格
+(add-hook 'c-mode-hook
+'(lambda ()
+(c-set-style "k&r")))
+
+;;把C++语言风格设置为stroustrup风格
+(add-hook 'c++-mode-hook
+'(lambda()
+(c-set-style "stroustrup")))
+
+;========================================================================
+
+(load-library "hideshow") 
+(add-hook 'c-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook 'hs-minor-mode)
+(add-hook 'perl-mode-hook 'hs-minor-mode)
+(add-hook 'php-mode-hook 'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+;;能把一个代码块缩起来，需要的时候再展开
+;;  M-x              hs-minor-mode
+;;  C-c @ ESC C-s    show all
+;;  C-c @ ESC C-h    hide all
+;;  C-c @ C-s        show block
+;;  C-c @ C-h        hide block
+;;  C-c @ C-c toggle hide/show
+
+;========================================================================
+
+(defun my-c-mode-auto-pair ()
+  (interactive)
+  (make-local-variable 'skeleton-pair-alist)
+  (setq skeleton-pair-alist  '(
+    (?` ?` _ "''")
+    (?\( ?  _ " )")
+    (?\[ ?  _ " ]")
+    (?{ \n > _ \n ?} >)))
+  (setq skeleton-pair t)
+  (local-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "`") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "[") 'skeleton-pair-insert-maybe))
+(add-hook 'c-mode-hook 'my-c-mode-auto-pair)
+(add-hook 'c++-mode-hook 'my-c-mode-auto-pair)
+;;输入左边的括号，就会自动补全右边的部分.包括(), "", [] , {} , 等等。
+
+;=========================================================================
+(setq semantic-load-turn-everything-on t) 
+;(add-hook 'semantic-init-hooks 'semantic-idle-completions-mode)
+
+(setq semanticdb-project-roots 
+        (list
+        (expand-file-name "/")))
+;;配置Semantic的检索范围
+
+(setq semanticdb-default-save-directory "~/")
+;;设置semantic.cache路径
+
+(global-set-key [(meta ?/)] 'hippie-expand)
+;;M-/ 绑定到 hippie-expand
+
+(autoload 'senator-try-expand-semantic "senator")
+(setq hippie-expand-try-functions-list 
+      '(senator-try-expand-semantic  ;优先调用了senator的分析结果
+        try-expand-dabbrev     ;当前的buffer补全
+ try-expand-dabbrev-visible   ;别的可见的窗口里寻找补全
+ try-expand-dabbrev-all-buffers  ;所有打开的buffer
+ try-expand-dabbrev-from-kill
+ try-complete-file-name-partially
+ try-complete-file-name
+ try-expand-all-abbrevs
+ try-expand-list
+ try-expand-line
+ try-complete-lisp-symbol-partially
+ try-complete-lisp-symbol))
+;设置 hippie-expand 的补全方式。它是一个优先列表， hippie-expand 会优先使用表最前面的函数来补全。
+
+;=========================================================================
+
+
+;;========================== 方便编程操作设置结束====================================
+
+
+; 在emacs中执行make,gdb调试找不到交叉编译程序
+;; add cross compile paht to emacs exec path 
+;; 添加交叉编译环境变量 
+(setenv "PATH" (concat "/usr/local/CodeSourcery/Sourcery_G++_Lite/bin/:" (getenv "PATH"))) 
+(setq exec-path (cons "/usr/local/CodeSourcery/Sourcery_G++_Lite/bin/" exec-path))
+ 
+;; 禁止emacs23.2内部自带的cedet 
+(setq load-path (remove "/usr/share/emacs/cedet" load-path)) 
+(setq load-path (remove "/usr/share/emacs/23.2/lisp/cedet" load-path));;C-h v load-path 检查是否去掉emacs内置cedet 
+(require 'cedet) 
+;; (load-file "~/.emacs.d/plugins/cedet-1.0/common/cedet.el") 
+(require 'ecb) 
+(require 'semantic-ia) 
+;; 最基本功能 
+;; semantic-idle-scheduler-mode,enable这个mode让cedet在emacs空闲的时候自动分析buffer内容 
+;; semantic-minor-mode,semanticdb是semantic用来保存分析后的内容的，所以也是应该enable的 
+;; semanticdb-load-ebrowse-caches,Load all semanticdb controlled EBROWSE caches. 
+;; (semantic-load-enable-minimum-features)
+;; imenu,imenu显示semantic分析出的类，函数等tags 
+;; semantic-idle-summary-mode,光标停留在一个类/函数等tag上时，会在minibuffer显示出这个函数原型 
+;; senator-minor-mode,在emacs上增加一个senator的菜单 
+;; semantic-mru-bookmark-mode 支持跳转 
+;; (semantic-load-enable-code-helpers) 
+;; (semantic-load-enable-code-helpers)
+;; semantic-stickyfunc-mode 
+;; 这个mode会根据光标位置把当前函数名显示在buffer顶上 
+;; semantic-decoration-mode 
+;; 打开这个mode后，semantic会在类/函数等tag上方加一条蓝色的线， 
+;; 源文件很大的时候用它可以提示出哪些是类和函数的头。 
+;; semantic-idle-completions-mode 
+;; 这个mode打开后，光标在某处停留一段时间后，semantic会自动提示此处可以补全的内容。 
+;; (semantic-load-enable-guady-code-helpers) 
+(semantic-load-enable-guady-code-helpers) 
+(global-semantic-highlight-func-mode 1) 
+;; (global-semantic-idle-local-symbol-highlight-mode 1) 
+(global-semantic-show-parser-state-mode 1) 
+(global-semantic-idle-summary-mode 0)
+;; semantic-highlight-func-mode 
+;; 打开这个mode的话，semantic会用灰的底色把光标所在函数名高亮显示， 
+;;global-semantic-idle-local-symbol-highlight-mode 
+;; 用过XCode或eclipse的人应该会喜欢高亮光标处变量的功能：就是在函数内部，光标停留在一个变量上，整个函数内部用这个变量的地方都高亮了。在 emacs里只要打开semantic-idle-tag-highlight-mode，光标在变量处停留一会，就会把相同的变量全都高亮 
+;; semantic-decoration-on-*-members 
+;; 把private和protected的函数用颜色标识出来 
+;; which-func-mode 
+;; 这个其实就是emacs自带的which-function-mode，把光标当前所在的函数名显示在mode-line上 
+;; (semantic-load-enable-excessive-code-helpers)
+;; semantic-highlight-edits-mode 
+;; 打开这个mode后，emacs会把最近修改过的内容高亮出来 
+;; semantic-show-unmatched-syntax-mode 
+;; 这个mode会把semantic解析不了的内容用红色下划线标识出来 
+;; semantic-show-parser-state-mode 
+;; 打开这个mode，semantic会在modeline上显示出当前解析状态 
+;; 未解析时显示为”!”，正在解析时显示”@”，解析完后显示”-”，如果buffer修改后未重新解析显示为”^” 
+;; semantic会在空闲时自动解析，另外可以打开senator-minor-mode，按[C-c , ,]或者在senator菜单中选[Force Tag Refresh]强制它马上解析。 
+;; (semantic-load-enable-semantic-debugging-helpers)
+;; (global-srecode-minor-mode 1) 
+(global-semantic-mru-bookmark-mode 1) 
+(require 'semantic-decorate-include)
+;;semanticdb 设置 
+;; 优化tags功能有几个方法 
+;; 1.声明ede项目来限制semantic的搜索 
+;; 2.显式的声明所有项目根文件夹 
+;; 3.使用semanticdb-create-ebrowse or semantic-create-cscope-database 
+;; 创建databases为常用的文件夹(/usr/include,/usr/local/include,etc) 
+;; 4.自定义semanticdb-find-default-throttle变量为某个xx-mode 
+;; 例如c-mode时，不使用系统include file 
+;; (setq-mode-local c-mode semanticdb-find-default-throttle 
+;;                             '(project unloaded system recursive))
+(require 'semanticdb) 
+(setq semanticdb-default-save-directory 
+       (expand-file-name "~/.emacs.d/.semanticdb"))
+;;设置 throttle，semantic按照指定的顺序查找头文件 
+(setq-mode-local c-mode 
+            semanticdb-find-default-throttle 
+            '(file local project unloaded system recursive)) 
+;; 避免semantic占用CPU过多,单位second 
+(setq-default semantic-idle-scheduler-idle-time 600) 
+;; (setq semanticdb-search-system-databases t) 
+;; ;; 设置semanticdb的默认路径 
+;; (setq semanticdb-default-system-save-directory "~/.semanticdb")
+;; project root path,检索/usr/include 
+;; (setq semanticdb-project-roots 
+;;           (list 
+;;         (expand-file-name "/")))
+;; (semantic-load-enable-all-exuberent-ctags-support) 
+;; (semanticdb-enable-exuberent-ctags 'c-mode) 
+;; (semanticdb-enable-exuberent-ctags 'c++-mode)
+;; if you want to enable support for gnu global 
+(require 'semanticdb-global) 
+(semanticdb-enable-gnu-global-databases 'c-mode) 
+(semanticdb-enable-gnu-global-databases 'c++-mode)
+;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库, 
+;; (setq semanticdb-search-system-databases t) 
+;;    (add-hook 'c-mode-common-hook                          
+;;            (lambda ()                                     
+;;              (setq semanticdb-project-system-databases    
+;;                    (list (semanticdb-create-database      
+;;                             semanticdb-new-database-class 
+;;                             "/usr/include")))))          
+;; Include settings, cedet能找系统头文件到并跳转到头文件 
+;; M-x semantic-c-describe-environment 查看当前系统c头文件路径 
+(require 'semantic-gcc) 
+(setq semanticdb-project-roots (list (expand-file-name "/"))) 
+;; 很多工程中都会把头文件和实现文件分开放置，比如头文件放在include(或者inc,public,common等)目录中， 
+;; 实现文件放在src目录中，这些目录semantic是不能自己找的,解决方法 
+(defconst cedet-user-include-dirs 
+  (list ".." "../include" "../inc" "../common" "../public" "." "./include" 
+        "../.." "../../include" "../../inc" "../../common" "../../public"))
+;; C-h v semantic-dependency-system-include-path : defines the system include path 
+;; C-h v semantic-c-dependency-system-include-path:system include path used by the C language. 
+(defconst cedet-sys-include-dirs 
+  (list        "/usr/include/c++/4.4" 
+               "/usr/include/c++/4.4/i486-linux-gnu" 
+               "/usr/include/c++/4.4/backward" 
+               "/usr/local/include" 
+               "/usr/lib/gcc/i486-linux-gnu/4.4.5/include" 
+               "/usr/lib/gcc/i486-linux-gnu/4.4.5/include-fixed" 
+               "/usr/include")) 
+;; semantic-add-system-include 根据mode把路径加入到semantic-dependency-system-include-path里 
+(let ((include-dirs cedet-user-include-dirs)) 
+  (when (eq system-type 'gnu/linux) 
+    (setq include-dirs (append include-dirs cedet-sys-include-dirs))) 
+  (mapc (lambda (dir) 
+          (semantic-add-system-include dir 'c++-mode) 
+          (semantic-add-system-include dir 'c-mode)) 
+        include-dirs))
+(setq semantic-c-dependency-system-include-path 
+      (list 
+               "/usr/include/c++/4.4" 
+               "/usr/include/c++/4.4/i486-linux-gnu" 
+               "/usr/include/c++/4.4/backward" 
+               "/usr/local/include" 
+               "/usr/lib/gcc/i486-linux-gnu/4.4.5/include" 
+               "/usr/lib/gcc/i486-linux-gnu/4.4.5/include-fixed" 
+               "/usr/include"))
+(setq cedet-sys-include-dirs (list 
+                              "/usr/include/c++/4.4" 
+                              "/usr/include/c++/4.4/i486-linux-gnu" 
+                              "/usr/include/c++/4.4/backward" 
+                              "/usr/local/include" 
+                              "/usr/lib/gcc/i486-linux-gnu/4.4.5/include" 
+                              "/usr/lib/gcc/i486-linux-gnu/4.4.5/include-fixed" 
+                              "/usr/include" 
+                              "/usr/include/bits" 
+                              "/usr/include/glib-2.0" 
+                              "/usr/include/gnu" 
+                              "/usr/include/gtk-2.0" 
+                              "/usr/include/gtk-2.0/gdk-pixbuf" 
+                              "/usr/include/gtk-2.0/gtk" 
+                              "/usr/local/include" 
+                              "/usr/local/include"))
+;; 如果semantic不能正确解析系统头文件，可尝试下面两种方法 
+;; 1.(add-to-list 'semantic-lex-c-preprocessor-symbol-file "/home/foo/project/a.h")，semantic正确解析某些特殊的宏 
+;; 2.(add-to-list 'semantic-lex-c-preprocessor-symbol-map '("SOMESYMBOL" . "")),semantic忽略掉某些特殊的宏 
+;; M-x semantic-analyze-current-context 检查semantic解析是否正确 
+;; semantic把解析的内容分为variable，function， include 
+;; 定义的宏和变量被归为varialble，函数归为fucntion， include归为include 
+(add-to-list 'semantic-lex-c-preprocessor-symbol-map '("__wur" . "")) 
+(add-to-list 'semantic-lex-c-preprocessor-symbol-file  "/usr/lib/gcc/i486-linux-gnu/4.4.5/include") 
+(add-to-list 'semantic-lex-c-preprocessor-symbol-file  "/usr/include/sys/cdefs.h")
+(defconst cedet-win32-include-dirs 
+  (list "D:/TDMMinGW/include" 
+        "D:/TDMMinGW/lib/gcc/mingw32/4.3.3/include/c++/backward" 
+        "D:/TDMMinGW/lib/gcc/mingw32/4.3.3/include/c++/mingw32" 
+        "D:/TDMMinGW/lib/gcc/mingw32/4.3.3/include/c++" 
+        "D:/TDMMinGW/lib/gcc/mingw32/4.3.3/include" 
+        "D:/TDMMinGW/lib/gcc/mingw32/4.3.3"
+;;        "C:/Program Files/Microsoft Visual Studio/VC98/MFC/Include" 
+        )) 
+(require 'semantic-c nil 'noerror) 
+(let ((include-dirs cedet-user-include-dirs)) 
+  (when (eq system-type 'windows-nt) 
+    (setq include-dirs (append include-dirs cedet-win32-include-dirs))) 
+  (mapc (lambda (dir) 
+          (semantic-add-system-include dir 'c++-mode) 
+          (semantic-add-system-include dir 'c-mode)) 
+        include-dirs))
+(setq ecb-tip-of-the-day nil) 
+(add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo))) 
+;; Integration with imenu with a list of functions, variables, and other tags.
+;; (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t) 
+;; (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t) 
+;; (define-key-after (lookup-key global-map [menu-bar tools]) 
+;;   [speedbar] 
+;;   '("Speedbar" . 
+;;     speedbar-frame-mode) 
+;;   [calendar])
+(setq ecb-auto-activate nil 
+      ecb-tip-of-the-day nil 
+      ecb-tree-indent 4 
+      ecb-windows-height 0.5 
+      ecb-windows-width 0.13) 
+(if (eq system-type 'windows-nt) 
+    (progn 
+    '(ecb-gzip-setup (quote ("d:\\cygwin\\bin\\gzip.exe" . windows))) 
+    '(ecb-wget-setup (quote ("d:\\cygwin\\bin\\wget.exe" . windows))) 
+    '(ecb-tar-setup (quote ("d:\\cygwin\\bin\\tar.exe" . windows)))))
+;; solve problem "Variable binding depth exceeds max-specpdl-size", 
+;; default value is 1080 
+(setq max-specpdl-size 34000) 
+(setq max-lisp-eval-depth 20000)
+;; semantic auto complete 
+(semantic-load-enable-code-helpers) 
+(autoload 'senator-try-expand-semantic "senator") 
+;; (global-set-key (kbd "M-/") 'semantic-ia-complete-symbol-menu) 
+(global-set-key (kbd "M-/") 'semantic-ia-complete-symbol) 
+(eval-after-load "semantic-complete" 
+  '(setq semantic-complete-inline-analyzer-displayor-class 
+         semantic-displayor-ghost)) 
+; enable ctags for some languages: 
+;;  Unix Shell, Perl, Pascal, Tcl, Fortran, Asm 
+;; (setq semantic-ectag-program "~/bin/ctags.exe") 
+(semantic-load-enable-primary-exuberent-ctags-support) 
+;; 
+(defun cedet-hook () 
+  (local-set-key "\C-cs" 'semantic-ia-show-summary) 
+  (local-set-key "\C-cr" 'semantic-symref-symbol))
+(add-hook 'c-mode-common-hook 'cedet-hook) 
+(add-hook 'lisp-mode-hook 'cedet-hook) 
+;; (add-hook 'scheme-mode-hook 'cedet-hook) 
+;; (add-hook 'emacs-lisp-mode-hook 'cedet-hook) 
+(add-hook 'python-mode-hook 'cedet-hook)
+(global-set-key (kbd "C-.") 'semantic-ia-fast-jump) 
+(global-set-key (kbd "C-,") 'semantic-mrub-switch-tags) 
+;; (defun my-c-mode-cedet-hook () 
+;;  (local-set-key "." 'semantic-complete-self-insert) 
+;;  (local-set-key ">" 'semantic-complete-self-insert)) 
+;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
+(global-set-key (kbd "<f2>") 'ecb-activate) 
+(global-set-key (kbd "ESC <f2>") 'ecb-deactivate)
+;; (custom-set-variables 
+;;   ;;设置系统包含路径 
+;;  '(semantic-c-dependency-system-include-path (quote ("/usr/include" "/usr/include/gtk-2.0" "/usr/include/glib-2.0"))))
+;; (setq qt4-base-dir "/usr/include/qt4")                                                             ;; 
+;; (semantic-add-system-include qt4-base-dir 'c++-mode)                                                 ;; 
+;; (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))                                         ;; 
+;; (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))         ;; 
+;; (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-dist.h")) ;; 
+;; (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))         ;;
+;; ede customization 
+(require 'semantic-lex-spp) 
+(global-ede-mode 1) 
+(setq ede-locate-setup-options 
+      '(ede-locate-global 
+        ede-locate-base)) 
+;;2. 全局关闭cedet #if #else 智能分析 
+(setq semantic-c-obey-conditional-section-parsing-flag nil)
+;; (setq test-project 
+;;       (ede-cpp-root-project "test" 
+;;                             :file "~/test/Makefile" 
+;;                             :system-include-path '("/test/include" 
+;;                                                    "/usr/include/boost-1.42"))) 
+;; ede-cpp-root-project指定了这个项目的其他信息：                                     
+;; :file 指向项目主目录下任一一个存在的文件                                         
+;; :include-path 指定头文件的所在目录                                                 ;; :spp-table 给出了预处理时的使用的宏，通常是在Makefile里使用-DXXX定义的宏，例如这里的__XEN__。 ;;
+;; 代码折叠用 
+(require 'semantic-tag-folding nil 'noerror) 
+(global-semantic-tag-folding-mode 1)
+
+
+--------------------------------------------
+;;自动补全
+(require ‘yasnippet)
+(yas/initialize)
+(yas/load-directory “~/.emacs.d/plugins/yasnippet/snippets”)
+;;;; CC-mode配置  http://cc-mode.sourceforge.net/
+(require ‘cc-mode)
+(c-set-offset ‘inline-open 0)
+(c-set-offset ‘friend ‘-)
+(c-set-offset ’substatement-open 0)
+;;;;我的C/C++语言编辑策略
+
+(defun my-c-mode-common-hook()
+  (setq tab-width 4 indent-tabs-mode nil)
+  ;;; hungry-delete and auto-newline
+  (c-toggle-auto-hungry-state 1)
+  ;;预处理设置
+  (setq c-macro-shrink-window-flag t)
+  (setq c-macro-preprocessor “cpp”)
+  (setq c-macro-cppflags ” “)
+  (setq c-macro-prompt-flag t)
+  (setq hs-minor-mode t)
+  (setq abbrev-mode t)
+  )
+(add-hook ‘c-mode-common-hook ‘my-c-mode-common-hook)
+;;;;我的C++语言编辑策略
+(defun my-c++-mode-hook()
+  (setq tab-width 4 indent-tabs-mode nil)
+  (c-set-style “stroustrup”)
+  ;;  (define-key c++-mode-map [f3] ‘replace-regexp)
+  )
+(global-set-key (kbd “<f9>”) ’smart-compile)
+(defun smart-compile()
+  “比较智能的C/C++编译命令
+如果当前目录有makefile则用make -k编译，否则，如果是
+处于c-mode，就用gcc -Wall编译，如果是c++-mode就用
+g++ -Wall编译”
+  (interactive)
+  ;; 查找 Makefile
+  (let ((candidate-make-file-name ‘(“makefile” “Makefile” “GNUmakefile”))
+        (command nil))
+    (if (not (null
+              (find t candidate-make-file-name :key
+                    ‘(lambda (f) (file-readable-p f)))))
+        (setq command “make -k “)
+        ;; 没有找到 Makefile ，查看当前 mode 是否是已知的可编译的模式
+        (if (null (buffer-file-name (current-buffer)))
+            (message “Buffer not attached to a file, won’t compile!”)
+            (if (eq major-mode ‘c-mode)
+                (setq command
+                      (concat “gcc -Wall -o “
+                              (file-name-sans-extension
+                               (file-name-nondirectory buffer-file-name))
+                              ” “
+                              (file-name-nondirectory buffer-file-name)
+                              ))
+              (if (eq major-mode ‘c++-mode)
+                  (setq command
+                        (concat “g++ -Wall -o “
+                                (file-name-sans-extension
+                                 (file-name-nondirectory buffer-file-name))
+                                ” “
+                                (file-name-nondirectory buffer-file-name)
+                                ))
+                (message “Unknow mode, won’t compile!”)))))
+    (if (not (null command))
+        (let ((command (read-from-minibuffer “Compile command: “ command)))
+          (compile command)))))
+;; 调用 stardict 的命令行接口来查辞典
+;; author: pluskid
+;; 如果选中了 region 就查询 region 的内容，
+;; 否则就查询当前光标所在的词
+(require ‘sdcv-mode)
+;;(setq sdcv-dictionary-list ‘(”朗道英汉字典5.0″))
+(global-set-key (kbd “C-c d”) ’sdcv-search)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun du-onekey-compile ()
+  "Save buffers and start compile"
+  (interactive)
+  (save-some-buffers t)
+  (switch-to-buffer-other-window "*compilation*")
+  (compile compile-command))
+  (global-set-key [C-f5] 'compile)
+  (global-set-key [f5] 'du-onekey-compile)
+;;  C-f5, 设置编译命令; f5, 保存所有文件然后编译当前窗口文件
+
+(global-set-key [f6] 'gdb)             
+;;F6设置为在Emacs中调用gdb
+
+(global-set-key [C-f7] 'previous-error)
+(global-set-key [f7] 'next-error)
+
+
+
+***********************************************************
+;cc-mode配置(http://cc-mode.sourceforge.net/)
+;1）缩进
+;(setq default-tab-width 4)
+(setq c-syntactic-indentation t)
+(setq c-tab-always-indent t)     ;t: 表示在一行的任何位置按TAB都会执行“行缩进”；
+                                 ;nil: 表示仅在一行的第一个非空白字符左边按TAB才执行“行缩进”，否则在光标处插入空白（空白具体是TAB还是等效的空格，由indent-tabs-mode变量决定）
+(setq indent-tabs-mode nil)      ;nil: insert equivalent number of spaces; t: insert real tab character
+
+;2）注释
+;C-c C-c (comment-region)                                 ;
+;C-u - C-c C-c                                            ;delete comment region
+;M-; (comment-dwim or indent-for-comment)                 ;Insert a comment at the end of the current line
+;C-u M-;                                                  ;kills any comment on the current line
+;(setq c-indent-comment-alist ???)                        ;
+;(setq c-indent-comments-syntactically-p set-from-style)  ;nil: M-;命令对“注释行”也起作用
+
+
+;3）移动
+;类似SourceInsight中双击预处理宏选中代码，然后用上下键就可以移动到预处理宏开始或结尾的功能
+;      C-c C-u (c-up-conditional)      ;move to the beginning of the preprocessor macro
+;C-u - C-c C-u                         ;move to the end of the preprocessor macro（注意，光标指针不能放在#的前面，否则无效，应该是cc-mode的bug）
+;      M-x c-up-conditional-with-else  ;
+;C-u - M-x c-up-conditional-with-else  ;
+
+;M-x c-down-conditional                ;
+;M-x c-down-conditional-with-else      ;
+
+
+;4）
+(setq c-electric-pound-behavior (quote (alignleft)))
+
+
+;5）
+;M-x c-hungry-delete-backwards  ;regardless whether hungry-delete mode is enabled or not
+;M-x c-hungry-delete-forward    ;regardless whether hungry-delete mode is enabled or not
+;M-x c-toggle-hungry-state / (setq hungry-delete-key t)  ;enabled hungry-delete mode or not
+
+
+;6）
+;      M-x c-backslash-region
+;C-u - M-x c-backslash-region
+;M-x c-macro-expand
+
+
+(defun my-c-initialization-hook ()
+  (define-key c-mode-base-map "\C-m" 'c-context-line-break))
+(add-hook 'c-initialization-hook 'my-c-initialization-hook)
+
+
+(setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux")))
+
+
+
+;Cedet
+;1）使用synaptic安装texinfo
+;2）cvs -d:pserver:anonymous@cedet.cvs.sourceforge.net:/cvsroot/cedet login
+;3）cvs -z3 -d:pserver:anonymous@cedet.cvs.sourceforge.net:/cvsroot/cedet co -P cedet
+;4) cd cedet
+;5) find . -name Makefile|xargs touch
+;6) make clean ; make -k all
+
+(load-file "~/cedet/common/cedet.el")
+;1) Eieio - CLOS layer for Emacs Lisp
+
+
+;2) EDE(Emacs Development Environment) - Project Management(File manager/ Makefile generator)
+(global-ede-mode t)
+(ede-cpp-root-project "NAME" :file "/home/linux/linux-2.6.29.4/Makefile") 
+;2-1) Find file
+(global-set-key [(control o)] 'ede-find-file)
+;gtags-find-file
+
+;3) Semantic - Parser Infrastructure for Emacs
+(semantic-load-enable-excessive-code-helpers)
+
+;4) SRecode (Template management) minor-mode
+(global-srecode-minor-mode 1)
+
+;3-1) Smart Help
+;semantic-ia-show-summary
+;semantic-ia-show-doc
+;semantic-ia-describe-class
+
+;3-2) Smart Jump
+(global-set-key [(control =)] 'semantic-ia-fast-jump)
+(global-set-key [(control ,)] 'semantic-mrub-switch-tags)
+;semantic-decoration-include-visit ;这个功能很实用，考虑绑定快捷键 Switch to the include file, whose name is under point.
+;semantic-analyze-proto-impl-toggle
+(global-set-key [(control c)(j)] 'semantic-complete-jump) ;in current project
+(global-set-key [(control c)(J)] 'semantic-complete-jump-local) ;in current file
+;senator-next-tag (C-c , n)
+;senator-previous-tag (C-c , p)
+;senator-go-to-up-reference (C-c , u)
+
+;3-3) Symbol Reference
+(define-key global-map [f7] 'semantic-symref)
+(define-key global-map [(control /)] 'semantic-symref-symbol)
+;;Global
+;1) cvs -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/global login
+;2) cvs -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/global co global
+;3) sudo sh reconf.sh 
+;4) sudo ./configure
+;5) sudo make
+;6) sudo make install
+;(setq load-path (cons "~/global" load-path))
+;(load-file "~/global/gtags.el")
+;(setq cedet-global-command "~/global")
+;(autoload 'gtags-mode "gtags" "" t)
+;; gnu global support
+(require 'semanticdb-global)
+(semanticdb-enable-gnu-global-databases 'c-mode)
+(semanticdb-enable-gnu-global-databases 'c++-mode)
+
+;;Cscope
+;(require 'xcscope)
+;(setq cscope-do-not-update-database-t)
+;(define-key global-map [(control f5)] 'cscope-find-this-file)
+;(define-key global-map [(control f6)] 'cscope-find-this-text-string)
+;(define-key global-map [(control f7)] 'cscope-find-this-symbol) //cedet
+;(define-key global-map [(control f8)] 'cscope-find-functions-calling-this-function) //cedet
+;(define-key global-map [(control f9)] 'cscope-find-global-definition-no-prompting) //cedet
+
+;3-4) Smart Completion
+;semantic-ia提供的命令
+;semantic-ia-complete-symbol-menu(*)
+;semantic-ia-complete-symbol(在另外的bufffer中给出提示)
+;semantic-complete-analyze-inline(*)
+;semantic-ia-complete-tip
+;semantic-analyze-possible-completions(在另外的bufffer中给出提示)
+
+;senator提供的命令(执行结果不如上面命令的结果精确)
+;senator-complete-symbol(C-c , TAB)(首先用找到的第一个进行补全，如果不是的话，用户重复执行命令一次，系统会用第二个匹配的补全，以此类推)
+;senator-completion-menu-popup(C-c , SPC)
+
+;补全模式
+;???semantic-idle-completions-mode
+;; customisation of modes
+(defun my-cedet-hook ()
+  (local-set-key [(control return)] 'semantic-ia-complete-symbol-menu)
+  (local-set-key "\C-c?" 'semantic-ia-complete-symbol)
+  ;;
+  (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+  (local-set-key "\C-c=" 'semantic-decoration-include-visit)
+ 
+  (local-set-key "\C-cj" 'semantic-ia-fast-jump)
+  (local-set-key "\C-cq" 'semantic-ia-show-doc)
+  (local-set-key "\C-cs" 'semantic-ia-show-summary)
+  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+  )
+;;(add-hook 'semantic-init-hooks 'my-cedet-hook)
+(add-hook 'c-mode-common-hook 'my-cedet-hook)
+(add-hook 'lisp-mode-hook 'my-cedet-hook)
+(add-hook 'emacs-lisp-mode-hook 'my-cedet-hook)
+;; (add-hook 'erlang-mode-hook 'my-cedet-hook)
+
+(defun my-c-mode-cedet-hook ()
+  (local-set-key "." 'semantic-complete-self-insert)
+  (local-set-key ">" 'semantic-complete-self-insert)
+  (local-set-key "\C-ct" 'eassist-switch-h-cpp)
+  (local-set-key "\C-xt" 'eassist-switch-h-cpp)
+  (local-set-key "\C-ce" 'eassist-list-methods)
+  (local-set-key "\C-c\C-r" 'semantic-symref)
+  )
+(add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
+
+;UML Diagram - Cogre
+
+
+;Advanced Code Browsing
+;Speedbar - Everything browser
+;===============================================================================
+(require 'speedbar)
+(setq speedbar-show-unknown-files t) ;Show all files
+(global-set-key [f2] 'speedbar-get-focus) ;switch between main frame and speedbar frame.ss
+;fix speedbar in left, and set auto raise mode
+(add-hook
+ 'speedbar-mode-hook
+ (lambda ()
+ (auto-raise-mode 1)
+ (add-to-list 'speedbar-frame-parameters '(top . 30))
+ (add-to-list 'speedbar-frame-parameters '(left . 0))))
+;inhibit tags grouping and sorting
+(setq speedbar-tag-hierarchy-method '(speedbar-simple-group-tag-hierarchy))
+;===============================================================================
+
+;Source code folding
+(setq global-semantic-tag-folding-mode 1)
+;senator-fold-tag command (C-c , -)
+;senator-unfold-tag (C-c , +).
+
+;Code templates
+;srecode-insert(C-c / /)
+;srecode-insert-again(C-c / .)
+;srecode-insert-getset(C-c / G)
+;srecode-edit(C-c / E)
+
+;Other
+;(require 'eassist)
+;eassist-list-methods
+;eassist-switch-h-cpp 
+;semanticdb-create-ebrowse-database
+;semanticdb-create-cscope-database
+;semanticdb-find-default-throttle
+;semantic-idle-scheduler-idle-time
+;semantic-lex-spp-describe
+;semantic-lex-c-preprocessor-symbol-map(变量)
+;semantic-lex-c-preprocessor-symbol-filep(变量)
+;(semantic-add-system-include "~/" 'c-mode)
+;Other commands implemented by Senator
+;senator-kill-tag(C-c , C-w)
+;senator-yank-tag(C-c , C-y)
+;senator-copy-tag (C-c , M-w)
+;senator-isearch-toggle-semantic-mode(C-c , i)
+;senator-search-set-tag-class-filter(C-c , f)
+;senator-search-forward
+;senator-search-backward
+;re-search-forward
+;isearch-forward
+
+;Ecb
+;1）cvs -d:pserver:anonymous@ecb.cvs.sourceforge.net:/cvsroot/ecb login
+;2）cvs -z3 -d:pserver:anonymous@ecb.cvs.sourceforge.net:/cvsroot/ecb co -P ecb
+;3) 查看readme文件
+(add-to-list 'load-path "~/ecb")
+(load-file "~/ecb/ecb.el")
+(require 'ecb)
+(setq ecb-auto-activate t
+      ecb-tip-of-the-day nil
+      ecb-tree-indent 4
+      ecb-windows-height 0.5
+      ecb-windows-width 0.15
+      ecb-auto-compatibility-check nil
+      ecb-version-check nil
+      inhibit-startup-message t)
+(global-set-key [f12] 'ecb-activate)
+(global-set-key [C-f12] 'ecb-deactivate)
+;重启Emacs，在emacs执行M-x ecb-byte-complie编译，可以加快ECB运行速度
+;M-x ecb-show-help看在线帮助
+;M-x customize-option RET ecb-source-path RET设置源码目录
+;ECB默认是不支持鼠标响应的，需作如下设置：打开emacs中的菜单 ECB->Preferences->Most important...,找到Ecb Primary Secondary Mouse Buttons:并点击Show Value，选择第三个选项：Primary:mouse-1,secondary:mouse-2保存选项为以后所用
+
+
+
+;Dictionary(支持配置代理)
+(add-to-list 'load-path "~/dictionary-1.8.7")
+(load "dictionary-init")
+(setq dictionary-server "localhost")
+;dictionary-port
+(global-set-key [mouse-3] 'dictionary-mouse-popup-matching-words)   ;定义鼠标快捷键
+;(global-set-key [(control c)(p)] 'dictionary-popup-matching-words) ;定义键盘快捷键
+;(global-set-key [(control c)(d)] 'dictionary)
+;(global-set-key [(control c)(s)] 'dictionary-search)
+;(global-set-key [(control c)(d)] 'dictionary-lookup-definition)
+;(global-set-key "\C-cm" 'dictionary-match-words)
+(setq dictionary-tooltip-dictionary "wn")
+(global-dictionary-tooltip-mode)
+
+
+
+(add-to-list 'load-path "~/.emacs.d")
+;;add xcscope浏览源代码 
+(require 'xcscope)
+(add-hook 'c-mode-common-hook
+ '(lambda ()
+   (require 'xcscope)))
+
+
+;; 回车缩进
+(global-set-key "\C-m" 'newline-and-indent)
+(global-set-key (kbd "C-<return>") 'newline)
+
+
+
+;;-----------------------------------------------  
+;; 编程  
+;; C代码采用内核风格排版  
+(defun c-lineup-arglist-tabs-only (ignored)  
+  "Line up argument lists by tabs, not spaces"  
+  (let* ((anchor (c-langelem-pos c-syntactic-element))  
+     (column (c-langelem-2nd-pos c-syntactic-element))  
+     (offset (- (1+ column) anchor))  
+     (steps (floor offset c-basic-offset)))  
+    (* (max steps 1)  
+       c-basic-offset)))  
+(add-hook 'c-mode-common-hook  
+      (lambda ()  
+        ;; Add kernel style  
+        (c-add-style  
+         "linux-tabs-only"  
+         '("linux" (c-offsets-alist  
+            (arglist-cont-nonempty  
+             c-lineup-gcc-asm-reg  
+             c-lineup-arglist-tabs-only))))))  
+(add-hook 'c-mode-hook  
+      (lambda ()  
+    ;;    (let ((filename (buffer-file-name)))  
+          ;; Enable kernel mode for the appropriate files  
+    ;;      (when (and filename  
+    ;;       (string-match (expand-file-name "/")  
+    ;;                 filename))  
+        (setq indent-tabs-mode t)  
+        (c-set-style "linux-tabs-only")))  
+;;))  
+;; 自动补全代码  
+(global-set-key [(meta ?/)] 'hippie-expand)  
+(setq hippie-expand-try-functions-list  
+      '(try-expand-dabbrev  
+    try-expand-dabbrev-visible  
+    try-expand-dabbrev-all-buffers  
+    try-expand-dabbrev-from-kill  
+    try-complete-file-name-partially  
+    try-complete-file-name  
+    try-expand-all-abbrevs  
+    try-expand-list  
+    try-expand-line  
+    try-complete-lisp-symbol-partially  
+    try-complete-lisp-symbol))  
+
+
+
+;;跳转
+;; Load CEDET.
+;; See cedet/common/cedet.info for configuration details.
+;; IMPORTANT: For Emacs >= 23.2, you must place this *before* any
+;; CEDET component (including EIEIO) gets activated by another 
+;; package (Gnus, auth-source, ...).
+(load-file "~/cedet-1.1/common/cedet.el")
+
+;; (semantic-load-enable-minimum-features)
+(semantic-load-enable-code-helpers)
+;; (semantic-load-enable-guady-code-helpers)
+;; (semantic-load-enable-excessive-code-helpers)
+(semantic-load-enable-semantic-debugging-helpers)
+
+;; (setq semanticdb-project-roots (list (expand-file-name "/")))
+(defconst cedet-user-include-dirs
+  (list ".." "../include" "../inc" "../common" "../public"
+        "../.." "../../include" "../../inc" "../../common" "../../public"))
+(defconst cedet-linux-include-dirs
+  (list "/usr/include"
+        "/usr/local/include"))
+(require 'semantic-c nil 'noerror)
+(let ((include-dirs cedet-user-include-dirs))
+  (when (eq system-type 'windows-nt)
+    (setq include-dirs (append include-dirs cedet-linux-include-dirs)))
+  (mapc (lambda (dir)
+          (semantic-add-system-include dir 'c++-mode)
+          (semantic-add-system-include dir 'c-mode))
+        include-dirs))
+
+(global-set-key [f12] 'semantic-ia-fast-jump)
+(global-set-key [S-f12]
+                (lambda ()
+                  (interactive)
+                  (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
+                      (error "Semantic Bookmark ring is currently empty"))
+                  (let* ((ring (oref semantic-mru-bookmark-ring ring))
+                         (alist (semantic-mrub-ring-to-assoc-list ring))
+                         (first (cdr (car alist))))
+                    (if (semantic-equivalent-tag-p (oref first tag)
+                                                   (semantic-current-tag))
+                        (setq first (cdr (car (cdr alist)))))
+                    (semantic-mrub-switch-tags first))))
+(define-key c-mode-base-map [M-S-f12] 'semantic-analyze-proto-impl-toggle)
+(define-key c-mode-base-map (kbd "M-n") 'semantic-ia-complete-symbol-menu)
+
+(global-set-key [(f4)] 'speedbar-get-focus)
+(define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
+
+
+;;通过鼠标在直接点击就可以打开和折叠代码
+(require 'semantic-tag-folding nil 'noerror)
+(global-semantic-tag-folding-mode 1)
+(global-srecode-minor-mode 1)
+;;semantic折叠快捷键设置 主要是为了防止其他配置和该配置的鼠标点击冲突造成点击折叠失败
+(define-key semantic-tag-folding-mode-map (kbd "C-c , -") 'semantic-tag-folding-fold-block)
+(define-key semantic-tag-folding-mode-map (kbd "C-c , =") 'semantic-tag-folding-show-block)
+(define-key semantic-tag-folding-mode-map (kbd "C-c ' -") 'semantic-tag-folding-fold-all)  
+(define-key semantic-tag-folding-mode-map (kbd "C-c ' =") 'semantic-tag-folding-show-all)  
+
+;;-----------------------------------------------  
+;; 自动添加  
+;; ecb  
+(add-to-list 'load-path "~/.emacs.d/ecb-2.40")
+(require 'ecb)
+;;ecb启动的时候会弹出一个提示窗口,如果不想看到它，可以在emacs配置文件(~/.emacs)里加这一句:
+(setq ecb-tip-of-the-day nil)
+(ecb-activate)
+
+(custom-set-variables  
+  ;; custom-set-variables was added by Custom.  
+  ;; If you edit it by hand, you could mess it up, so be careful.  
+  ;; Your init file should contain only one such instance.  
+  ;; If there is more than one, they won't work right.  
+ '(ecb-fix-window-size t)  
+ '(ecb-layout-window-sizes nil)  
+ '(ecb-options-version "2.40")  
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))  
+ '(ecb-windows-width 0.3))  
+(custom-set-faces  
+  ;; custom-set-faces was added by Custom.  
+  ;; If you edit it by hand, you could mess it up, so be careful.  
+  ;; Your init file should contain only one such instance.  
+  ;; If there is more than one, they won't work right.  
+ )  
+(put 'upcase-region 'disabled nil)  
+(put 'downcase-region 'disabled nil)  
+
+
+;;ecb的导航窗口里的东西默认不能用鼠标点选/打开，用键盘回车可以。如果想用鼠标，配置文件里加这一句：
+;;(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1)
+
+;;ecb相关设置
+;;;; 各窗口间切换
+(global-set-key [M-left] 'windmove-left)
+(global-set-key [M-right] 'windmove-right)
+(global-set-key [M-up] 'windmove-up)
+(global-set-key [M-down] 'windmove-down)
+ 
+;;;; 隐藏和显示ecb窗口
+(define-key global-map [(control f1)] 'ecb-hide-ecb-windows)
+(define-key global-map [(control f2)] 'ecb-show-ecb-windows)
+ 
+;;;; 使某一ecb窗口最大化
+(define-key global-map [(control c1)] 'ecb-maximize-window-directories)
+(define-key global-map [(control c2)] 'ecb-maximize-window-sources)
+(define-key global-map [(control c3)] 'ecb-maximize-window-methods)
+(define-key global-map [(control c4)] 'ecb-maximize-window-history)
+;;;; 恢复原始窗口布局
+;;(define-key global-map "/C-c`" 'ecb-restore-default-window-sizes)
+
+
+;;高亮c中的宏定义
+;;(load-file "/home/.emacs.d/ctypes.el") 
+(require 'ctypes)
+(ctypes-auto-parse-mode 1)
+
+
+
+;;在同一个窗口显示speedbar而不是另开一个窗口
+;;http://www.emacswiki.org/emacs/SpeedBar
+;;http://www.emacswiki.org/emacs/SrSpeedbar
+;;http://www.emacswiki.org/emacs/sr-speedbar.el
+(require 'sr-speedbar)
+(require 'speedbar-extension)
+(global-set-key (kbd "C-c / C-s") 'sr-speedbar-toggle) ;;sr-speedbar按键绑定
+
+
+
+;;CEDET配置
+
+
+;;cedet1.0初始化必须要放在前面，因为cedet-called-interactively-p在cedet-compat.el中有定义，这个和后面的东西有冲突，必须放在前面初始化
+(load "cedet")                        ;集成开发环境
+(load "ede")
+
+
+(require 'ecb)                          ;Emacs代码浏览器
+;;(defun ede-dired-minor-mode (&optional arg) nil)
+(require 'semantic)                     ;semantic
+(require 'semantic-ia)                  ;semantic-ia
+;;(require 'semantic-gcc) ;; 没找到这个插件 ;;自动将gcc的头文件目录添加到semantic解析的路径中 
+;; Semanticdb can use databases generated by external utilities — gtags from GNU Global, ctags, ebrowse & cscope
+(require 'semanticdb);;semantic 工具解析文件设置的database 
+
+
+
+
+
+
+(require 'ede-dired)   ;;
+
+
+
+
+;;; ### ECB ###
+;;; --- 代码浏览器
+(setq ecb-primary-secondary-mouse-buttons 'mouse-1--C-mouse-1) ;;设置可以使用鼠标点击各个窗口的东东
+;;(custom-set-variables '(ecb-options-version "2.4")) ;ECB的版本, 以使启动时不检查
+(setq ecb-layout-window-sizes                        ;定制ECB窗口的布局
+      (quote (("left8" (0.20967741935483872 . 0.27586206896551724)
+               (0.20967741935483872 . 0.2413793103448276)
+               (0.20967741935483872 . 0.27586206896551724)
+               (0.20967741935483872 . 0.1724137931034483)))))
+(setq ecb-tip-of-the-day nil)           ;启动ECB时不显示每日提示
+
+
+(semantic-load-enable-minimum-features)
+(semantic-load-enable-code-helpers)
+;;(semantic-load-enable-guady-code-helpers)
+(global-semantic-stickyfunc-mode 0) ;;关闭将函数名显示在Buffer顶的功能，因为容易和tabbar冲突
+(global-semantic-idle-completions-mode 0);;;关闭semantic的自动补全功能，因为会很慢，而且和补全插件有点冲突额
+(global-semantic-decoration-mode 1);;启用函数名装饰一条蓝色线的功能
+;;(semantic-load-enable-excessive-code-helpers)
+(semantic-load-enable-semantic-debugging-helpers)
+(semantic-load-enable-all-exuberent-ctags-support)
+(setq semanticdb-project-roots (list (expand-file-name "/")))   ;配置Semantic的检索范围
+(autoload 'senator-try-expand-semantic "senator")               ;优先调用了senator的分析结果
+;;semantic 头文件目录设置
+(defconst cedet-user-include-dirs
+  (list "." ".." "../include" "../inc" "../common" "../public"
+        "../.." "../../include" "../../inc" "../../common" "../../public"))
+(defconst cedet-linux-include-dirs
+  (list "~/CodeSourcery/Sourcery_G++_Lite/arm-none-eabi/include"
+))
+(require 'semantic-c nil 'noerror)
+(let ((include-dirs cedet-user-include-dirs))
+  (when (eq system-type 'gnu/linux)
+    (setq include-dirs (append include-dirs cedet-linux-include-dirs)))
+  (mapc (lambda (dir)
+          (semantic-add-system-include dir 'c++-mode)
+          (semantic-add-system-include dir 'c-mode))
+        include-dirs))
+
+
+;;通过鼠标在直接点击就可以打开和折叠代码
+(require 'semantic-tag-folding nil 'noerror)
+(global-semantic-tag-folding-mode 1)
+(global-srecode-minor-mode 1)
+;;semantic折叠快捷键设置 主要是为了防止其他配置和该配置的鼠标点击冲突造成点击折叠失败
+(define-key semantic-tag-folding-mode-map (kbd "C-c , -") 'semantic-tag-folding-fold-block)
+(define-key semantic-tag-folding-mode-map (kbd "C-c , =") 'semantic-tag-folding-show-block)
+(define-key semantic-tag-folding-mode-map (kbd "C-c ' -") 'semantic-tag-folding-fold-all)  
+(define-key semantic-tag-folding-mode-map (kbd "C-c ' =") 'semantic-tag-folding-show-all)  
+
+
+(global-ede-mode 1) ;;启用全局EDE(工程管理)特性  有时候会不出现project菜单项，当将其建立的工程导入时就可以出现菜单了
+
+
+
+
+
+;;自动补全设置
+;;http://cx4a.org/software/auto-complete/
+(require 'auto-complete)
+(require 'ac-dabbrev)
+(require 'ac-math) ;;用于latex补全
+(add-to-list 'ac-dictionary-directories  (concat my-emacs-lisps-path "auto-complete-1.3.1/dict"))
+(require 'auto-complete-config)
+(require 'auto-complete+) ;;ahei写的加强auto-complete功能的插件
+(require 'auto-complete-extension nil t) ;optional
+(require 'auto-complete-yasnippet nil t) ;optional
+(require 'auto-complete-semantic nil t)  ;optional
+(require 'auto-complete-etags nil t)     ;optional
+;;(require 'auto-complete-cpp nil t) ;optional 这个模式和最新的auto-complete模式冲突
+(ac-config-default)
+
+;; The sources for common all mode.
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(ac-sources (quote (ac-source-yasnippet ac-source-semantic ac-source-imenu ac-source-abbrev ac-source-words-in-buffer ac-source-files-in-current-dir ac-source-filename)) t)
+ '(bmkp-last-as-first-bookmark-file "~/.emacs.bmk")
+ '(safe-local-variable-values (quote ((eval add-hook (quote write-file-hooks) (quote time-stamp))))))
+(defun ac-common-setup ()
+      (setq ac-sources (append ac-sources '(ac-source-dabbrev))))
+
+(add-hook 'auto-complete-mode-hook 'ac-common-setup)
+
+;; The mode that automatically startup.
+(setq ac-modes
+      '(emacs-lisp-mode lisp-interaction-mode lisp-mode scheme-mode
+                        c-mode  c++-mode java-mode org-mode
+                        perl-mode cperl-mode python-mode ruby-mode
+                        ecmascript-mode javascript-mode php-mode css-mode
+                        makefile-mode sh-mode fortran-mode f90-mode ada-mode
+                        xml-mode sgml-mode latex-mode
+                        haskell-mode literate-haskell-mode
+                        asm-mode))
+
+;;;http://code.google.com/p/ac-math  latex模式下补全
+;;;;增加补全项到latex-mode补全时用
+(defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
+  (setq ac-sources
+     (append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
+               ac-sources))
+)
+(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup) ;;latex-mode调用时启用补全源增加函数，见上
+
+
+(setq ac-math-unicode-in-math-p t) ;;use unicode input
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; C-common-mode ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enables omnicompletion with `c-mode-common'.
+(add-hook 'c-mode-common-hook
+          '(lambda ()
+             (add-to-list 'ac-omni-completion-sources
+                          (cons "\\." '(ac-source-semantic)))
+             (add-to-list 'ac-omni-completion-sources
+                          (cons "->" '(ac-source-semantic)))
+             (add-to-list 'ac-sources 'ac-source-etags)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; C++-mode ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Keywords.
+(add-hook 'c++-mode-hook '(lambda ()
+                            (add-to-list 'ac-sources )))
+
+
+(add-to-list 'ac-trigger-commands 'org-self-insert-command) ; if you want enable auto-complete at org-mode, uncomment this line
+(global-set-key (kbd "C-c a") 'auto-complete) ;全局设置补全快捷键
+;;设置采用TAB键进行选中补全项 回车键换行不补全
+(define-key ac-completing-map "\t" 'ac-complete)
+(define-key ac-completing-map "\r" nil)
+
+
+(global-auto-complete-mode 1)
+(setq ac-auto-start 2) ;;输入两个字符后开始补全
+;; Show 0.8 second later
+(setq ac-auto-show-menu 0.1) 
+(setq ac-dwim t)                        ;Do what i mean
+
+
+;;company-mode补全 Company stands for "complete anything" and is a modular in-buffer completion mechanism.
+;;http://www.emacswiki.org/emacs/CompanyMode
+(require 'company)                      ;代码自动补全
+(require 'ac-company)
+(autoload 'company-mode "company" nil t)
+(setq company-idle-delay 0.2)           ;延迟时间
+(setq company-minimum-prefix-length 2)  ;触发补全的字符数量
+(setq company-show-numbers nil)         ;不显示数字
+(setq company-begin-commands '(self-insert-command)) ;;只有插入文字时才进行补全
+(dolist (hook (list
+               'emacs-lisp-mode-hook
+               'lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'scheme-mode-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               'haskell-mode-hook
+               'asm-mode-hook
+               'emms-tag-editor-mode-hook
+               'sh-mode-hook
+               'org-mode
+               ))
+  (add-hook hook 'company-mode))
+(ac-company-define-source ac-source-company-elisp company-elisp)
+(add-hook 'emacs-lisp-mode-hook
+ (lambda () 
+   (add-to-list 'ac-sources 'ac-source-company-elisp)))
+
+
+;;CC-MODE c语言开发环境
+;; Make a non-standard key binding.  We can put this in
+;; c-mode-base-map because c-mode-map, c++-mode-map, and so on,
+;; inherit from it.
+(require 'cc-mode)
+(defun my-c-initialization-hook ()
+  (define-key c-mode-base-map "\C-m" 'c-context-line-break))
+(add-hook 'c-initialization-hook 'my-c-initialization-hook)
+
+
+;; offset customizations not in my-c-style
+;; This will take precedence over any setting of the syntactic symbol
+;; made by a style.
+(setq c-offsets-alist '((member-init-intro . ++)))
+
+
+;; Create my personal style.
+(defconst my-c-style
+  '((c-tab-always-indent        . t)
+    (c-comment-only-line-offset . 4)
+    (c-hanging-braces-alist     . ((substatement-open after)
+                                   (brace-list-open)))
+    (c-hanging-colons-alist     . ((member-init-intro before)
+                                   (inher-intro)
+                                   (case-label after)
+                                   (label after)
+                                   (access-label after)))
+    (c-cleanup-list             . (scope-operator
+                                   empty-defun-braces
+                                   defun-close-semi))
+    (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
+                                   (substatement-open . 0)
+                                   (case-label        . 4)
+                                   (block-open        . 0)
+                                   (knr-argdecl-intro . -)))
+    (c-echo-syntactic-information-p . t))
+  "My C Programming Style")
+(c-add-style "PERSONAL" my-c-style)
+
+
+;; Customizations for all modes in CC Mode.
+(defun my-c-mode-common-hook ()
+  ;; set my personal style for the current buffer
+  (c-set-style "PERSONAL")
+  ;; other customizations
+  (setq tab-width 4
+        ;; this will make sure spaces are used instead of tabs
+        indent-tabs-mode nil)
+  ;; we like auto-newline, but not hungry-delete
+  (c-toggle-auto-newline 1))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;;代码浏览
+;;;头文件导航
+;;(require 'cedet)
+(require 'eassist)  ;;这个工具不错   ;h, cpp文件跳转函数, 支持即时按键选择 http://www.emacswiki.org/emacs/EAssist
+(require 'sourcepair) ;;头文件导航
+(define-key global-map "\C-xz" 'sourcepair-jump-to-headerfile) ;;跳转到头文件的设置
+(setq sourcepair-source-path    '( "." "../*" "../../*" ))
+(setq sourcepair-header-path    '( "." "include" "../include" "../*" "../../*"))
+(setq sourcepair-recurse-ignore '( "CVS"  "Debug" "Release" ))
+
+
+(defun my-c-mode-common-hook ()
+   (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+   (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+(defun my-python-mode-hook ()
+  (define-key python-mode-map (kbd "M-m") 'eassist-list-methods))
+(add-hook 'python-mode-hook 'my-python-mode-hook)
+
+
+(define-key lisp-mode-shared-map (kbd "M-m") 'eassist-list-methods)
+
+
+;;emacs 里面进行工程项目管理
+;;;http://www.emacswiki.org/emacs/ProjectBufferMode
+;;;http://www.emacswiki.org/emacs/FindFileInProject TODO
+;;;http://www.emacswiki.org/emacs/eproject
+
+
+(require 'etags)                        ;源代码导航 emacs库 http://www.emacswiki.org/emacs/EmacsTags
+(require 'etags-extension)    ;;etags加强插件
+;;https://github.com/mattkeller/etags-update
+(require 'etags-update);;自动更新etags
+(global-set-key (kbd "<f5>") 'find-tag+) ;全局设置函数跳转快捷键
+(global-set-key (kbd "<f6>") 'pop-tag-mark) ;全局设置函数跳转返回
+;;select from mutiple tags
+(require 'etags-select)
+(global-set-key (kbd "C-c / M-t p") 'etags-select-find-tag-at-point)
+(global-set-key (kbd "C-c / M-t s") 'etags-select-find-tag)
+
+
+;;xCscope配置
+;;;http://www.emacswiki.org/emacs/CScopeAndEmacs
+(require 'xcscope)
+(require 'xcscope+);;;;;;cscope的插件扩展  http://www.emacswiki.org/emacs/xcscope+.el
+(setq cscope-do-not-update-database t)
+
+
+;;Outline模式 大纲模式 用于隐藏一些不必要的文字
+;;hideshow 模式设置
+;;http://www.emacswiki.org/emacs/HideShow
+;;;(require 'hideshow-fringe)
+(load-library "hideshow")
+
+
+;;Add markers to the fringe for regions foldable by hideshow.el
+(autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
+(autoload 'hideshowvis-minor-mode
+  "hideshowvis"
+  "Will indicate regions foldable with hideshow in the fringe."
+  'interactive)
+;;指定模式激活Hideshowvis 必须放在这个激活hideshow前面
+(dolist (hook (list
+               'c-mode-hook
+               'java-mode-hook
+               'perl-mode-hook
+               'php-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-mode-hook
+               ))
+  (add-hook hook 'hideshowvis-enable))
+;;指定模式自动激活hideshow
+(dolist (hook (list
+               'c-mode-hook
+               'java-mode-hook
+               'perl-mode-hook
+               'php-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-mode-hook
+               ))
+  (add-hook hook 'hs-minor-mode))
+
+
+;;Displaying overlay content in echo area or tooltip
+(defun display-code-line-counts (ov)
+      (when (eq 'code (overlay-get ov 'hs))
+        (overlay-put ov 'help-echo
+                     (buffer-substring (overlay-start ov)
+                      (overlay-end ov)))))
+ 
+    (setq hs-set-up-overlay 'display-code-line-counts)
+;;Other Options
+;; Hide the comments too when you do a 'hs-hide-all'
+(setq hs-hide-comments nil)
+;; Set whether isearch opens folded comments, code, or both
+;; where x is code, comments, t (both), or nil (neither)
+(setq hs-isearch-open 'x)
+;; Add more here
+
+
+
+
+
+;;通过TAGS文件访问头文件 不是很好用 http://www.emacswiki.org/emacs/find-file-in-tags
+(require 'find-file-in-tags)
+(global-set-key (read-kbd-macro "C-c / M-i") 'find-file-in-tags)
+
+
+
+
+;;注释工具
+;;;代码加框注释
+;;;还未添加其快捷键
+(require 'rebox2)
+(require 'edit-misc) ;;ahei写的一些快捷编辑的插件 
+(global-set-key (kbd "C-c / C-c") 'comment) ;;智能加注释
+(global-set-key (kbd "C-c / M-c") 'uncomment) ;;智能去注释
+
+
+;;doxymacs注释工具
+
+
+(require 'doxymacs)
+(add-hook 'c-mode-common-hook 'doxymacs-mode);;访问C/C++文件时启用doxymacs模式
+;;If you want Doxygen keywords fontified use M-x doxymacs-font-lock
+;;doxymacs 快捷键
+;; 命令英文解释 中文解释
+;; C-c d ?will look up documentation for the symbol under the point.查找当前鼠标点下的符号的文档
+;; C-c d rwill rescan your Doxygen tags file.重新扫描tags文件
+;; C-c d fwill insert a Doxygen comment for the next function.为函数插入Doxygen注释
+;; C-c d iwill insert a Doxygen comment for the current file.为文件插入Doxygen注释
+;; C-c d ;will insert a Doxygen comment for the current member.为当前成员插入Doxygen注释
+;; C-c d mwill insert a blank multiline Doxygen comment.插入多行注释
+;; C-c d swill insert a blank singleline Doxygen comment.插入单行注释
+;; C-c d @will insert grouping comments around the current region.插入环绕当前区域的注释
+(defun my-doxymacs-font-lock-hook ()
+    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+        (doxymacs-font-lock)))
+(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+(setq doxymacs-doxygen-style "C++") ;;设置默认模板为C++
+;;Doxymacs C/C++注释模板
+;;;doxymacs C/C++文件头注释模板
+(defconst doxymacs-C++-file-comment-template
+ '(
+   "/*" > n
+   "*" " =====================================================================================" > n
+   "*" > n
+   "*" "    Filename:  "
+   (if (buffer-file-name)
+       (file-name-nondirectory (buffer-file-name))
+     "") > n
+   "*" > n
+   "*" " Description:  " (p "Brief description of this file: ") > n
+   "*" > n
+   "*" "    "> n
+   "*" > n
+   "*" "     Version:  " "0.1"> n
+   "*" "     Created:  " (current-time-string) > n
+   "*" > n
+   "*" "     Authors:  " (user-full-name) (concat " , " user-mail-address) > n
+   "*" "     Company:  " my-company > n
+   "*" "    Revision:  " > n
+   "*" " ======================================================================================" > n
+   "*" " @0.1   " (concat (user-full-name) "  ")  (concat (current-time-string) " , create orignal file")  > n
+   "*" " ======================================================================================" > n
+   "*" " Copyright (c) 2012, " my-company  > n
+   "*" " ======================================================================================" > n
+   "*/" > n)
+ "Default C++-style template for file documentation.")
+;;;Doxymacs C/C++函数注释模板
+(defconst doxymacs-C++-function-comment-template
+'((let ((next-func (doxymacs-find-next-func)))
+     (if next-func
+(list
+ 'l
+ "/** " '> 'n
+ " * " 'p '> 'n
+ " * " '> 'n
+      ;" * ===  FUNCTION  ======================================================================" > n
+ (doxymacs-parm-tempo-element (cdr (assoc 'args next-func)))
+ (unless (string-match
+                   (regexp-quote (cdr (assoc 'return next-func)))
+                   doxymacs-void-types)
+   '(l " * " > n " * " (doxymacs-doxygen-command-char)
+"return " (p "Returns: ") > n))
+ " */" '>)
+       (progn
+(error "Can't find next function declaration.")
+nil))))
+ "Default C++-style template for function documentation.")
+(defconst doxymacs-C++-function-comment-template
+ '((let ((next-func (doxymacs-find-next-func)))
+     (if next-func
+  (list
+   'l
+   " " '> 'n
+   "/* " '> 'n
+   "*" " ===  FUNCTION  ========================================================================" '>  'n
+   "*" "         Name: " (cdr (assoc 'func (doxymacs-find-next-func)))
+   (if (string-match (regexp-quote "static") (cdr (assoc 'return next-func)))
+      "<private>") '> 'n
+   "*" "  Description: " '(p "Brief description of this file: ") '> 'n
+   "*" "   Parameters: " '> 'n
+   (doxymacs-parm-tempo-element (cdr (assoc 'args next-func)))
+   (unless (string-match
+                   (regexp-quote (cdr (assoc 'return next-func)))
+                   doxymacs-void-types)
+     '(l "* " > n "* "
+   "Return Value: " (p  "Returns: ") > n))
+   "*" "      Created: " (current-time-string) (concat " by" (user-full-name)) '> 'n
+   "*" "     Revision: " '> 'n
+   "*" " =======================================================================================" '> 'n
+   "*" " @0.1   " (concat (user-full-name) "  ")  (concat (current-time-string) " , create orignal file")   '> 'n
+   "*" " ======================================================================================="  '> 'n
+   "*" " Copyright (c) 2012, " my-company   '> 'n
+   "*" " ======================================================================================="  '> 'n
+   "*/" '> 'n)
+       (progn
+  (error "Can't find next function declaraton.")
+  nil))))
+ "Default C++-style template for function documentation.")
+;;;Doxymacs 单行C/C++注释模板
+(defconst doxymacs-C++-blank-singleline-comment-template
+ '("/* " p "  */")
+ "Default C++-style template for a blank single line doxygen comment.")
+
+
+;;;Doxymacs 多行C/C++注释模板
+(defconst doxymacs-C++-blank-multiline-comment-template
+ '(
+   > n 
+   "/*" > n 
+   "* " p > n
+   "* " > n
+   "* " "Add by " (user-full-name) (concat " , " (current-time-string)) > n 
+   "*/" > n)
+ "Default C++-style template for a blank multiline doxygen comment.")
+
+
+;;flymake语法检测
+;;flymake是一个实时的语法检查工具，好像是从emacs22开始已经自带flymake，自带的flymake提供了对C,C++,XML,HTML,C#,perl,php,java,tex,idl的支持。
+;;http://emacser.com/flymake.htm
+;;http://www.emacswiki.org/emacs/FlyMake
+;;http://flymake.sourceforge.net/
+(require 'flymake)
+(require 'flymake-shell)
+;;flymake-extension 依赖于fringehelper
+;;http://www.emacswiki.org/emacs/FringeHelper http://nschum.de/src/emacs/fringe-helper/
+(require 'fringe-helper)
+(require 'flymake-extension)
+;;flymake
+(dolist (hook (list
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               ))
+  (add-hook hook 'flymake-find-file-hook))
+;; flymake-shell
+(add-hook 'sh-mode-hook 'flymake-shell-load)
+;; flymake extension
+(setq flymake-extension-use-showtip t)  ;use `shotip' display error or warning.
+;;flymake快捷键设置
+(global-set-key (kbd "C-c \ f C-n") 'flymake-show-next-error);;显示下一个错误
+(global-set-key (kbd "C-c \ f C-p") 'flymake-show-prev-error);;显示前一个错误
+
+
+
+
+;;anything插件 暂时没有研究  不会使用 据说很牛B 
+;;It provides a totally new Emacs experience. While normal Emacs way is specifying action then selecting candidates, 
+;;the anything way is narrowing and selecting candidates then executing action for selected candidates. 
+;;http://www.emacswiki.org/emacs/Anything
+;;http://metasandwich.com/2010/07/30/what-can-i-get-for-10-dolla-anything-el/
+;;http://metasandwich.com/2010/08/01/anything-else/
+(require 'anything)
+(require 'anything-match-plugin)
+;;(require 'anything-config) ;;开启这个会有很多bug，暂时不想解决
+
+
+;;自动下载插件的插件 autoinstall
+;;;http://www.emacswiki.org/emacs/auto-install.el
+;;http://www.emacswiki.org/emacs/AutoInstall
+(require 'auto-install)
+(setq auto-install-directory "~/.emacs.d/auto-install/");;设置插件下载目录
+
+
+;;代码折叠
+(load-library "hideshow")
+(add-hook 'c-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook 'hs-minor-mode)
+(add-hook 'perl-mode-hook 'hs-minor-mode)
+(add-hook 'cperl-mode-hook 'hs-minor-mode)
+(add-hook 'php-mode-hook 'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode) 
+
+
+
+;;**********************        常用编程配置        *********************
+
+;;热键设置
+(global-set-key [f5] 'compile)
+(setq-default compile-command "make -k")
+(global-set-key [f6] 'speedbar)
+(global-set-key [f7] 'gdb)
+(global-set-key [f8] 'previous-error)
+(global-set-key [f9] 'next-error)
+;;启动窗口gdb    
+(global-set-key [f10] 'gdb-many-windows)
+
+
+
+;;(global-set-key [f9] 'delete-window);F9 关闭d当前窗口
+;;(global-set-key [f8] 'other-window);F8窗口间跳转
+;;(global-set-key [(f2)] 'ansi-term);F2 切换到shell模式
+;;(global-set-key [f3] 'split-window-vertically);F3分割窗口
+;;(global-set-key [f12] 'my-fullscreen);F12 全屏
+;;(global-set-key [(f4)] 'compile);编译
+;;(global-set-key [f5] 'gdb);启动gdb
+;;(global-set-key [(f6)] 'gdb-many-windows);启动窗口gdb
+;;(global-set-key [f1] 'goto-line);设置M-g为goto-line
+;;(global-set-key [f7] 'other-frame);跳到其它窗格
+;;(global-set-key [(f3)] 'speedbar);打开speedbar
+
+
+
+;;###########     CC-mode配置  http://cc-mode.sourceforge.net/     ################
+;;add-to-list 'load-path "~/.emacsd/cc-mode-5.31.3")
+;; Use cperl mode instead of the default perl mode
+;;(defalias 'c++-mode 'c-version)
+(add-to-list 'load-path "~/.emacs.d/plugins/cc-mode-5.31.3")
+
+
+(require 'cc-mode)
+(c-set-offset 'inline-open 0)
+(c-set-offset 'friend '-)
+(c-set-offset 'substatement-open 0)
+
+(setq indent-tabs-mode nil)
+(setq c-basic-offset 4 )
+(setq default-tab-width 4)
+
+
+
+;;Create MyCppStyle
+(defconst MyCppStyle
+'((c-tab-always-indent . t)
+   ;; (c-comment-only-line-offset . 0)
+        (c-hanging-braces-alist . ((substatement-open after)
+                                              (brace-list-open)))
+        (c-cleanup-list . (comment-close-slash
+                                 compact-empty-funcall))
+    (c-offsets-alist . ((substatement-open . 0)
+                                                (innamespace . 0)                           ;;在namespace中不缩进
+                                                (case-label      . +)                          ;;case标签缩进一个c-basic-offset单位
+                                                (access-label . -)                             ;;private/public等标签少缩进一单位
+                                             ;;   (inline-open . 0)                             ;;在.h文件中写函数，括号不缩进
+                                                (block-open     . 0)))                       ;;在一个新块开始时不缩进
+;;    (c-echo-syntactic-information-p t)
+        (setq comment-start "/*"
+                  comment-end "*/")
+    (setq indent-tabs-mode nil))
+    "My Cpp Coding Style")
+(c-add-style "MyCppStyle" MyCppStyle)                   ;;定义完自己的style，将其添加到cc-mode的style中。
+
+
+;;Define own hook
+(defun MyCppHook ()
+(setq indent-tabs-mode nil)
+(setq global-hl-line-mode t)
+(c-set-style "MyCppStyle"))                                   ;;设置这个hook对应于MyCppStyle
+(add-hook 'c++-mode-hook 'MyCppHook)                ;;将此hook应用于所有的c++模式。
+
+
+ ;; 最后，可以设置对于不同的文件绑定不同的模式，可以用以下语句实现：
+;;set *.h and *.c and *.cpp files use c++ mode
+(setq auto-mode-alist
+      (cons '("\\.h$" . c++-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.c$" . c++-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.cpp$" . c++-mode) auto-mode-alist))
+
+
+;;输入左边的括号，就会自动补全右边的部分.包括(), '', [] , {} ,""
+ (defun my-c-mode-auto-pair ()
+      (interactive)
+        (make-local-variable 'skeleton-pair-alist)
+          (setq skeleton-pair-alist '(
+                      (?` ?` _ "''")
+                      (?\( _ ")")
+                      (?\[ _ "]")
+;;                      (?{ \n > _ \n ?} >)
+                      (?\" _ "\"")))
+    (setq skeleton-pair t)
+          (local-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+;;          (local-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "'") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "\"") 'skeleton-pair-insert-maybe))
+   (add-hook 'c-mode-hook 'my-c-mode-auto-pair)
+   (add-hook 'c++-mode-hook 'my-c-mode-auto-pair)
+;;    (add-hook 'cperl-mode-hook 'my-c-mode-auto-pair)
+;;    (add-hook 'perl-mode-hook 'my-c-mode-auto-pair)    
+
+
+;;默认Linux内核编程风格，取自Linux内核说明文档                       
+
+(setq auto-mode-alist (cons '("/usr/src/linux.*/.*\\.[ch]$" . linux-c-mode)
+                            auto-mode-alist))                                                 
+(defun linux-c-mode ()
+  "C mode with adjusted defaults for use with the Linux kernel."  
+  (interactive)                                                           
+  (c-mode)                                                               
+   (c-set-style "K&R")                                                    
+   (setq tab-width 4) ;;默认风格是8个缩进                                 
+   (setq indent-tabs-mode t)                                            
+   (setq c-basic-offset 4))  ;;默认风格是8个缩进            
+
+
+;;c-mode或cc-mode下缩进只有4格
+(add-hook 'c-mode-hook
+          '(lambda ()
+             (c-set-style "Stroustrup")))
+
+
+;;_____________C______________
+;;C预处理设置                                                               
+(setq c-macro-shrink-window-flag t)
+(setq c-macro-preprocessor "c")
+(setq c-macro-cppflags " ")
+(setq c-macro-prompt-flag t)
+(setq abbrev-mode t)
+;;(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+
+
+;;___________CPP______________
+;;CPP预处理设置
+(setq c-macro-shrink-window-flag t)
+(setq c-macro-preprocessor "cpp")
+(setq c-macro-cppflags " ")
+(setq c-macro-prompt-flag t)
+(setq abbrev-mode t)
+;;(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;;下面这句是自动换行
+;;(c-toggle-auto-hungry-state 1)                                            
+;;(c-set-style "stroustrup")
+;;(add-hook 'c-mode-common-hook 'program-mode)
+;;(add-hook 'c++-mode-common-hook 'program-mode)
+
+
+
+
+
+;;从《perl语言最佳实践》中摘录的配置信息
+;;======================            CPerl-Mode          =====================
+;; Use cperl mode instead of the default perl mode
+(defalias 'perl-mode 'cperl-mode)
+;;(add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+;;(add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
+;;(add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
+;;(add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
+
+;; turn autoindenting on
+(global-set-key "\t" 'newline-and-indent)
+
+;; Use 4 space indents via cperl mode
+(custom-set-variables
+ '(cperl-close-paren-offset -4)
+ ;;'(cperl-continued-statement-offset 4)
+ '(cperl-indent-level 4)
+ '(cperl-indent-parens-as-block t)
+ '(cperl-tab-always-indent t));
+
+
+;;Since I do not like the default indentations, I have the followings:
+;;(add-hook 'cperl-mode-hook 'n-cperl-mode-hook t)
+;;(defun n-cperl-mode-hook ()
+ ;; (setq cperl-indent-level 4)
+;;  (setq cperl-continued-statement-offset 0)
+;;  (setq cperl-extra-newline-before-brace t)
+  ;;(set-face-background 'cperl-array-face "wheat")
+  ;;(set-face-background 'cperl-hash-face "wheat")
+
+
+
+;; Set line width to 78 columns..
+;;(setq fill-column 78)
+(setq fill-column 80)
+(setq auto-fill-mode t)
+
+;; use % to match various kinds of brackets...
+;; See: http://www.lifl.fr/~hodique/uploads/Perso/patches.el
+(global-set-key "%" 'match-paren)
+(defun match-paren (arg)
+  "Go to the matching paren if on a paren; otherwise insert %."
+  (interactive "p")
+  (let ((prev-char (char-to-string (preceding-char)))
+        (next-char (char-to-string (following-char))))
+    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+          ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+          (t (self-insert-command (or arg 1))))))
+
+;; Load an application template in a new unattached buffer...
+(defun application-template-pl ()
+  "Inserts the standard Perl application template"; For help and info.
+  (interative "*")                                ; Make this user accessible.
+(switch-to-buffer "application-template-pl")
+(insert-file "~/.code_templates/perl_application.pl"))
+;; Set to a specific key combination...
+(global-set-key "\C-ca" 'application-template-pl)
+
+;; Load a module template in a new unattached buffer...
+(defun modelu-template-pm ()
+"Insert the standard Perl modelu template"    ; For help and info.
+(interactive "*")    ; Make this user accessible.
+(switch-to-buffer "module-template-pm")
+(insert-file "~/.code_templates/perl_module.pm"))
+;; Set to a specific key combination...
+
+;; Expand the following abbreviations while typing in text files...
+(abbrev-mode 1) 
+
+(define-abbrev-table 'global-abbrev-table '(
+ ("pdbg"    "use Data:: Dumper qw( Dumper );\nwarn Dumper[];"    nil l)
+ ("phbp"    "#! /usr/bin/perl -w"                                nil 1)
+ ("pbmk"    "use Benchmark qw( cmpthese );\ncmpthese -10, {};"  nil 1)
+ ("pusc"    "use Smart::Comments;\n\n### "                        nil 1)
+ ("putm"    "use Test::More 'no_plan';"                            nil 1)
+))
+
+
+;;输入左边的括号，就会自动补全右边的部分.包括(), '', [] , {} ,""同cc-mode设置部分
+ (require 'cperl-mode)
+  (defun auto-pair ()
+      (interactive)
+        (make-local-variable 'skeleton-pair-alist)
+          (setq skeleton-pair-alist '(
+                      (?` ?` _ "''")
+                      (?\( _ ")")
+                      (?\[ _ "]")
+;;                      (?{ \n > _ \n ?} >)
+                      (?\" _ "\"")))
+    (setq skeleton-pair t)
+          (local-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+;;          (local-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "'") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+          (local-set-key (kbd "\"") 'skeleton-pair-insert-maybe))
+   (add-hook 'cperl-mode-hook 'auto-pair)
+   (add-hook 'perl-mode-hook 'auto-pair)
+;;----------------------            End CPerl-Mode       --------------------- 
+
+
+
+;;======================            自动补全功能       =====================
+;;自动补全功能，这事从王垠的网站直接Copy过来的，引用一些他对此的说明
+;;设置以下 hippie-expand 的补全方式。它是一个优先列表， hippie-expand 会优先使用表最前面
+;;的函数来补全这是说，首先使用当前的buffer补全，如果找不到，就到别的可见的窗口里寻找，如
+;;还找不到，那么到所有打开的buffer去找，如果还……那么到kill-ring里，到文件名，到简称列表
+;;里，到list，当前使用的匹配方式会在 echo 区域显示。
+;;特别有意思的是 try-expand-line，它可以帮你补全整整一行文字。我很多时后有两行文字大致相
+;;同，只有几个字不一样，但是我懒得去拷贝粘贴以下。那么我就输入这行文字的前面几个字。然后
+;;多按几下 M-/ 就能得到那一行。
+
+;;hippie的自动补齐策略，优先调用了senator的分析结果：
+(autoload 'senator-try-expand-semantic "senator")
+
+(global-set-key [(meta ?/)] 'hippie-expand)
+(setq hippie-expand-try-functions-list
+'(
+    senator-try-expand-semantic    
+    try-expand-line
+    try-expand-line-all-buffers
+    try-expand-list
+    try-expand-list-all-buffers
+    try-expand-dabbrev
+    try-expand-dabbrev-visible
+    try-expand-dabbrev-all-buffers
+    try-expand-dabbrev-from-kill
+    try-complete-file-name
+    try-complete-file-name-partially
+    try-complete-lisp-symbol
+    try-complete-lisp-symbol-partially
+    try-expand-whole-kill))
+
+
+
+;;自定义自动补齐命令，这部分是抄hhuu的，如果在单词中间就补齐，否则就是tab。
+(defun my-indent-or-complete ()
+  (interactive)
+  (if (looking-at "\\>")
+      (hippie-expand nil)
+    (indent-for-tab-command))
+  )
+
+(global-set-key [(control tab)] 'my-indent-or-complete)
+                
+
+;;----------------------            End 自动补全        --------------------- 
+
+
+;;**********************            常用编程插件                 *********************
+
+
+;;======================            google-c-style        =====================
+(load-file "~/.emacs.d/plugins/google-c-style.el")
+(add-hook 'c-mode-common-hook 'google-set-c-style)
+(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+;;----------------------        END    google-c-style        ---------------------
+
+
+
+
+;;======================            auto-header            =====================
+(add-to-list 'load-path "~/.emacs.d/plugins/")
+(require 'auto-header)
+
+;;加载auto-header.el文件,自动添加文件头
+(require 'auto-header)
+
+;; 设置文件头中的姓名
+(setq header-full-name "吴旭")
+
+;; 设置邮箱
+(setq header-email-address "admirestator#gmail.com")
+
+;; 设置每次保存时要更新的项目
+(setq header-update-on-save
+    '(  filename
+        modified
+        counter
+        copyright))
+;; 设置文件头的显示格式
+(setq header-field-list
+'(  filename  ;文件名
+;;    blank     ;空行，下同
+    ;;copyright ;;版权
+    version
+    author    ;作者
+    created   ;创建人
+;;blank
+    description   ;描述
+    ;;blank
+    ;;modified_by ;更改者
+   ;; blank
+    ;;status  ;状态，是否发布
+    ;;更新
+    ;;blank
+  ))
+;;----------------------        END    auto-header            ---------------------
+
+
+
+
+;;======================            Load cedet            =====================
+;; See cedet/common/cedet.info for configuration details.
+(load-file "~/.emacs.d/plugins/cedet-1.0pre7/common/cedet.el")
+
+
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
+
+;; Enable EDE for a pre-existing C++ project
+;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
+
+
+;; Enabling Semantic (code-parsing, smart completion) features
+;; Select one of the following:
+
+;; * This enables the database and idle reparse engines
+(semantic-load-enable-minimum-features)
+
+;; * This enables some tools useful for coding, such as summary mode
+;;   imenu support, and the semantic navigator
+;;(semantic-load-enable-code-helpers)
+
+;; * This enables even more coding tools such as intellisense mode
+;;   decoration mode, and stickyfunc mode (plus regular code helpers)
+;; (semantic-load-enable-gaudy-code-helpers)
+
+;; * This enables the use of Exuberent ctags if you have it installed.
+;;   If you use C++ templates or boost, you should NOT enable it.
+;; (semantic-load-enable-all-exuberent-ctags-support)
+;;   Or, use one of these two types of support.
+;;   Add support for new languges only via ctags.
+;; (semantic-load-enable-primary-exuberent-ctags-support)
+;;   Add support for using ctags as a backup parser.
+;; (semantic-load-enable-secondary-exuberent-ctags-support)
+
+;; Enable SRecode (Template management) minor-mode.
+;; (global-srecode-minor-mode 1)
+;;----------------------            END cedet                ---------------------
+
+
+
+;;======================            Load ecb                =====================
+(add-to-list 'load-path "~/.emacs.d/plugins/ecb-2.40")
+(require 'ecb)
+(require 'ecb-autoloads)
+;;打开emacs，然后M-x ecb-activate即可打开ecb。
+;;----------------------            END    ecb                ---------------------
+
+
+
+
+;;======================            Load cscope                =====================
+(add-to-list 'load-path "~/emacs.d/plugins/cscope-15.7a/contrib/xcscope/")
+(require 'xcscope)
+;;如果工程十分庞大，即使是判断文件更新与否也很费时，可以告诉 Emacs 别自 动更新 cscope.out：
+;;(setq cscope-do-not-update-database t)
+;;先M-x !，然后cscope -b，之后就可以在源代码中进行跳转了。命令见cscope菜单
+;;这里有篇讲怎么在emacs下安装和使用cscope的：
+;;http://ann77.stu.cdut.edu.cn/EmacsCscope.html
+;;----------------------              END    cscop                ---------------------
+
+
+
+
+
+;;======================            Load color-theme            =====================
+;;配色方案
+(load-file "~/.emacs.d/plugins/color-theme.el")
+ (require 'color-theme)
+     ;;(color-theme-initialize)
+     ;;(color-theme-comidia)
+     ;;(color-theme-midnight)
+     ;;(color-theme-renegade)
+     ;;-->(color-theme-taming-mr-arneson)
+    ;;     (color-theme-dark-laptop)      
+     ;;(color-theme-calm-forest)
+;;----------------------            END    color-theme            ---------------------
+
+
+
+;;======================            `Load gdb-many-window            =====================
+;;gdb-many-window
+;;这个功能插件可以使emacs的调试界面像VC一样，有watch, stacktrace等窗口，真正实现图形化gdb.
+;;在emacs中编译好程序，然后M-x gdb，连按两次ret，多窗口gdb就出来了
+;;http://www.inet.net.nz/~nickrob/multi-gud.el
+;;http://www.inet.net.nz/~nickrob/multi-gdb-ui.el
+
+(add-to-list 'load-path"~/.emacs.d/plugins")
+(setq gdb-many-windows t)
+(load-library "multi-gud.el")
+(load-library "multi-gdb-ui.el")
+;;----------------------                END    gdb-many-window            ---------------------
+
+
+
+
+;;======================            Load yasnippet                =====================
+;;自动补全代码插件
+(add-to-list 'load-path"~/.emacs.d/plugins")
+(require 'yasnippet-bundle) ;; not yasnippet-bundle
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/plugins/")
+
+ (require 'dropdown-list)
+       (setq yas/prompt-functions '(yas/dropdown-prompt
+              yas/ido-prompt
+              yas/completing-prompt))
+;;----------------------            END    yasnippet            ---------------------
+
+(setq speedbar-show-unknown-files t);;可以显示所有目录以及文件
+(setq dframe-update-speed nil);;不自动刷新，手动 g 刷新
+(setq speedbar-update-flag nil)
+(setq speedbar-use-images nil);;不使用 image 的方式
+(setq speedbar-verbosity-level 0)
+
+
+
+;;xcscope
+(require 'xcscope)
+;; C-c s a             设定初始化的目录，一般是你代码的根目录
+;; C-s s I             对目录中的相关文件建立列表并进行索引
+;; C-c s s             序找符号
+;; C-c s g             寻找全局的定义
+;; C-c s c             看看指定函数被哪些函数所调用
+;; C-c s C             看看指定函数调用了哪些函数
+;; C-c s e             寻找正则表达式
+;; C-c s f             寻找文件
+;; C-c s i             看看指定的文件被哪些文件include
+;=========================================END==============================================;
+
+;;文件头header设置
+(require 'header2)
+;;(require 'header)
+(setq make-header-hooks '(header-mode-line
+                            header-blank
+                            header-file-name
+                            header-blank
+                            header-copyright
+                            header-blank
+                            header-author
+                            header-creation-date
+                            header-modification-author
+                            header-modification-date
+                            header-update-count
+                            header-blank
+                            header-history
+                            header-blank
+                            ))
+(setq header-copyright-notice "  XXXXXXX" )
+(make-local-variable 'user-full-name)
+(make-local-variable 'user-mail-address)
+;=========================================END==============================================;
+
+
+
+;;setnu
+;(add-hook 'c-mode-common-hook '(lambda()  (require 'setnu+)  ) ) ;;设置C/C++mode显示行号
+;(add-hook 'c++-mode-common-hook '(lambda()  (require 'setnu+)  ) )
+
+
+
+;;cedet ecb安装
+(add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo)))
+     (load-file "~/.emacs.d/site-lisp/cedet-1.0pre4/common/cedet.el")
+     (semantic-load-enable-code-helpers)
+     (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
+     (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
+     (define-key-after (lookup-key global-map [menu-bar tools])
+                [speedbar]
+                '("Speedbar" .
+                speedbar-frame-mode)
+                [calendar])
+
+;; 指定semantic临时文件的路径，避免到处都是临时文件
+(setq semanticdb-default-save-directory "~/backups/emacs/semantic")
+
+;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库
+(setq semanticdb-search-system-databases t)
+  (add-hook 'c-mode-common-hook
+          (lambda ()
+            (setq semanticdb-project-system-databases
+                  (list (semanticdb-create-database
+                           semanticdb-new-database-class
+                           "/usr/include")))))
+
+;; project root path
+(setq semanticdb-project-roots
+          (list
+        (expand-file-name "/")))
+;; 避免semantic占用CPU过多
+(setq-default semantic-idle-scheduler-idle-time 432000)
+
+;;ecb
+(add-to-list 'load-path "~/.emacs.d/site-lisp/ecb-2.32")
+(load-file "~/.emacs.d/site-lisp/ecb-2.32/ecb.el")
+(require 'ecb)
+(setq ecb-auto-activate nil
+          ecb-tip-of-the-day nil
+          ecb-tree-indent 4
+          ecb-windows-height 0.5
+          ecb-windows-width 0.13)
+          ecb-auto-compatibility-check nil
+          ecb-version-check nil
+          inhibit-startup-message t
+;;重启Emacs
+;;运行M-x ecb-byte-complie编译，可以加快运行速度
+;;M-x ecb-show-help看在线帮助
+;;M-x customize-option RET ecb-source-path RET设置源码目录
+
+;;设置自动补全
+(defun my-indent-or-complete ()
+   (interactive)
+   (if (looking-at "\\>")
+          (hippie-expand nil)
+          (indent-for-tab-command)))
+(autoload 'senator-try-expand-semantic "senator")
+
+(setq hippie-expand-try-functions-list
+          '(
+                senator-try-expand-semantic
+                try-expand-dabbrev
+                try-expand-dabbrev-visible
+                try-expand-dabbrev-all-buffers
+                try-expand-dabbrev-from-kill
+                try-expand-list
+                try-expand-list-all-buffers
+                try-expand-line
+                try-expand-line-all-buffers
+            try-complete-file-name-partially
+            try-complete-file-name
+            try-expand-whole-kill
+        )
+)
+;=========================================END==============================================;
+
+
+;; c-mode设置
+;; c-mode公共设置
+(defun my-c-mode-common-hook ()
+  (setq default-tab-width 4)
+  (setq tab-width 4)
+  (setq c-basic-offset 4)
+  (hs-minor-mode t))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+(load-library "hideshow")
+(add-hook 'c-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook 'hs-minor-mode)
+(add-hook 'perl-mode-hook 'hs-minor-mode)
+(add-hook 'php-mode-hook 'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+;;能把一个代码块缩起来，需要的时候再展开
+;;  M-x              hs-minor-mode
+;;  C-c @ ESC C-s    show all
+;;  C-c @ ESC C-h    hide all
+;;  C-c @ C-s        show block
+;;  C-c @ C-h        hide block
+;;  C-c @ C-c toggle hide/show
+
+;; C语言设置
+(defun my-c-mode-hook ()
+  (c-set-style "cc-mode"))
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+
+;; C++设置
+(defun my-c++-mode-hook ()
+  (c-set-style "stroustrup"))
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+
+;=========================================END==============================================;
+
+(defun my-c-mode-auto-pair ()
+  (interactive)
+  (make-local-variable 'skeleton-pair-alist)
+  (setq skeleton-pair-alist  '(
+    (?` ?` _ "''")
+    (?\( ?  _ " )")
+    (?\[ ?  _ " ]")
+    (?{ \n > _ \n ?} >)))
+  (setq skeleton-pair t)
+  (local-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "`") 'skeleton-pair-insert-maybe)
+  (local-set-key (kbd "[") 'skeleton-pair-insert-maybe))
+(add-hook 'c-mode-hook 'my-c-mode-auto-pair)
+(add-hook 'c++-mode-hook 'my-c-mode-auto-pair)
+;;输入左边的括号，就会自动补全右边的部分.包括(), "", [] , {} , 等等。
+;=========================================END==============================================;
+
+
+
+
+
+;;HOT KEY
+;;保留F3、F4、F5、F6、F7、F8 for Xrefactory
+(global-set-key [f1] 'shell)                              ; 进入shell
+(global-set-key [C-f9] 'gdb)                              ; 调试
+(setq compile-command "make -f Makefile")                 ; 编译
+(global-set-key [f9] 'do-compile)
+(global-set-key [f10] 'speedbar)                          ; 启动/关闭speedbar
+
+(global-set-key (kbd "M-\[") 'hs-hide-block)              ; 隐藏块
+(global-set-key (kbd "M-\]") 'hs-show-block)              ; 显示块
+(global-set-key [C-f12] 'comment-or-uncomment-region)     ; 注释 / 取消注释
+(global-set-key [f12] 'c-indent-line-or-region)           ; 格式化代码
+
+(global-set-key (kbd "C-`") 'ecb-goto-window-sources)     ; 切换到ecb sources窗口
+(global-set-key [C-tab] 'other-window)                    ; 切换窗口
+(global-set-key [M-return] 'delete-other-windows)         ; 关闭其他窗口
+(global-set-key "\C-xk" 'kill-this-buffer)                ; 关闭当前buffer
+(global-set-key (kbd "s-SPC") 'set-mark-command)          ; 改变set mark键
+
+;; 显示buffer列表
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;; 跳转到当前目录的Dired
+(global-set-key "\C-x\C-j" 'dired-jump)
+
+;; 跳转到寄存器指定的位置
+(global-set-key "\C-xj" 'jump-to-register)
+
+;; 跳转到全局定义
+(global-set-key "\C-xg" 'cscope-find-global-definition-no-prompting) 
+
+(global-set-key (kbd "S-<SPC>") 'set-mark-command) ;用shift+space 来 setmark 了, C-@ 很不好按。
+
+(global-set-key [C-=] 'my-indent-or-complete)     ;自动补全或缩进
+(global-set-key [\C-f12] 'ecb-activate)         ;启用ECB
+(global-set-key [\C-S-f12] 'ecb-deactivate)     ;退出ECB
+;; 补全命令 右Ctrl+\ 自动补全menu
+(global-set-key [M-/] 'hippie-expand)
+;;(global-set-key [(control return)] 'senator-complete-symbol);
+;;(global-set-key [(control return)] ' senator-completion-menu-popup)
+(global-set-key "\C-\\" 'semantic-ia-complete-symbol-menu)
+;;tabbar
+(global-set-key (kbd "S-<up>") 'tabbar-backward-group)
+(global-set-key (kbd "S-<down>") 'tabbar-forward-group)
+(global-set-key (kbd "S-<left>") 'tabbar-backward)
+(global-set-key (kbd "S-<right>") 'tabbar-forward)
+(global-set-key ( kbd "C-.") 'redo) 
+;=========================================END==============================================;
+
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(ecb-options-version "2.32")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2)))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+;=========================================END==============================================;
+
+
+;; c-mode设置
+在.emacs文件添加
+;; c-mode公共设置
+(defun my-c-mode-common-hook ()
+(setq default-tab-width 4)
+(setq tab-width 4)
+(setq c-basic-offset 4)
+(hs-minor-mode t))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+;; C语言设置
+(defun my-c-mode-hook ()
+(c-set-style "cc-mode"))
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+
+;; C++设置
+(defun my-c++-mode-hook ()
+(c-set-style "stroustrup"))
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+如果按照你的来的话不会报错，但是按tag键就会不能自动补全，我的设置是：
+;;;cc-mode配置 http://cc-mode.sourceforge.net/
+(require 'cc-mode)
+(c-set-offset 'inline-open 0)
+(c-set-offset 'friend '-)
+(c-set-offset 'substatement-open 0)
+
+;;;;我的C/C++语言编辑策略
+(defun my-c-mode-common-hook())
+(setq tab-width 4 indent-tabs-mode nil)
+;;;hungry-delete and auto-newline
+(c-toggle-auto-hungry-state 1)
+;;;;我的C++语言编辑策略
+(defun my-c++-mode-hook())
+(setq tab-width 4 indent-tabs-mode nil)
+(add-hook 'c++-mode-hook
+'(lambda()
+(c-set-style "stroustrup")))
+;;(define-key c++-mode-map [f3] 'replace-regexp)  回复  更多评论 
+
+
+24. ;;自动补全功能，这事从王垠的网站直接Copy过来的，引用一些他对此的说明   
+	25. ;;你可以设置以下 hippie-expand 的补全方式。它是一个优先列表， hippie-expand 会优先使用表最前面的函数来补全   
+	26. ;;这是说，首先使用当前的buffer补全，如果找不到，就到别的可见的窗口里寻找，如果还找不到，那么到所有打开的buffer去找，如果还……那么到kill-ring里，到文件名，到简称列表里，到list，…… 当前使用的匹配方式会在 echo 区域显示。   
+	27. ;;特别有意思的是 try-expand-line，它可以帮你补全整整一行文字。我很多时后有两行文字大致相同，只有几个字不一样，但是我懒得去拷贝粘贴以下。那么我就输入这行文字的前面几个字。然后多按几下 M-/ 就能得到那一行。  
+	28. (global-set-key [(meta ?/)] 'hippie-expand)   
+	29. (setq hippie-expand-try-functions-list   
+	30. '(try-expand-line   
+	31. try-expand-line-all-buffers   
+	32. try-expand-list   
+	33. try-expand-list-all-buffers   
+	34. try-expand-dabbrev   
+	35. try-expand-dabbrev-visible   
+	36. try-expand-dabbrev-all-buffers   
+	37. try-expand-dabbrev-from-kill   
+	38. try-complete-file-name   
+	39. try-complete-file-name-partially   
+	40. try-complete-lisp-symbol   
+	41. try-complete-lisp-symbol-partially   
+	42. try-expand-whole-kill))   
+	

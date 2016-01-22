@@ -1,0 +1,13 @@
+;;; tagedit-autoloads.el --- automatically extracted autoloads
+;;
+;;; Code:
+
+
+(provide 'tagedit-autoloads)
+;; Local Variables:
+;; version-control: never
+;; no-byte-compile: t
+;; no-update-autoloads: t
+;; coding: utf-8
+;; End:
+;;; tagedit-autoloads.el ends here

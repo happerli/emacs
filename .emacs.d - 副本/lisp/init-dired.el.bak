@@ -1,0 +1,4 @@
+(require 'dired-details)
+(dired-details-install)
+
+(provide 'init-dired)

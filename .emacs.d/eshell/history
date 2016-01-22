@@ -1,0 +1,38 @@
+ll
+ls
+ssh root@192.168.1.220
+ssh root@192.168.1.53
+ssh root@192.168.1.53
+find
+pwd
+cd ..
+cd ..
+cd ..
+pwd
+cd ..
+find -name "*.[chCH]" -print | etags -
+find -name "*.[chCH]" -print | etags -
+find -name "*.[chCH]"
+find -name *.cpp
+find --?
+find --help
+find -name "*.[chCH]" -print | etags -
+find -name "*.[chCH]" -print | etags.exe -
+find -name "*.[chCH]" -print
+find -name "*.[chCH]" -print | etags -
+find . -name "*.[chS]" | xargs etags
+find . -name "*.[chS]"
+pwd
+find -name "*.[chCH]" -exec etags -a {} 
+etags
+etags
+find -name "*.[chCH]" -exec etags -a {}
+etags --help
+pwd
+pwd
+dir /s /b *.c *.h
+ls /s /b *.c *.h
+find *.h
+find --help
+find --name
+find

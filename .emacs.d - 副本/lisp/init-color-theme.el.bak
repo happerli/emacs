@@ -1,0 +1,9 @@
+;; color theme
+(require 'color-theme-library)
+(require 'color-theme-charcoal-black)
+(color-theme-charcoal-black)
+;;(require 'color-theme)
+;;(require 'color-theme-molokai)
+;;(color-theme-molokai)
+
+(provide 'init-color-theme)

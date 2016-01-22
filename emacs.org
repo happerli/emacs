@@ -64,6 +64,8 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 *** Some time ago, the support of the git svn was added to the package. If current repository was created from the Subversion, then user will get access to the two additional commands: N r (magit-svn-rebase) will perform git svn rebase command, that performs synchronisation with the Subversion, and N c (magit-svn-dcommit), that will push your changesets from the Git to Subversion.
 
 *** Use magit-ediff or 'e' on an unmerged item to resolve merge conflicts with ediff. 
+	Resolving Merge Conflicts Hit e on the Unmerged file in magit-status screen to start a 3 way ediff session. For me this is by far the killer feature. This is especially useful since I do a lot of work on teams and the git history is hardly linear. This usually takes all headaches out of the process.
+	
     Magit will set up an ediff with three buffers A, B and C. A and B are the original (conflicting) files, and C is the conflicted merge.Use 'n'/'p' to move to the next/previous conflict, use 'a'/'b' to choose which changes (those in a A or B) should be the ones to keep in the merged file.You can always just switch to buffer C and edit what the merged version should look like.Once you're done resolving all conflicts, just hit 'q' to exit the ediff merging session, ediff will prompt you to save the changes to the merged file. Save them and then move on to the next unmerged file.Once you're done, just stage the resolved versions of the files and continue with your merge or rebase.
 	After resolving the conflict, back to M-x magit-status and s on the Unmerge line will stage the result. Committing with c c prompts for a commit message prepared with the list of conflicting files and a relevant comment can be added explaining how the conflict was resolved.
 
@@ -77,14 +79,14 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 *** Magit branch manager is also very interactive. 
 	From magit-status press b to open branch popup buffer; it lists arguments relevant to branch command. Then, press v to select a list of branches (or you can execute the stand alone magit-branch-manager) to open the branch manager. You can select branch simply by moving point to a branch then press RET! No more menially typing on the command line and press TAB. To delete a branch, move point to that branch and press k. As you can see, the same key binding has same meaning: kill, but in many different context. Similarly, D stands for Diff.
 
-*** Resolving Merge Conflicts Hit e on the Unmerged file in magit-status screen to start a 3 way ediff session. For me this is by far the killer feature. This is especially useful since I do a lot of work on teams and the git history is hardly linear. This usually takes all headaches out of the process.
-*** Precision staging I love git add -p but magit takes it to the next level. After using TAB to expand the diff in the Unstaged area, you can use the usual emacs marking (C-SPC) to select what you want to stage! This is brilliant. For me, many times the diff blocks you can cycle through with n and p are too large or I have gone a while without committing and I'm trying to narrow down code to keep the commit germane. Being able to precisely mark a region and stage it is sooo nice. (edit: likewise, at the magit-status screen you can start a region and select all the filenames you specifically want to stage or unstage wholesale ...)
+*** Precision staging I love git add -p but magit takes it to the next level. 
+	After using TAB to expand the diff in the Unstaged area, you can use the usual emacs marking (C-SPC) to select what you want to stage! This is brilliant. For me, many times the diff blocks you can cycle through with n and p are too large or I have gone a while without committing and I'm trying to narrow down code to keep the commit germane. Being able to precisely mark a region and stage it is sooo nice. (edit: likewise, at the magit-status screen you can start a region and select all the filenames you specifically want to stage or unstage wholesale ...)
 
 *** tutorial
-http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
-http://jr0cket.co.uk/2012/12/driving-git-with-emacs-pure-magic-with.html.html
-http://jr0cket.co.uk/2012/12/driving-git-with-emacs-part-two-may-log.html.html
-http://magit.vc/manual/magit-refcard.pdf
+- http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
+- http://jr0cket.co.uk/2012/12/driving-git-with-emacs-pure-magic-with.html.html
+- http://jr0cket.co.uk/2012/12/driving-git-with-emacs-part-two-may-log.html.html
+- http://magit.vc/manual/magit-refcard.pdf
 
 *** key map
    - M-x magit-status switch to the status buffer of that repository 使用这个命令查看Git的状态，在git中的命令为git status
@@ -157,6 +159,7 @@ http://magit.vc/manual/magit-refcard.pdf
    - x               magit-reset-head
    - z               magit-key-mode-popup-stashing
    - DEL             magit-show-item-or-scroll-down
+   
 ** git-gutter
 ** ediff
    (setq ediff-split-window-function (quote split-window-horizontally))  将其缺省打开模式改为左右：

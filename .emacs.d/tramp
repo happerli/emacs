@@ -1,6 +1,0 @@
-;; -*- emacs-lisp -*- <14/10/13 19:59:27 c:/Users/user/AppData/Roaming/.emacs.d/tramp>
-;; Tramp connection history.  Don't change this file.
-;; You can delete it, forcing Tramp to reapply the checks.
-
-((["ssh" "root" "imtest.idbhost.com" nil nil]
-  nil))

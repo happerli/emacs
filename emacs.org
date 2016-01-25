@@ -10,12 +10,12 @@ git中除了第一次外，不提示输入密码：git config --global credentia
 ** magit
 *** magit-status buffer
     this buffer contains several lists of objects, matching to different states of objects in Git's repository:
-- unknown objects (untracked)
-- saved (stashed) objects.stash临时存储变更，为以备将来使用stash apply恢复
-- modified object, but not added to commit list (unstaged)
-- modified objects, added to commit list (staged)
-- committed changes, but not pushed to source repository (unpushed).
-	Besides this, if lists staged & unstaged aren't exists, then all modified files are listed in list with status changed.
+    - unknown objects (untracked)
+    - saved (stashed) objects.stash临时存储变更，为以备将来使用stash apply恢复
+    - modified object, but not added to commit list (unstaged)
+    - modified objects, added to commit list (staged)
+    - committed changes, but not pushed to source repository (unpushed).
+    Besides this, if lists staged & unstaged aren't exists, then all modified files are listed in list with status changed.
 User can move between objects in list by using arrow keys, or keys n & p. Besides this, user can quickly move between groups of files with different states by using numerical keys: 1 (magit-jump-to-untracked), 2 (magit-jump-to-unstaged), 3 (magit-jump-to-staged) and 4 (magit-jump-to-unpushed).
 
 	Some operations, that could be performed on objects, behave differently depending on state of object. For example, if you press the k key (magit-discard-item) on unknown object, then it will deleted, but if you press it on modified object, this will only lead to drop changes from that object. And if you'll apply it to the saved (stashed) change, then this change will deleted.

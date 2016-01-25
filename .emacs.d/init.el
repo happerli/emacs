@@ -33,8 +33,9 @@
 (require 'idle-require)
 (require 'init-elpa)
 (require 'init-exec-path) ;; Set up $PATH
-(setenv "GIT_ASKPASS" "git-gui--askpass")
-;;(require 'init-git)
+
+(prefer-coding-system 'utf-8)
+(require 'init-git)
 
 (provide 'init)
 (put 'scroll-left 'disabled nil)

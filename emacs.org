@@ -6,9 +6,11 @@
 
 
 * version control
-git中除了第一次外，不提示输入密码：git config --global credential.helper store
-** magit
-*** shortcut
+** git
+   git中除了第一次外，不提示输入密码：git config --global credential.helper store
+   git通过ui来请求密码：(setenv "GIT_ASKPASS" "git-gui--askpass")
+*** magit
+**** shortcut
    - M-x magit-status switch to the status buffer of that repository 使用这个命令查看Git的状态，在git中的命令为git status
    - s to stage files 把untracked或者unstaged文件的状态改成stage模式，
    - c to commit (type in your commit message then C-c C-c to save the message and commit)  把所有staged文件都commit到索引仓库中
@@ -19,7 +21,7 @@ git中除了第一次外，不提示输入密码：git config --global credentia
    - I ignore file this will add the file to .git/infor/exclude
    - C-h m Magit的使用帮助信息
 
-*** magit-status buffer
+**** magit-status buffer
     this buffer contains several lists of objects, matching to different states of objects in Git's repository:
     - unknown objects (untracked)
     - saved (stashed) objects.stash临时存储变更，为以备将来使用stash apply恢复
@@ -34,8 +36,8 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 	If you don't want to delete unknown objects, and don't want to register them in repository, then you can ignore them with one of two defined commands: the i key (magit-ignore-item) will put current object into ignore list located in the .gitignore file, and the I key (magit-ignore-item-locally) will put current object into the .git/info/exclude file, that is used to ignore objects only in current repository. Besides this, if you'll specify prefix argument before pressing one of these keys, then commands will ask for name of file to ignore, and you can enter name or regular expression as answer.
 
 	And, as usually, you can open current object by pressing the RET key (magit-visit-item).
-
-*** Work with changes
+	
+**** Work with changes
 	User can commit by using one of two commands — either c (magit-log-edit), or C (magit-add-log). They both open a new buffer, where user should enter description of change, but slightly differs in decoration of this description. For first command, user can enter description as free form text, while for second, buffer will contain name of files, so log will look like standard ChangeLog files.
 
 	But I need to mention, that changes are committed differently, depending on the state of repository. If exists only list of modified (changed) objects, then these commands will commit changes for files in this list. If user wants to commit only some objects, then he need to move them into the list of objects to commit (staged), and perform commit only after this operation. To move object into commit list, user can use the s key(magit-stage-item), (for unknown (untracked) objects, this will add object into repository), and remove file from this list, user can with the u key (magit-unstage-item). To move all objects into commit list, we can use the S key (magit-stage-all), and to perform reverse operations — the U key (magit-unstage-all).To stage multiple items (files/directories), you can mark a region and simply press s.
@@ -48,7 +50,7 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 
 	And if user wants, he could return to the clear state of repository by discarding the changes with the x key(magit-reset-head), that will rollback repository to the given changeset (by default this is last committed changeset). There is also magit-reset-working-tree command (the X key), that will revert changes and return repository to the last committed change, without asking for name of changeset.
 
-*** Work with history of changes
+**** Work with history of changes
 	To see history of changes in repository, user can use either l key (magit-log-head), or L key (magit-log). First command displays history of changes for current branch of development, while second, displays history for range, that it asks from user. Example of output, produced by these commands, you can see on the picture below. I want to mention, that magit tries to display changes in different branches, like the gitk command do.
 
 	When moving along the history of changes, user can get detailed information about changeset under point by pressing the RET key. Besides this, user can view changes between any two changesets. To do this, he need to move to first changeset and mark it with the . key (magit-mark-item), and than, move to the other changeset, and display the changes by pressing the = key (magit-diff-with-mark). This will create a new buffer, where corresponding information will displayed.
@@ -61,7 +63,7 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 
 	If something goes wrong, you can return to start of work by pressing r a, and work will started from the revision, those name you enter with r s. And you can finish work by pressing r f, that will apply rest of changeset in the same order, as they were in the history of changes.
 
-*** Tags, branches, and remote repositories
+**** Tags, branches, and remote repositories
 	The magit package also provides enough set of commands for work with branches, tags & remote repositories, so almost all operations could be performed from the Emacs.
 
 	To create tags user can use keys t (magit-tag) and T (magit-annotated-tag). They both ask user for a name of tag, but the second command will also ask for more detailed description of the tag, so it could be much easier to find it later. After entering of tag's name, package will create tag with given name, and using current repository state.
@@ -72,34 +74,34 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 
 	There are also several commands to work with remote repositories. The f key (magit-remote-update) gets from remote (origin) repository list of changesets, missing in current repository. These changes could be downloaded and applied with the F key (magit-pull). Besides this, if user did right customization of repository, then user can also use P key (magit-push) to push changesets into remote repository (currently, supported only pushing into origin.
 
-*** Some time ago, the support of the git svn was added to the package. If current repository was created from the Subversion, then user will get access to the two additional commands: N r (magit-svn-rebase) will perform git svn rebase command, that performs synchronisation with the Subversion, and N c (magit-svn-dcommit), that will push your changesets from the Git to Subversion.
+**** Some time ago, the support of the git svn was added to the package. If current repository was created from the Subversion, then user will get access to the two additional commands: N r (magit-svn-rebase) will perform git svn rebase command, that performs synchronisation with the Subversion, and N c (magit-svn-dcommit), that will push your changesets from the Git to Subversion.
 
-*** Use magit-ediff or 'e' on an unmerged item to resolve merge conflicts with ediff. 
+**** Use magit-ediff or 'e' on an unmerged item to resolve merge conflicts with ediff. 
 	Resolving Merge Conflicts Hit e on the Unmerged file in magit-status screen to start a 3 way ediff session. For me this is by far the killer feature. This is especially useful since I do a lot of work on teams and the git history is hardly linear. This usually takes all headaches out of the process.
 	
     Magit will set up an ediff with three buffers A, B and C. A and B are the original (conflicting) files, and C is the conflicted merge.Use 'n'/'p' to move to the next/previous conflict, use 'a'/'b' to choose which changes (those in a A or B) should be the ones to keep in the merged file.You can always just switch to buffer C and edit what the merged version should look like.Once you're done resolving all conflicts, just hit 'q' to exit the ediff merging session, ediff will prompt you to save the changes to the merged file. Save them and then move on to the next unmerged file.Once you're done, just stage the resolved versions of the files and continue with your merge or rebase.
 	After resolving the conflict, back to M-x magit-status and s on the Unmerge line will stage the result. Committing with c c prompts for a commit message prepared with the list of conflicting files and a relevant comment can be added explaining how the conflict was resolved.
 
-*** magit-log (press l then press another l in magit-status), you can interact with every commit:
+**** magit-log (press l then press another l in magit-status), you can interact with every commit:
 	RET to view relevant changes of a commit. A window dedicated to that commit is opened inside Emacs, with commit message and hunks. Press n to move to next hunk and p to move to previous hunk. If you want to jump to a hunk, just move point to that hunk and press RET! Magit can even jump to the exact location of the character in the hunk. magit-status is an excellent way to review your commit before pushing changes, because you can use all the editing power of Emacs in the magit-status buffer.
 	
 	For each hunk, you can press v to revert if you want to undo some change. After pressing v, magit-status is updated immeidately with the reverted changes and you can stage to amend the current commit. To amend, press C-c C-a. An Emacs window is opened for you to compose the commit message; after done composing, press C-c C-c to commit or C-c C-k to cancel. Then, magit-status shows you two commits: one is unpulled commit (the old commit before amending), one is unpushed commit (the new commit after amending). Press P to open magit-push popup: this buffer lists relevant arguments for pushing a commit. Enter -f to force push to override the old commit and finally press P again to push the new commit to override the old one. Well, if you don't like to amend, you can always push a revert commit.
 	
 	You can also perform interactive rebase with Magit: from magit-log (with beautiful presentation), move point to a commit you want to rebase. Press E on a commit you want to rebase. A buffer appears similar to when you run git rebase -i <commit_hash>that displays the relevant commits, but the buffer is also interactive. Instead of typing the full word "pick" to pick a commit, you can press k to kill a commit (the commit is crossed out), press e to edit a commit, M-p to move commit up and M-n to move commit down etc... there's a short note below specifies these bindings. After that, C-c C-c to start your interactive rebase session. Keep rebasing then press C-c C-a to amend, then move on to the next commit by pressing R: a menu asks for you to [C]ontinue, [A]bort or keep working in the current commit (I forgot they key binding). After you done your rebasing, force push to override the old commits to amend.
 
-*** Magit branch manager is also very interactive. 
+**** Magit branch manager is also very interactive. 
 	From magit-status press b to open branch popup buffer; it lists arguments relevant to branch command. Then, press v to select a list of branches (or you can execute the stand alone magit-branch-manager) to open the branch manager. You can select branch simply by moving point to a branch then press RET! No more menially typing on the command line and press TAB. To delete a branch, move point to that branch and press k. As you can see, the same key binding has same meaning: kill, but in many different context. Similarly, D stands for Diff.
 
-*** Precision staging I love git add -p but magit takes it to the next level. 
+**** Precision staging I love git add -p but magit takes it to the next level. 
 	After using TAB to expand the diff in the Unstaged area, you can use the usual emacs marking (C-SPC) to select what you want to stage! This is brilliant. For me, many times the diff blocks you can cycle through with n and p are too large or I have gone a while without committing and I'm trying to narrow down code to keep the commit germane. Being able to precisely mark a region and stage it is sooo nice. (edit: likewise, at the magit-status screen you can start a region and select all the filenames you specifically want to stage or unstage wholesale ...)
 
-*** tutorial
+**** tutorial
 - http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
 - http://jr0cket.co.uk/2012/12/driving-git-with-emacs-pure-magic-with.html.html
 - http://jr0cket.co.uk/2012/12/driving-git-with-emacs-part-two-may-log.html.html
 - http://magit.vc/manual/magit-refcard.pdf
 
-*** key map
+**** key map
    - M-x magit-status switch to the status buffer of that repository 使用这个命令查看Git的状态，在git中的命令为git status
    - s to stage files 把untracked或者unstaged文件的状态改成stage模式，
    - c to commit (type in your commit message then C-c C-c to save the message and commit)  把所有staged文件都commit到索引仓库中
@@ -170,8 +172,13 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
    - x               magit-reset-head
    - z               magit-key-mode-popup-stashing
    - DEL             magit-show-item-or-scroll-down
-   
-** git-gutter
+**** Unresolved  
+- compare two commit files;
+- compare two files in different branch.
+**** Resolved  
+- stage individual hunks and parts of hunks in a file.
+	emacs init must specify: (prefer-coding-system 'utf-8)
+*** git-gutter
 ** ediff
    (setq ediff-split-window-function (quote split-window-horizontally))  将其缺省打开模式改为左右：
 * max frame when startup

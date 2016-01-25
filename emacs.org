@@ -8,6 +8,17 @@
 * version control
 git中除了第一次外，不提示输入密码：git config --global credential.helper store
 ** magit
+*** shortcut
+   - M-x magit-status switch to the status buffer of that repository 使用这个命令查看Git的状态，在git中的命令为git status
+   - s to stage files 把untracked或者unstaged文件的状态改成stage模式，
+   - c to commit (type in your commit message then C-c C-c to save the message and commit)  把所有staged文件都commit到索引仓库中
+   - P P to do a git push Update remote refs along with associated objects
+   - F F to do a git pull Fetch from and merge with another repository or a local branch
+   - TAB  Toggle hidden status of current section 用来转换显示当前文件的一些信息
+   - i ignore file this will add the filename to the .gitignore file. 忽略当前文件的版本控制，如一些临时文件
+   - I ignore file this will add the file to .git/infor/exclude
+   - C-h m Magit的使用帮助信息
+
 *** magit-status buffer
     this buffer contains several lists of objects, matching to different states of objects in Git's repository:
     - unknown objects (untracked)

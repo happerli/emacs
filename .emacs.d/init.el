@@ -34,6 +34,8 @@
 (require 'init-elpa)
 (require 'init-exec-path) ;; Set up $PATH
 
+;;change default layout of ediff
+(setq ediff-split-window-function (quote split-window-horizontally))
 (prefer-coding-system 'utf-8)
 (require 'init-git)
 (require 'init-window)

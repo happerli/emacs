@@ -62,7 +62,7 @@ ARCHIVE is the string name of the package archive.")
 
 ;; We include the org repository for completeness, but don't use it.
 ;; Lock org-mode temporarily:
-;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+ (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 
 ;; Un-comment below line if you download zip file
 ;; from https://github.com/redguardtoo/myelpa/archive/master.zip
@@ -100,5 +100,6 @@ ARCHIVE is the string name of the package archive.")
 
 (require-package 'magit)
 (require-package 'git-gutter)
+
 
 (provide 'init-elpa)

@@ -31,7 +31,6 @@
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
 
-
 ;;----------------------------------------------------------------------------
 ;; Suppress GUI features
 ;;----------------------------------------------------------------------------
@@ -40,12 +39,10 @@
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message t)
 
-
 ;;----------------------------------------------------------------------------
 ;; Show a marker in the left fringe for lines not in the buffer
 ;;----------------------------------------------------------------------------
 (setq indicate-empty-lines t)
-
 
 ;;----------------------------------------------------------------------------
 ;; Window size and features
@@ -56,6 +53,9 @@
   (set-scroll-bar-mode nil))
 (when (fboundp 'menu-bar-mode)
   (menu-bar-mode -1))
-
+ 
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+ 
 (provide 'init-window)
 

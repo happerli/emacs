@@ -182,6 +182,9 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 ** ediff
    (setq ediff-split-window-function (quote split-window-horizontally))  将其缺省打开模式改为左右：
 * max frame when startup
+	(custom-set-variables
+		'(initial-frame-alist (quote ((fullscreen . maximized)))))
+
 * modeline
 ** date time
 ** line, column
@@ -251,4 +254,6 @@ M-x package-install RET xxx RET
 ** expand
 ** minimap?
 * function list
+* rotate buffer
+* undo/redo layout
 

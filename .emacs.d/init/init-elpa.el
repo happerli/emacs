@@ -100,6 +100,7 @@ ARCHIVE is the string name of the package archive.")
 
 (require-package 'magit)
 (require-package 'git-gutter)
+(require-package 'org)
 
 
 (provide 'init-elpa)

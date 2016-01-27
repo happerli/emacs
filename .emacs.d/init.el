@@ -40,6 +40,7 @@
 (prefer-coding-system 'utf-8)
 (require 'init-git)
 (require 'init-window)
+(require 'init-org)
 
 (provide 'init)
 (put 'scroll-left 'disabled nil)

@@ -7,7 +7,7 @@
 
 
 
-* version control
+* DONE version control
 ** git
    git中除了第一次外，不提示输入密码：git config --global credential.helper store
    git通过ui来请求密码：(setenv "GIT_ASKPASS" "git-gui--askpass")
@@ -193,8 +193,8 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 ** uniquify file name
 ** which function
 ** mode
-* org
-** 配置
+* TODO org
+** TODO 1 配置
 把下面几行加到 .emacs 文件里。后三行是为命令定义全局快捷键――请改成适合你自己的。
 #+BEGIN_EXAMPLE
 ;; The following lines are always needed. Choose your own keys.
@@ -206,7 +206,7 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 #+END_EXAMPLE
 设置之后，打开 .org 扩展的文件会自动进入 org 模式。
 
-** 大纲
+** 2 大纲
 2.3 视图循环
 大纲模式可以隐藏缓冲区里的部分正文。Org 用绑定到 TAB 和 S-TAB 上的两个全命令来改变视图。
 
@@ -261,7 +261,7 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 |-----------------------+------+------------------------------------------------------------|
 | TAB（新的空的条目中） |      | 	如果新的条目中还没有文字，TAB 会调整到合适的级别。 |
 
-** 文本列表
+** 3 文本列表
 在大纲树的一项中，自定义格式的列表可以提供更多的组织结构，也使我们可以得到一个复先框列表（见 5.6 节［复先框］）。Org 模式可以处理这种列表，并且 HTML 导出器（见12章）也支持这种格式。
 
 Org 能够识别有序列表、无序列表和描述列表。
@@ -282,7 +282,7 @@ Org 能够识别有序列表、无序列表和描述列表。
 | C-c C-c        | 如果项中有复先框，就触发改变其状态。并且自动保持本项的符号与缩进在列表中的一致性                     |
 | C-c -          | 循环改变将当前列表的项标志符号                                                                       |
 
-** 表格
+** 4 表格
 任何以‘|’为首个非空字符的行都会被认为是表格的一部分。’|‘也是列分隔符。
 当你在表格内部输入 TAB、RET 或者 C-c C-c 时表格都会自动调整。TAB 会进入下一个区域（RET 进入下一行）并且创建一个新的行。
 当按 TAB、S-TAB 或者 RET 将光标移动到其他区域时，区域中会自动填充一些空格。
@@ -315,7 +315,7 @@ Org 能够识别有序列表、无序列表和描述列表。
 | C-c RET        |      | 添加水平分割线并跳到下一行       |
 | C-c ^          |      | 根据当前列排序，可以选择排序方式 |
 
-** 待办事项
+** 5 待办事项
 Org 模式并不用一个单独的文件来维持TODO列表。它是一些笔记的集合体，因为TODO列表是在你记录笔记的过程中逐渐形成的。
 你Org模式下可以很容易地将树中的一项标记为一个TODO的项。用这种方式，信息内容不会冗余加倍，而且可以显示TODO项的上下文环境。
 当然，这种处理待办事项的方式会将它们分散于各个笔记文件中。Org 模式提供了一些方法使我们可以把它们看作一个整体来处理。
@@ -486,7 +486,7 @@ Org 支持基于一个标签列表来插入标签。默认情况这个列表是�
 这些命令都会提示输入字符串，字符串支持基本的逻辑去处。像“+boss+urgent-project1”，是搜索所有的包含标签“boss”和“urgent”但不含“project1”的项；
 而 “Kathy|Sally”，搜索标签包含“Kathy”或者“Sally”和项。搜索字符串的语法很丰富，支持查找TODO关键字、条目级别和属性。更详细的介绍和例子，见第 10.3.3 节
 
-** 属性
+** 7 属性
 属性是一些与条目关联的键值对。它们位于一个名为 PROPERTIES 的特殊抽屉中。第一个属性都单独一行，键在前（被冒号包围），值在后：
 
 #+BEGIN_EXAMPLE
@@ -544,6 +544,7 @@ Org 支持基于一个标签列表来插入标签。默认情况这个列表是�
 
 一个时间戳可以包含一个时间间隔，表示事件不只在指定的时间发生，还在每隔一个特定的时间如 N 天（d）、周（w）、月（m）或者年（y）之后重复发生。
 下面的事件每周二在议程中显示：
+
 #+BEGIN_EXAMPLE
  * Pick up Sam at school <2007-05-16 Wed 12:30 +1w>
 #+END_EXAMPLE
@@ -632,7 +633,7 @@ Org 支持基于一个标签列表来插入标签。默认情况这个列表是�
 |                 | 如何定制视图，见手册                                                                                                   |   |
 | C-c C-c	 | 在一个已经存在的计时表格之上时，更新它。 更新动态块。光标需要置于动态块 #+BEGIN 这行。                                 |   |
 "/"键可能会在时间轴（见第 10.3.4 节）和议程（见第 10.3.1 节）中使用来查看一天中处理和关闭了哪些任务。
-** 9 捕获——转发——存档
+** TODO 9 捕获——转发——存档
 任何组织系统都有一个重要功能，就是能捕获新的灵感或者任务，并将相关的引用材料与之联系起来。Org 提供了一个捕获过程来创建任务。
 它将与一个任务相关的文件（附件）保存在一个特定的目录下。在系统中，任务和项目经常移动。将整个项目树保存到一个归档文件中可以保持系统简洁快速。
 
@@ -707,7 +708,7 @@ Org 的获取一个新条目的方法很大程序上受 John Wiegley 的 excelle
 #+ARCHIVE: %s_done::
 #+END_EXAMPLE
 
-** 10 议程视图
+** TODO 10 议程视图
 根据 Org 的工作方式，TODO 项、时间戳和带标签的标题分散在一个或者多个文件中。
 为了能够查看某一天的项目或者事件，信息必须收集在一起，以一种的有条理方式排序、显示。有几种不同的视图，见下文。
 
@@ -715,7 +716,12 @@ Org 的获取一个新条目的方法很大程序上受 John Wiegley 的 excelle
 从议程缓冲区中远程编辑是说，比如，你可以在议程缓冲区中改变标题和约会的日期。议程缓冲区中使用的命令在第 10.4 节列出。
 
 *** 10.1 议程文件
-显示的信息通常是从各个议程文件中收集来的，这样文件在变量 org-agenda-files 中列出。
+显示的信息通常是从各个议程文件中收集来的，这样文件在变量 org-agenda-files 中列出。你可以在你的emacs初始化文件(.emacs)里加入如下几行：
+#+BEGIN_EXAMPLE
+ (setq org-agenda-files (list "~/org/work.org"
+                            "~/org/school.org"
+                             "~/org/home.org"))
+#+END_EXAMPLE
 
 | C-c [ | 将当前文件加入到议程文件列表中。当前文件会被加到列表的前面。如果文件已经在列表中，会被移到前面。带有前缀时，文件添加/移到到后面。 |
 | C-c ] | 将当前文件从议程文件列表中删除。                                                                                                  |
@@ -860,10 +866,58 @@ C-c a M  同 C-c a m，但只复选同时也是 TODO 项的标题。
 Org 支持用 M-TAB 进行缓冲区内部的补全。这种补全不需要利用 minibuffer。你只需要键入几个字母然后用快捷键在原位补全。
 例如，这个命令可以在‘\’后面补全 TeX 符号，在标题的开头补全 TODO 关键字，在‘:’之后补全标签。
 
+** Link
+用一个特殊的含有方括号的语法来表示链接：
+
+#+BEGIN_EXAMPLE
+[link(链接地址)][ description(链接描述)]]
+#+END_EXAMPLE
+生效后链接消失，只显示它的描述。移动光标到该链接上，按Ctrl-c和Ctrl-o，调用org-open-at-point。
+
+你也能链接到本地文件。试试看浏览另外一个文件，比如说你的emacs初始化文件 (.emacs)，然后连续按Ctrl-c和l键调用org-store-link。
+你会看到一条信息，说已经把你正在浏览的文件中的位置存为一个链接。
+然后回到你的Org-Mode的buffer，用Ctrl-c和Ctrl-l来调出org-insert-link 来插入该链接。(你可以用方向键来翻查到你刚才记录的链接。)
 ** DONE hide more star, indent instead of star
 - M-x org-indent-mode
 - (setq org-startup-indented t);;in .emacs config
 ** TODO agenda view
+Switch to a daily view with d (org-agenda-day-view)
+Switch to a weekly view with w (org-agenda-week-view)
+View earlier or later days/weeks with your left and right arrow keys (org-agenda-earlier, org-agenda-later)
+Jump to a specific day with j (org-agenda-goto-date)
+
+A: all
+
+Category:
+P: project 一个工程项目对应一个以上的行动，并且它们通常都付有结束的日期。在各个工程项目的目录中记述项目的内容，换句话说就是细化项目流程。
+   与任务的（Next Action）中说明的一样，也用一些动词来表述项目：
+   完成，决定，处理，调查，提示，扩大，计划，设计，结束，确定，查询，展开，更新，安装，改良，设定。
+F: financial 财务相关
+C: calendar 特殊日期
+T: tasks todo list 使用明确的动词表示“next action”，例如：
+   处理，提问，回避，购买，变更，明确，收集，委托，从事，深思，想象，决定，延期，开发，废弃，重新实现，下载，输入，整理，跟踪，雇佣，
+   改善，增加，报告，寻找，维持，测定，检测，订货，描画，打电话，设置优先级，购入，减少，记忆，修理，回复，调查，回顾，时间安排，卖，
+   送，服务，指定，开始，停止，建议，规划，坐车，更新，升级，写。
+
+Property:
+SEQ_TODO: TODO(t) STARTED(s) WAITING(w) APPT(a) | DONE(d) CANCELLED(c) DEFERRED(f)
+
+Tag:
+O: office
+H: home
+R: reading 正在读的书
+B: book 计划读的书
+
+** TODO remember or capture mode
+** TODO plannerMode
+SCHEDULED: <2016-01-30 周六>
+[[http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html][org-mode: 最好的文档编辑利器，没有之一]]
+[[http://holbrook.github.io/2012/04/14/emacs_orgmode_task.html][[Emacs学习笔记(10):Org-mode,最强的任务管理利器，没有之一]]
+[[http://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html#sec-9][Org-mode 简明手册]]
+[[http://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html][用Org-mode实现GTD]]
+[[http://www.yifeiyang.net/emacs/use-emacs-org-mode.html][GTD实践---使用Emacs和Org-mode (quick links)]]
+[[http://members.optusnet.com.au/~charles57/GTD/gtd_workflow.html][How I use Emacs and Org-mode to implement GTD]]
+[[http://doc.norang.ca/org-mode.html][Org Mode - Organize Your Life In Plain Text!]]
 
 * switch window
 * switch buffer

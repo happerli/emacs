@@ -43,4 +43,3 @@
 (require 'init-org)
 
 (provide 'init)
-(put 'scroll-left 'disabled nil)

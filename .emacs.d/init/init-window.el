@@ -56,6 +56,8 @@
  
 (custom-set-variables
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
+(put 'scroll-left 'disabled nil)
  
 (provide 'init-window)
 

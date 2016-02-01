@@ -981,6 +981,6 @@ M-x package-install RET xxx RET
 * function list
 * rotate buffer
 * undo/redo layout
-SCHEDULED: <2016-01-27 周三>
+* w3m open link
 
 

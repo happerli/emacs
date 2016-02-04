@@ -1,93 +1,86 @@
 ;; -*- coding: utf-8 -*-
 (require 'org)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
+;;(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+;;(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
 (setq org-startup-indented t)
 (setq org-log-done t)
+
+;;Changing a task state is done with C-c C-t KEY,
+;;where KEY is the appropriate fast todo state selection key as defined in org-todo-keywords.
+(setq org-use-fast-todo-selection t)
+
+;;allows changing todo states with S-left and S-right skipping all of 
+;;the normal processing when entering or leaving a todo state. 
+;;This cycles through the todo states but skips setting timestamps and
+;; entering notes which is very convenient when all you want to
+;; do is fix up the status of an entry.
+(setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;;(eval-after-load 'org
-;;   '(progn
-;;      (require 'org-clock)
-;;      ; @see http://irreal.org/blog/?p=671
-;;      (setq org-src-fontify-natively t)
-;;      ;; (require 'org-fstree)
-;;      (defun soft-wrap-lines ()
-;;        "Make lines wrap at window edge and on word boundary,
-;;        in current buffer."
-;;        (interactive)
-;;        ;; display wrapped lines instead of truncated lines
-;;        (setq truncate-lines nil)
-;;        (setq word-wrap t))
-;;      (add-hook 'org-mode-hook '(lambda ()
-;;                                  (setq evil-auto-indent nil)
-;;                                  (soft-wrap-lines)
-;;                                  ))))
-
-
+(setq org-agenda-files (quote ("~/org/gtd")))
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-              (sequence "WAITING(w@/!)" "SOMEDAY(S)" "PROJECT(P@)" "|" "CANCELLED(c@/!)"))))
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org clock
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;The triggers break down to the following rules:
+;; -Moving a task to CANCELLED adds a CANCELLED tag
+;; -Moving a task to WAITING adds a WAITING tag
+;; -Moving a task to HOLD adds WAITING and HOLD tags
+;; -Moving a task to a done state removes WAITING and HOLD tags
+;; -Moving a task to TODO removes WAITING, CANCELLED, and HOLD tags
+;; -Moving a task to NEXT removes WAITING, CANCELLED, and HOLD tags
+;; -Moving a task to DONE removes WAITING, CANCELLED, and HOLD tags
+;;The tags are used to filter tasks in the agenda views conveniently.
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-;; Change task state to STARTED when clocking in
-(setq org-clock-in-switch-to-state "STARTED")
-;; Save clock data and notes in the LOGBOOK drawer
-(setq org-clock-into-drawer t)
-;; Removes clocked tasks with 0:00 duration
-(setq org-clock-out-remove-zero-time-clocks t)
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold)
+              ("PHONE" :foreground "forest green" :weight bold))))
+			  
+(defun bh/hide-other ()
+  (interactive)
+  (save-excursion
+    (org-back-to-heading 'invisible-ok)
+    (hide-other)
+    (org-cycle)
+    (org-cycle)
+    (org-cycle)))
 
-;; Show the clocked-in task - if any - in the header line
-(defun sanityinc/show-org-clock-in-header-line ()
-  (setq-default header-line-format '((" " org-mode-line-string " "))))
+(defun bh/set-truncate-lines ()
+  "Toggle value of truncate-lines and refresh window display."
+  (interactive)
+  (setq truncate-lines (not truncate-lines))
+  ;; now refresh window display (an idiom from simple.el):
+  (save-excursion
+    (set-window-start (selected-window)
+                      (window-start (selected-window)))))
 
-(defun sanityinc/hide-org-clock-from-header-line ()
-  (setq-default header-line-format nil))
+(defun bh/make-org-scratch ()
+  (interactive)
+  (find-file "/tmp/publish/scratch.org")
+  (gnus-make-directory "/tmp/publish"))
 
-(add-hook 'org-clock-in-hook 'sanityinc/show-org-clock-in-header-line)
-(add-hook 'org-clock-out-hook 'sanityinc/hide-org-clock-from-header-line)
-(add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
-
-(eval-after-load 'org-clock
-  '(progn
-     (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
-     (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu)))
-
-(eval-after-load 'org
-   '(progn
-      (require 'org-clock)
-      ; @see http://irreal.org/blog/?p=671
-      (setq org-src-fontify-natively t)
-      ;; (require 'org-fstree)
-      (defun soft-wrap-lines ()
-        "Make lines wrap at window edge and on word boundary,
-        in current buffer."
-        (interactive)
-        ;; display wrapped lines instead of truncated lines
-        (setq truncate-lines nil)
-        (setq word-wrap t))
-      (add-hook 'org-mode-hook '(lambda ()
-                                  (setq evil-auto-indent nil)
-                                  (soft-wrap-lines)
-                                  ))))
-
-(defadvice org-open-at-point (around org-open-at-point-choose-browser activate)
-  (let ((browse-url-browser-function
-         (cond ((equal (ad-get-arg 0) '(4))
-                'browse-url-generic)
-               ((equal (ad-get-arg 0) '(16))
-                'choose-browser)
-               (t
-                (lambda (url &optional new)
-                  (w3m-browse-url url t))))))
-    ad-do-it))
-	
+(defun bh/switch-to-scratch ()
+  (interactive)
+  (switch-to-buffer "*scratch*"))
+  
 (provide 'init-org)
 

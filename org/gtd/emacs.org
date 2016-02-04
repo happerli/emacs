@@ -546,7 +546,7 @@ Org 支持基于一个标签列表来插入标签。默认情况这个列表是�
 下面的事件每周二在议程中显示：
 
 #+BEGIN_EXAMPLE
- * Pick up Sam at school <2007-05-16 Wed 12:30 +1w>
+ * Pick up Sam at school <2016-02-03 周三 12:30 +1w>
 #+END_EXAMPLE
 
 **** 日记样式的 sexp 条目
@@ -607,16 +607,19 @@ Org 支持基于一个标签列表来插入标签。默认情况这个列表是�
 | C-c C-s | 在标题下面插入一个带有“SCHEDULED”关键字的时间戳。 |
 
 在给定的日期标题会列在议程中。另外，对于过期的日程安排会在编辑为 今天 并给出提醒，直到被标记为 DONE。也就是说，任务会自动推迟日期直到它被完成。
+
 #+BEGIN_EXAMPLE
  *** TODO Call Trillian for a date on New Years Eve.
     SCHEDULED: <2004-12-25 Sat>
 #+END_EXAMPLE
 
 有些任务需要一再重复出现。Org 模式在截止期限、计划安排和普通时间戳中用所谓的中继器来管理这种任务。在下面的例子中：
+
 #+BEGIN_EXAMPLE
  ** TODO Pay the rent
    DEADLINE: <2005-10-01 Sat +1m>
 #+END_EXAMPLE
+
 +1m 是一个中继器；上面的意思是任务有一个截止期限 ~ 2005-10-01~ ，并从这个日期开始每月都重复出现。
 
 *** 8.4 记录工作时间
@@ -918,6 +921,10 @@ SCHEDULED: <2016-01-30 周六>
 [[http://www.yifeiyang.net/emacs/use-emacs-org-mode.html][GTD实践---使用Emacs和Org-mode (quick links)]]
 [[http://members.optusnet.com.au/~charles57/GTD/gtd_workflow.html][How I use Emacs and Org-mode to implement GTD]]
 [[http://doc.norang.ca/org-mode.html][Org Mode - Organize Your Life In Plain Text!]]
+[[https://github.com/marboo/orgmode-cn/blob/master/org.org][Org-Manual 7.8]]
+[[[[https://dl.dropboxusercontent.com/u/3968124/sacha-emacs.html#unnumbered-46]]][Sacha Chua's Emacs configuration]]
+
+
 
 * switch window
 * switch buffer

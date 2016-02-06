@@ -21,7 +21,11 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-(setq org-agenda-files (quote ("~/org/gtd")))
+(setq org-agenda-files (quote ("~/org/gtd/"
+                               "~/org/gtd/work/home"
+                               "~/org/gtd/work/office"
+                               "~/org/gtd/info")))
+
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))

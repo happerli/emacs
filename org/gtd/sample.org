@@ -1,0 +1,15 @@
+* Health and Recreation
+  :PROPERTIES:
+  :CATEGORY: Health
+  :END:
+** TODO examine
+- State "TODO"       from "WAITING"    [2016-02-02 周二 11:21]
+- State "WAITING"    from "WAITING"    [2016-02-02 周二 11:21] \\
+  w1
+- State "WAITING"    from "TODO"       [2016-02-02 周二 11:10] \\
+  i donot known.
+- State "TODO"       from "CANCELLED"  [2016-02-02 周二 11:07]
+* House Maintenance
+  :PROPERTIES:
+  :CATEGORY: House
+  :END:

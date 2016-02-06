@@ -913,7 +913,7 @@ B: book 计划读的书
 
 ** TODO remember or capture mode
 ** TODO plannerMode
-SCHEDULED: <2016-01-30 周六>
+
 [[http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html][org-mode: 最好的文档编辑利器，没有之一]]
 [[http://holbrook.github.io/2012/04/14/emacs_orgmode_task.html][[Emacs学习笔记(10):Org-mode,最强的任务管理利器，没有之一]]
 [[http://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html#sec-9][Org-mode 简明手册]]

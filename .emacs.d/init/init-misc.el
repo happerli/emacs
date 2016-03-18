@@ -35,7 +35,6 @@ delete-selection-mode 1
  ;; no annoying beep on errors
 visible-bell t
 transient-mark-mode t
-global-visual-line-mode t;;It turns on word-wrapping
 )
 
 (show-paren-mode t);; highlight paren

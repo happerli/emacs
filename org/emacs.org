@@ -9,7 +9,9 @@
 
 * DONE version control
 ** git
-   git中除了第一次外，不提示输入密码：git config --global credential.helper store
+1. git中除了第一次外，不提示输入密码：git config --global credential.helper store
+2. git config user.email "xxx@xxx.com"
+3. git config user.name "xxx"
    git通过ui来请求密码：(setenv "GIT_ASKPASS" "git-gui--askpass")
 *** magit
 **** shortcut

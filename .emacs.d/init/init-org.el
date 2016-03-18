@@ -5,6 +5,7 @@
 ;;(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
 (setq org-startup-indented t)
 (setq org-log-done t)
+(global-visual-line-mode t);;It turns on word-wrapping
 
 ;;Changing a task state is done with C-c C-t KEY,
 ;;where KEY is the appropriate fast todo state selection key as defined in org-todo-keywords.

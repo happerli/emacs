@@ -39,7 +39,6 @@
 (setq ediff-split-window-function (quote split-window-horizontally))
 (prefer-coding-system 'utf-8)
 (require 'init-git)
-(require 'init-org)
 (require 'init-window-buffer)
 (require 'init-highlight-symbol)
 (require 'init-ace-jump-mode)
@@ -54,6 +53,7 @@
 (require 'init-helm)
 (require 'init-ibuffer)
 (require 'init-company)
+(require 'init-org)
 
 (server-start) 
 

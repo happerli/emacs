@@ -1105,11 +1105,11 @@ that was stored with ska-point-to-register."
 ;;  "Automatically save buffer when edit in moccur."
 ;;  (save-buffer))
 ;;
-;;(require 'ediff)                        ;文件比较功能 emacs帿http://www.emacswiki.org/emacs/EdiffMode
-;;(require 'ediff+)                       ;ediff增强 http://www.emacswiki.org/emacs/ediff+.el
-;;(setq ediff-split-window-function (if (> (frame-width) 150)
-;;                                      'split-window-horizontally
-;;                                    'split-window-vertically));; split the window depending on the frame width:
+(require 'ediff)                        ;文件比较功能 emacs帿http://www.emacswiki.org/emacs/EdiffMode
+(require 'ediff+)                       ;ediff增强 http://www.emacswiki.org/emacs/ediff+.el
+(setq ediff-split-window-function (if (> (frame-width) 150)
+                                      'split-window-horizontally
+                                    'split-window-vertically));; split the window depending on the frame width:
     
 ;;;;kill-ring 里的内容都可以方便的浏览，粘贴。具体操作请在这个buffer 按C-h m 或者?.
 ;;;;need install browse-kill-ring

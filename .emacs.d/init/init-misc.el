@@ -1106,6 +1106,9 @@ that was stored with ska-point-to-register."
 ;;  (save-buffer))
 ;;
 (require 'ediff)                        ;文件比较功能 emacs帿http://www.emacswiki.org/emacs/EdiffMode
+;;Interactively, on the fly:
+;;Whitespace sensitivity – Toggle with `##’ (‘ediff-toggle-skip-similar’).
+;;Case sensitivity – Toggle with `#c’ (‘ediff-toggle-ignore-case’). This assumes that you’ve loaded library Lisp:ediff+.el and that you are using ;;`diff(1)’ as ‘ediff-diff-program’. (Toggling case-sensitivity is available in vanilla GNU Emacs 22, so Lisp:ediff+.el is mainly useful for older ;;Emacs versions.)
 (require 'ediff+)                       ;ediff增强 http://www.emacswiki.org/emacs/ediff+.el
 (setq ediff-split-window-function (if (> (frame-width) 150)
                                       'split-window-horizontally

@@ -22,7 +22,7 @@
    - i ignore file this will add the filename to the .gitignore file. 忽略当前文件的版本控制，如一些临时文件
    - I ignore file this will add the file to .git/infor/exclude
    - C-h m Magit的使用帮助信息
-
+     
 **** magit-status buffer
     this buffer contains several lists of objects, matching to different states of objects in Git's repository:
     - unknown objects (untracked)
@@ -174,15 +174,16 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
    - x               magit-reset-head
    - z               magit-key-mode-popup-stashing
    - DEL             magit-show-item-or-scroll-down
-**** Unresolved  
+**** TODO Unresolved [/]  
 - compare two commit files;
 - compare two files in different branch.
+- compare two version;
 **** Resolved  
 - stage individual hunks and parts of hunks in a file.
 	emacs init must specify: (prefer-coding-system 'utf-8)
 *** git-gutter
-** ediff
-   (setq ediff-split-window-function (quote split-window-horizontally))  将其缺省打开模式改为左右：
+** TODO ediff
+(setq ediff-split-window-function (quote split-window-horizontally))  将其缺省打开模式改为左右：
 * DONE max frame when startup
 	(custom-set-variables
 		'(initial-frame-alist (quote ((fullscreen . maximized)))))
@@ -193,6 +194,694 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 ** uniquify file name
 ** which function
 ** mode
+* DONE switch window
+M+num
+* [ ] switch buffer
+** DONE ace jump buffering(C+x b)
+** TODO helm-buffers-list(helm-mini)
+** DONE C+x <left>/<right>
+
+* DONE jump or back to recent postion (in buffer or between buffers)
+(setq rj-ring-length 1000)
+(require 'recent-jump)
+(recent-jump-mode);;need hook position move functions 
+(define-key global-map [f5] 'recent-jump-backward)
+(define-key global-map [f6] 'recent-jump-forward)
+* DONE browse dir(dired)
+C+x d
+* DONE highlight symbol(prev or next)
+* DONE ace jump
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+* DONE shift line up or down
+M-up/down
+* DONE line number
+* DONE undo redo
+(global-set-key (kbd "C-/") 'undo)
+(global-set-key (kbd "C-?") 'redo)
+* DONE go to last change
+http://www.emacswiki.org/emacs/GotoChg
+(require 'goto-chg)
+(global-set-key (kbd "C-\\") 'goto-last-change)
+* DONE undo/redo layout
+Navigate window layouts with "C-c <left>" and "C-c <right>"
+(global-set-key (kbd "C-x 4 u") 'winner-undo)
+(global-set-key (kbd "C-x 4 r") 'winner-redo)
+* DONE project(ile)
+https://github.com/bbatsov/projectile
+*** key(Interactive Commands)
+Here's a list of the interactive Emacs Lisp functions, provided by Projectile:
+| ;;Keybinding    | Description                                                                                                |
+|-----------------+------------------------------------------------------------------------------------------------------------|
+| ;;C-c p g       | Display a list of all files at point in the project. With a prefix argument it will clear the cache first. |
+| ;;C-c p f       | Display a list of all files in the project. With a prefix argument it will clear the cache first.          |
+| ;;C-c p F       | Display a list of all files in all known projects.                                                         |
+| ;;C-c p s g     | Run grep on the files in the project.                                                                      |
+| ;;M-- C-c p s g | Run grep on projectile-grep-default-files in the project.                                                  |
+| ;;C-c p v       | Run vc-dir on the root directory of the project.                                                           |
+|                 |                                                                                                            |
+|-----------------+------------------------------------------------------------------------------------------------------------|
+|                 |                                                                                                            |
+| ;;C-c p 4 f     | Jump to a project's file using completion and show it in another window.                                   |
+| ;;C-c p 4 g     | Jump to a project's file based on context at point and show it in another window.                          |
+| ;;C-c p d       | Display a list of all directories in the project. With a prefix argument it will clear the cache first.    |
+| ;;C-c p 4 d     | Switch to a project directory and show it in another window.                                               |
+| ;;C-c p 4 a     | Switch between files with the same name but different extensions in other window.                          |
+| ;;C-c p T       | Display a list of all test files(specs, features, etc) in the project.                                     |
+| ;;C-c p l       | Display a list of all files in a directory (that's not necessarily a project)                              |
+| ;;C-c p b       | Display a list of all project buffers currently open.                                                      |
+| ;;C-c p 4 b     | Switch to a project buffer and show it in another window.                                                  |
+| ;;C-c p 4 C-o   | Display a project buffer in another window without selecting it.                                           |
+| ;;C-c p a       | Switch between files with the same name but different extensions.                                          |
+| ;;C-c p o       | Runs multi-occur on all project buffers currently open.                                                    |
+| ;;C-c p r       | Runs interactive query-replace on all files in the projects.                                               |
+| ;;C-c p i       | Invalidates the project cache (if existing).                                                               |
+| ;;C-c p R       | Regenerates the projects TAGS file.                                                                        |
+| ;;C-c p j       | Find tag in project's TAGS file.                                                                           |
+| ;;C-c p k       | Kills all project buffers.                                                                                 |
+| ;;C-c p D       | Opens the root of the project in dired.                                                                    |
+| ;;C-c p e       | Shows a list of recently visited project files.                                                            |
+| ;;C-c p E       | Opens the .dirs-local.el file of the project.                                                              |
+| ;;C-c p s s     | Runs ag on the project. Requires the presence of ag.el.                                                    |
+| ;;C-c p !       | Runs shell-command in the root directory of the project.                                                   |
+| ;;C-c p &       | Runs async-shell-command in the root directory of the project.                                             |
+| ;;C-c p c       | Runs a standard compilation command for your type of project.                                              |
+| ;;C-c p P       | Runs a standard test command for your type of project.                                                     |
+| ;;C-c p t       | Toggle between an implementation file and its test file.                                                   |
+| ;;C-c p 4 t     | Jump to implementation or test file in other window.                                                       |
+| ;;C-c p z       | Adds the currently visited file to the cache.                                                              |
+| ;;C-c p p       | Display a list of known projects you can switch to.                                                        |
+| ;;C-c p S       | Save all project buffers.                                                                                  |
+| ;;C-c p m       | Run the commander (an interface to run commands with a single key).                                        |
+| ;;C-c p ESC     | Switch to the most recently selected Projectile buffer.                                                    |
+
+If you ever forget any of Projectile's keybindings just do a:
+C-hc p C-h
+You can change the default keymap prefix C-c p like this:
+
+(setq projectile-keymap-prefix (kbd "C-c C-p"))
+It is also possible to add additional commands to projectile-command-map referenced by the prefix key in projectile-mode-map. You can even add an alternative prefix for all commands. Here's an example that adds super-p as the extra prefix:
+
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+You can also bind the projectile-command-map to any other map you'd like (including the global keymap). Prelude does this for its prelude-mode-map.
+
+For some common commands you might want to take a little shortcut and leverage the fairly unused Super key (by default Command on Mac keyboards and Windows on Win keyboards). Here's something you can add to your Emacs config:
+
+(define-key projectile-mode-map [?\s-d] 'projectile-find-dir)
+(define-key projectile-mode-map [?\s-p] 'projectile-switch-project)
+(define-key projectile-mode-map [?\s-f] 'projectile-find-file)
+(define-key projectile-mode-map [?\s-g] 'projectile-grep)
+Note that the Super keybindings are not usable in Windows. Emacs Prelude already adds those extra keybindings.
+*** function:
+- jump to a file in project
+- jump to files at point in project
+- jump to a directory in project
+- jump to a file in a directory
+- jump to a project buffer
+- jump to a test in project
+- toggle between files with same names but different extensions (e.g. .h <-> .c/.cpp, Gemfile <-> Gemfile.lock)
+- toggle between code and its test (e.g. main.service.js <-> main.service.spec.js)
+- jump to recently visited files in the project
+- switch between projects you have worked on
+- kill all project buffers
+- replace in project
+- multi-occur in project buffers
+- grep in project
+- regenerate project etags or gtags (requires ggtags).
+- visit project in dired
+- run make in a project with a single key chord
+  
+*** Basic setup
+(projectile-global-mode)
+If you're going to use the default ido completion it's extremely highly recommended that you install the optional 
+flx-ido package, which provides a much more powerful alternative to ido's built-in flex matching.
+
+*** Indexing method
+
+Projectile has two modes of operation - one is portable and is implemented in Emacs Lisp(therefore it's native to Emacs and is known as the native indexing method) and the other relies on external commands like find, git, etc to obtain the list of files in a project.
+
+Since the native indexing mode is much slower, by default the second method is used on all operating systems except Windows. To force the use of native indexing in operating systems other than Windows:
+
+(setq projectile-indexing-method 'native)
+To force the use of external indexing in Windows:
+
+(setq projectile-indexing-method 'alien)
+This can speed up Projectile in Windows significantly. The disadvantage of this method is that it's not well supported on Windows systems. If there's problem, you can always use native indexing mode.
+
+*** Caching
+
+**** Project files
+
+Since indexing a big project is not exactly quick (especially in Emacs Lisp), Projectile supports caching of the project's files. The caching is enabled by default whenever native indexing is enabled.
+
+To enable caching unconditionally use this snippet of code:
+
+(setq projectile-enable-caching t)
+At this point you can try out a Projectile command such as C-c p f (M-x projectile-find-file RET).
+
+Running C-u C-c p f will invalidate the cache prior to prompting you for a file to jump to.
+
+Pressing C-c p z will add the currently visited file to the cache for current project. Generally files created outside Emacs will be added to the cache automatically the first time you open them.
+
+The project cache is persistent and will be preserved during Emacs restarts.
+
+You can purge an individual file from the cache with M-x projectile-purge-file-from-cache or an entire directory with M-x projectile-purge-dir-from-cache.
+
+**** File exists cache
+
+Projectile does many file existence checks since that is how it identifies a project root. Normally this is fine, however in some situations the file system speed is much slower than usual and can make emacs "freeze" for extended periods of time when opening files and browsing directories.
+
+The most common example would be interfacing with remote systems using TRAMP/ssh. By default all remote file existence checks are cached
+
+To disable remote file exists cache that use this snippet of code:
+
+(setq projectile-file-exists-remote-cache-expire nil)
+To change the remote file exists cache expire to 10 minutes use this snippet of code:
+
+(setq projectile-file-exists-remote-cache-expire (* 10 60))
+You can also enable the cache for local file systems, that is normally not needed but possible:
+
+(setq projectile-file-exists-local-cache-expire (* 5 60))
+
+*** Using Projectile everywhere
+
+If you want Projectile to be usable in every directory (even without the presence of project file):
+
+(setq projectile-require-project-root nil)
+This might not be a great idea if you start Projectile in your home folder for instance. :-)
+
+*** Switching projects
+
+When running projectile-switch-project (C-c p p) Projectile invokes the command specified in projectile-switch-project-action (by default it is projectile-find-file).
+
+Depending on your personal workflow and habits, you may prefer to alter the value of projectile-switch-project-action:
+
+projectile-find-file
+
+This is the default. With this setting, once you have selected your project via Projectile's completion system (see below), you will remain in the completion system to select a file to visit. projectile-find-file is capable of retrieving files in all sub-projects under the project root, such as Git submodules. Currently, only Git is supported. Support for other VCS will be added in the future.
+
+projectile-find-file-in-known-projects
+
+Similar to projectile-find-file but lists all files in all known projects. Since the total number of files could be huge, it is beneficial to enable caching for subsequent usages.
+
+projectile-find-file-dwim
+
+If point is on a filepath, Projectile first tries to search for that file in project:
+
+If it finds just a file, it switches to that file instantly. This works even if the filename is incomplete, but there's only a single file in the current project that matches the filename at point. For example, if there's only a single file named "projectile/projectile.el" but the current filename is "projectile/proj" (incomplete), projectile-find-file still switches to "projectile/projectile.el" immediately because this is the only filename that matches.
+
+If it finds a list of files, the list is displayed for selecting. A list of files is displayed when a filename appears more than one in the project or the filename at point is a prefix of more than two files in a project. For example, if `projectile-find-file' is executed on a filepath like "projectile/", it lists the content of that directory. If it is executed on a partial filename like "projectile/a", a list of files with character 'a' in that directory is presented.
+
+If it finds nothing, display a list of all files in project for selecting.
+
+projectile-dired
+
+(setq projectile-switch-project-action 'projectile-dired)
+With this setting, once you have selected your project, the top-level directory of the project is immediately opened for you in a dired buffer.
+
+projectile-find-dir
+
+(setq projectile-switch-project-action 'projectile-find-dir)
+With this setting, once you have selected your project, you will remain in Projectile's completion system to select a sub-directory of your project, and then that sub-directory is opened for you in a dired buffer. If you use this setting, then you will probably also want to set
+
+(setq projectile-find-dir-includes-top-level t)
+in order to allow for the occasions where you want to select the top-level directory.
+
+*** Completion Options
+
+**** Ido
+
+By default Projectile uses ido as its completion system. ido is extremely popular and it is built into Emacs.
+
+As already noted above if you're going to use the ido completion it's extremely highly recommended that you install the optional flx-ido package, which provides a much more powerful alternative to ido's built-in flex matching.
+
+**** Basic (Emacs's default)
+
+If you don't like ido and grizzl you can use regular completion:
+
+(setq projectile-completion-system 'default)
+You might want to combine default completion with icomplete-mode for optimum results.
+
+**** Custom Completion Function
+
+You can also set projectile-completion-system to a function:
+
+(setq projectile-completion-system 'my-custom-completion-fn)
+(setq projectile-completion-system
+      (lambda (prompt choices)
+        ;; ...
+        ))
+An example of a custom completion function is this one, which only show the file name (not including path) and if the file selected is not unique, another completion with names relative to project root appears.
+
+**** Regenerate tags
+
+To be able to regenerate a project's tags via projectile-tags-command, you should install and add to the PATH Exuberant Ctags instead of a plain ctags, which ships with Emacs distribution.
+
+*** Ignoring files
+
+If you'd like to instruct Projectile to ignore certain files in a project, when indexing it you can do so in the .projectile file by adding each path to ignore, where the paths all are relative to the root directory and start with a slash. Everything ignored should be preceded with a - sign. Alternatively, not having any prefix at all also means to ignore the directory or file pattern that follows. Here's an example for a typical Rails application:
+
+-/log
+-/tmp
+-/vendor
+-/public/uploads
+This would ignore the folders only at the root of the project. Projectile also supports relative pathname ignores:
+
+-tmp
+-*.rb
+-*.yml
+-models
+You can also ignore everything except certain subdirectories. This is useful when selecting the directories to keep is easier than selecting the directories to ignore, although you can do both. To select directories to keep, that means everything else will be ignored.
+
+Example:
+
++/src/foo
++/tests/foo
+Keep in mind that you can only include subdirectories, not file patterns.
+
+If both directories to keep and ignore are specified, the directories to keep first apply, restricting what files are considered. The paths and patterns to ignore are then applied to that set.
+
+*** Customizing project root files
+
+You can set the values of projectile-project-root-files, projectile-project-root-files-top-down-recurring, projectile-project-root-files-bottom-up and projectile-project-root-files-functions to customize how project roots are identified.
+
+To customize project root files settings:
+
+M-x customize-group RET projectile RET
+
+*** File-local project root definitions
+
+If you want to override the projectile project root for a specific file, you can set the file-local variable projectile-project-root. This can be useful if you have files within one project that are related to a different project (for instance, Org files in one git repo that correspond to other projects).
+
+*** Storing project settings
+
+From project to project some things may differ even in same language - different coding styles, separate auto-completion sources, etc. If you need to set some variables according to selected project, you can use standard Emacs feature called Per-Directory Local Variables. To use it you must create file named .dir-locals.el inside project directory. This file must contain something like this:
+
+((nil . ((secret-ftp-password . "secret")
+         (compile-command . "make target-x")
+         (eval . (progn
+                   (defun my-project-specific-function ()
+                     ;; ...
+                     ))))
+ (c-mode . (c-file-style . "BSD")))
+The top-level alist member referenced with the key nil applies to the entire project. A key with the name eval will evaluate its arguments. In the example above, this is used to create a function. It could also be used to e.g. add such a function to a key map.
+
+You can also quickly visit the the .dir-locals.el file with C-c p E (M-x projectile-edit-dir-locals RET).
+
+Here are a few examples of how to use this feature with Projectile.
+
+*** Configuring Projectile's Behavior
+
+Projectile offers many customizable variables (via defcustom) that allows us to customize its behavior. Because of how dir-locals.el works, it can be used to set these customizations on a per-project basis.
+
+You could enable caching for a project in this way:
+
+((nil . ((projectile-enable-caching . t))))
+If one of your projects had a file that you wanted Projectile to ignore, you would customize Projectile by:
+
+((nil . ((projectile-globally-ignored-files . '("MyBinaryFile")))))
+If you wanted to wrap the git command that Projectile uses to find list the files in you repository, you could do:
+
+((nil . ((projectile-git-command . "/path/to/other/git ls-files -zco --exclude-standard"))))
+If you want to use a different project name than how Projectile named your project, you could customize it with the following:
+
+((nil . ((projectile-project-name . "your-project-name-here"))))
+
+*** Configure a Project's Compilation, Test and Run commands
+
+There are a few variables that are intended to be customized via .dir-locals.el.
+
+for compilation - projectile-project-compilation-cmd
+for testing - projectile-project-test-cmd
+for running - projectile-project-run-cmd
+They're all set to nil by default, but by setting them you'll override the default commands per each supported project type. These variables can be strings to run external commands or Emacs Lisp functions:
+
+(setq projectile-test-cmd #'custom-test-function)
+
+*** Idle Timer
+
+Projectile can be configured to run the hook projectile-idle-timer-hook every time Emacs is in a project and has been idle for projectile-idle-timer-seconds seconds (default is 30 seconds). To enable this feature, run:
+
+M-x customize-group RET projectile RET
+and set projectile-enable-idle-timer to non-nil. By default, projectile-idle-timer-hook runs projectile-regenerate-tags. Add additional functions to the hook using add-hook:
+
+(add-hook 'projectile-idle-timer-hook 'my-projectile-idle-timer-function)
+
+*** Mode line indicator
+
+By default the minor mode indicator of Projectile appears in the form " Projectile[ProjectName]". This is configurable via the custom variable projectile-mode-line, which expects a sexp like '(:eval (format " Proj[%s]" (projectile-project-name))).
+
+The project name will not appear by default when editing remote files (via TRAMP), as recalculating the project name (this is done on every keystroke) is a fairly slow operation there.
+
+*** Extensions
+
+There are a number of packages that built on top of the basic functionality provided by Projectile:
+
+helm-projectile provides Helm integration
+persp-projectile provides perspective.el integration
+projectile-rails provides extra functionality for Ruby on Rails projects
+
+*** Caveats
+Some operations like search (grep) depend (presently) on external utilities such as find.
+
+http://iqbalansari.github.io/blog/2014/02/22/switching-repositories-with-magit/
+* DONE change font size
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+* DONE theme, stripe
+* DONE session
+* DONE server mode
+win7 shortcut menu regedit:
+HKEY_CLASSES_ROOT\*\shell\Edit with Emacs\command
+default value: "path\to\emacsclientw.exe" --no-wait --alternate-editor="path\to\runemacs.exe" "%1"
+* DONE open recent files
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+* DONE rotate buffer
+M-x rotate-windows
+* DONE covert code between dos and unit
+;convert a buffer from dos ^M end of lines to unix end of lines
+dos2unix
+;vice versa
+unix2dos
+* DONE rectangle block矩形块操作
+C-x r k cut 
+C-x r y paste  
+C-x r o insert rectangle block  
+C-x r c clear  
+C-x r t insert text
+* DONE helm
+** DONE key
+| Key Binding | Command                         | Description                                                                                       |
+| M-x         | helm-M-x                        | List commands                                                                                     |
+| C-c i       | helm-imenu                      | list function                                                                                     |
+| C-c h i     | helm-semantic-or-imenu          | Helm interface to semantic/imenu                                                                  |
+| M-y         | helm-show-kill-ring             | Shows the content of the kill ring                                                                |
+| C-x b       | helm-mini                       | Shows open buffers, recently opened files                                                         |
+| C-c h o     | helm-occur                      | Similar to occur                                                                                  |
+| C-x C-f/C-o | helm-find-files                 | The helm version for find-file, same as ffap                                                      |
+| C-z/C-j/TAB | persistent action               | expand the name when helm-find-files                                                              |
+| C-s         | helm-ff-run-grep                | Run grep from within helm-find-files                                                              |
+| C-'         | ace-jump-helm-line              |                                                                                                   |
+| M-i         | helm-swoop                      | When doing isearch, hand the word over to helm-swoop.(or:From helm-swoop to helm-multi-swoop-all) |
+| M-I         | helm-swoop-back-to-last-point   |                                                                                                   |
+| C-r         | helm-previous-line              | in swoop                                                                                          |
+| C-s         | helm-next-line                  | in swoop                                                                                          |
+| C-x <n>     |                                 | jumps to before the hightlighted line.                                                            |
+| C-c <n>     |                                 | jumps to after the highlighted line.                                                              |
+|             |                                 |                                                                                                   |
+|-------------+---------------------------------+---------------------------------------------------------------------------------------------------|
+|             |                                 |                                                                                                   |
+| C-c h m     | helm-man-woman                  | Jump to any man entry                                                                             |
+| C-c h /     | helm-find                       | Helm interface to find                                                                            |
+| C-c h l     | helm-locate                     | Helm interface to locate                                                                          |
+| C-c h a     | helm-apropos                    | Describes commands, functions, variables,                                                         |
+| C-c h h g   | helm-info-gnus                  |                                                                                                   |
+| C-c h h i   | helm-info-at-point              |                                                                                                   |
+| C-c h h r   | helm-info-emacs                 |                                                                                                   |
+| C-c h <tab> | helm-lisp-completion-at-point   | Provides a list of available functions                                                            |
+| C-c h b     | helm-resume                     | Resumes a previous helm session                                                                   |
+| C-h SPC     | helm-all-mark-rings             | Views content of local and global mark rings                                                      |
+| C-c h r     | helm-regex                      | Visualizes regex matches                                                                          |
+| C-c h x     | helm-register                   | Shows content of registers                                                                        |
+| C-c h t     | helm-top                        | Helm interface to top                                                                             |
+| C-c h s     | helm-surfraw                    | Command line interface to many web search engines                                                 |
+| C-c h g     | helm-google-suggest             | Interactively enter search terms and get results from Google in helm buffer                       |
+| C-c h c     | helm-color                      | Lists all available faces                                                                         |
+| C-c h M-:   | helm-eval-expression-with-eldoc | Get instant results for emacs lisp expressions in the helm buffer                                 |
+| C-c h C-,   | helm-calcul-expression          | Helm interface to calc                                                                            |
+| C-c C-l     | helm-eshell-history             | Interface to eshell history                                                                       |
+| C-c C-l     | helm-comint-input-ring          | Interface to shell history                                                                        |
+| C-c C-l     | helm-mini-buffer-history        | Interface to mini-buffer history                                                                  |
+grep in buffer:
+helm-buffers-list, but it's almost the same as helm-mini. The only difference is that helm-buffers-list uses ido-virtual-buffers for listing recently used files, 
+while helm-mini uses recentf.
+All the C buffers are selected using the pattern *C. In the demo, I also select Tcl buffers with *Tcl and then switched back to C buffers with *C.
+I only want to have buffers that contains only the string crash. To do that, I add a space, then add the pattern @crash. After the initial search pattern,
+ I hand over the current highlighting buffer to helm-moccur (moccur with Helm interface) using C-s. Candidates can be filtered gradually by adding more pattern, i.e.
+ I added memory to filtered down to buffers that contain the string "memory" among the buffers that are containing crash. 
+You can also mark multiple with C-SPC or mark all buffers with M-a to search all listing buffers in helm-mini.
+As you can see, as you filtered out, the number of candidates decreases, as displayed in the modeline.
+At the end, there were 12 buffers remained as the result of filtering, down from the total 253 buffers.
+** DONE persistent action
+;; For find-file etc.
+(define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
+;; For helm-find-files etc.
+(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+
+persistent-action means execute an action without quitting helm-session.
+If the source have no defined persistent-action defined, the first
+action is executed instead.
+
+The main persistent action is bound to C-z, however many sources have
+other persistent actions bound to differents keys.
+
+For `helm-find-files', on a regular file, first hit on C-z expand the
+file name, second hit open the file and display buffer in the other
+window and third hit kill the buffer (unless it was already open before
+starting helm session).
+While in `helm-find-files' session hit C-c ? for more infos
+** DONE ace-jump-helm-line
+(global-set-key (kbd "C-'") 'ace-jump-helm-line)
+** DONE helm-occur(moccur)
+(global-set-key (kbd "C-c h o") 'helm-occur)
+** DONE helm-browse-killring
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+** DONE helm-swoop
+*** key
+(require 'helm-swoop)
+(global-set-key (kbd "M-i") 'helm-swoop)
+(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+(global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+
+;; When doing isearch, hand the word over to helm-swoop
+(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+;; From helm-swoop to helm-multi-swoop-all
+(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+;; Move up and down like isearch
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+*** Feature
+Culling all lines in buffer with your input
+Highlight multiple matched pattern
+Jumping line to line according to list buffer's move
+Cache result until modifies the buffer
+Go back to the last line
+Multi separated line culling
+Culling lines are editable
+*** Usage
+Now helm-swoop has several ways:
+
+M-x helm-swoop when region active
+M-x helm-swoop when the cursor is at any symbol
+M-x helm-swoop when the cursor is not at any symbol
+M-3 M-x helm-swoop or C-u 5 M-x helm-swoop multi separated line culling
+M-x helm-multi-swoop multi-occur like feature
+M-x helm-multi-swoop-all apply all buffers
+C-u M-x helm-multi-swoop apply last selected buffers from the second time
+M-x helm-multi-swoop-org apply to all org-mode buffers
+M-x helm-multi-swoop-current-mode apply to all buffers with the same major-mode as the current buffer
+M-x helm-swoop-same-face-at-point list lines have the same face at the cursor is on
+During isearch M-i to hand the word over to helm-swoop
+During helm-swoop M-i to hand the word over to helm-multi-swoop-all
+While doing helm-swoop press C-c C-e to edit mode, apply changes to original buffer by C-x C-s
+It's able to use words within a region or a word at symbol as search query when it called. Also use a keybind you set just type like M-i instead of M-x helm-swoop.
+
+*** Edit mode
+While doing helm-swoop type C-c C-e to enter the edit mode. Before enter the edit mode, you can choose some lines marked by C-SPC or M-SPC to edit. Apply changes to original buffer type C-x C-s.
+
+*** Across multiple buffers
+
+M-x helm-multi-swoop
+
+Select any buffers by [C-SPC] or [M-SPC]
+Press [RET] to start helm-multi-swoop
+helm-multi-swoop
+
+M-x helm-multi-swoop-all
+Skip select phase and apply all buffers.
+
+C-u M-x helm-multi-swoop
+Skip select phase and apply last selected buffers, if you have done helm-multi-swoop before.
+
+M-x helm-multi-swoop-org
+Skip the select phase and apply to all org-mode buffers
+
+M-x helm-multi-swoop-current-mode
+Skip the select phase and apply to all buffers with the same major mode as the current buffer
+
+*** Multiline behavior
+M-4 M-x helm-swoop or C-u 4 M-x helm-swoop
+** DONE linum-relative
+(helm-linum-relative-mode 1)  enables linum-relative in helm. 
+Helm buffers then display nine numbered candidates before an after the current selection (highlighted line).
+C-x <n>  jumps to before, and  C-c <n>  jumps to after the highlighted line.
+** DONE helm-projectile
+*** key
+| Key Binding | Command                                     | Description                                                  |
+| C-c p h     | helm-projectile                             | Helm interface to projectile                                 |
+|             | helm-projectile-switch-to-buffer            |                                                              |
+|             | helm-projectile-find-file                   |                                                              |
+|             | helm-projectile-switch-project              |                                                              |
+| C-c p g     | helm-projectile-find-file-dwim              | Find file based on context at point                          |
+|             |                                             |                                                              |
+|-------------+---------------------------------------------+--------------------------------------------------------------|
+| C-c p p     | helm-projectile-switch-project              | Switches to another projectile project                       |
+| C-c p f     | helm-projectile-find-file                   | Lists all files in a project                                 |
+| C-c p F     | helm-projectile-find-file-in-known-projects | Find file in all known projects                              |
+| C-c p d     | helm-projectile-find-dir                    | Lists available directories in current project               |
+| C-c p e     | helm-projectile-recentf                     | Lists recently opened files in current project               |
+| C-c p a     | helm-projectile-find-other-file             | Switch between files with same name but different extensions |
+| C-c p i     | projectile-invalidate-cache                 | Invalidate cache                                             |
+| C-c p z     | projectile-cache-current-file               | Add the file of current selected buffer to cache             |
+| C-c p b     | helm-projectile-switch-to-buffer            | List all open buffers in current project                     |
+| C-c p s g   | helm-projectile-grep                        | Searches for symbol starting from project root               |
+| C-c p s a   | helm-projectile-ack                         | Same as above but using ack                                  |
+| C-c p s s   | helm-projectile-ag                          | Same as above but using ag                                   |
+** CANCELED helm-ls-git
+** BUG helm-gtags
+helm-gtags-pop-stack cann't work.
+* DONE ace-isearch
+(global-set-key (kbd "C-f") 'isearch-forward)
+* DONE isearch
+search symbol at current point: C-s C-w / C- r C-w
+* DONE ggtags
+** Preparation
+run gtags at root directory of source code.
+** key
+- "M-." ggtags-find-tag-dwim  to find the tag at point.
+- "M-]" ggtags-find-reference
+- "C-M-." ggtags-find-tag-regexp
+- "M-," find next same name symbol
+- "M-*" go to last postion(press M-. place)
+When a search finds multiple matches, a buffer named *ggtags-global* is popped up and 
+ggtags-navigation-mode is turned on to facilitate locating the right match. 
+ggtags-navigation-mode makes a few commands in the *ggtags-global* buffer globally accessible:
+- M-n Move to the next match.
+- M-p Move to the previous match.
+- M-} Move to next file.
+- M-{ Move to previous file.
+- M-= Move to the file where navigation session starts.
+- M-< Move to the first match.
+- M-> Move to the last match.
+- C-M-s or M-s s Use isearch to find the match.
+- RET Found the right match so exit navigation mode. Resumable by M-, (tags-loop-continue).
+- M-* Abort and go back to the location where the search was started.
+** find tag
+M-.
+** jump back
+M-*
+** find refrence
+M-]
+* DONE find file(ffap)
+|               | ffap           | find file      |
+|---------------+----------------+----------------|
+| in projectile | C-c p g        | C-c p h        |
+| no projectile | M-x ffap       | helm-find-file |
+|               | helm-find-file |                |
+* DONE visual-line-mode
+(setq global-visual-line-mode t)
+* DONE parentheses
+** DONE hightlighting parentheses
+(show-paren-mode t)
+** DONE match
+smartparens
+* DONE moccur
+same as helm-swoop, so i do not use it.
+* DONE plugin(package) manager, update plugin
+M-x package-refresh-contents RET
+M-x package-install RET xxx RET
+M-x package-list-packages RET
+* DONE autocomplete
+* DONE list
+** DONE file
+helm-projectile C-c p h
+** DONE function
+C-c i
+* DONE emacs-zoom-window
+(global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+* ediff
+Ediff 比较的项目有：( 可用 M-x 来启动 )
+| 比较项目                                       | 说明                                                                                                                       |
+| ediff-regions-linewise, ediff-regions-         | 询问两个缓冲区的名字，然后比较相应的区域。不过你只能在每一个缓冲区中选定一个区域，                                         |
+|                                                | 而不能比较一个文件缓冲区的两个区域。                                                                                       |
+| ediff-buffers                                  | 询问两个缓冲区的名字，然后比较                                                                                             |
+| ediff-files                                    | 询问两个文件的名字，加载之，然后比较                                                                                       |
+| ediff-windows-linewise, ediff-windows-wordwise | 让你选两个窗口，然后比较窗口的内容。 -linewise- 函数比 -wordwise- 函数要快，                                               |
+|                                                | 但另一方面， -wordwise- 工作方式更好，尤其是小区域作业时。 -linewise- 一行一行地比较， -wordwise- 一个单词一个单词地比较。 |
+一些Ediff 控制命令
+在 control buffer 中，按键。
+| 快捷键         | 命令                              | 说明                                                                 |
+| q              | ediff-quit                        | 关闭 ediff control buffer， 并退出 ediff                             |
+| Space 或 n     | ediff-next-difference             | 下一个差异处                                                         |
+| Del 或 p       | ediff-previous-difference         | 上一个差异处                                                         |
+| [n]j           | ediff-jump-to-difference          | 有数字前缀 [n] 修饰，第n个差异处,n可为负数                           |
+| v 或 C-v       | ediff-scroll-vertically           | 所有缓冲区同步向下滚动                                               |
+| V 或 M-v       | ediff-scroll-vertically           | 所有缓冲区同步向上滚动                                               |
+| <              | ediff-scroll-horizontally         | 所有缓冲区同步向左滚动                                               |
+| >              | ediff-scroll-horizontally         | 所有缓冲区同步向右滚动                                               |
+| (vertical bar) | ediff-toggle-split                | 切换缓冲区布局方式, 水平和竖直                                       |
+| m              | ediff-toggle-wide-display         | 在正常 frame 大小和最大化之间切换                                    |
+| a              | ediff-copy-A-to-B                 | 把Buffer-A的内容复制到Buffer-B                                       |
+| b              | ediff-copy-B-to-A                 | 把Buffer-B的内容复制到Buffer-A                                       |
+| r a 或 r b     | ediff-restore-diff                | 恢复 Buffer-A 或 Buffer-B 差异区域中的被修改的内容                   |
+| A 或 B         | ediff-toggle-read-only            | 切换 Buffer-A 或 Buffer-B 的只读状态                                 |
+| g a 或 g b     | ediff-jump-to-difference-at-point | 根据光标在缓冲区中的位置，设置一个离它们最近的差异区域为当前活动区域 |
+| C-l            | ediff-recenter                    | 恢复先前的所有缓冲区比较的高亮差异区。                               |
+| !              | ediff-update-diffs                | 重新比较并高亮差异区域                                               |
+| w a 或 w b     | ediff-save-buffer                 | 保存 Buffer-A 或 Buffer-B 到磁盘                                     |
+| E              | ediff-documentation               | 打开 Ediff 文档                                                      |
+| z              | ediff-suspend                     | 关闭 ediff control buffer, 只是挂起，可在以后恢复 ediff 状态         |
+比较三个文件
+此种需要大都发生在两个文件共有一个原始的文件。假设 C —> A, C —> B. A与B可能都对C进行了修改，你需要知晓，究竟A和B哪个对C做了什么修改。此时就需要比较三个文件了。
+假如A有一部分内容，而在B中不存在，可能是下列两种情况之一：
+- A 中增添了这部分内容
+- B 中删除了这部分内容
+你就应该比较A B C 三个文件来确定究竟是哪种情况。
+操作
+有两个函数
+| 函数           | 说明           |
+| ediff-files3   | 比较三个文件   |
+| ediff-buffers3 | 比较三个缓冲区 |
+具体操作
+比较两个文件或缓冲区的所有操作，几乎都适于三个比较。不过在进行缓冲区差异区从A到B拷贝的操作略有不同：
+| 快捷键 | 说明                        |
+| cb     | 将 Buffer-C 拷贝到 Buffer-A |
+| ab     | 将 Buffer-A 拷贝到 Buffer-B |
+以此类推，在 Buffer-A , Buffer-B, Buffer-C之间的操作可以很容易猜出。
+Ediff Session
+你可能同时要比较好多对文件，你可以同时拥有多个 Ediff Session 。按 z 挂起当前 Ediff session ,然后启动另一个 Ediff session 就可以了。 此时，在 control buffer 中按 R 或是按下 M-x eregistry, 将会打开一个 *Ediff Registry* 的缓冲区，此缓冲区包含当前运行的所有 Ediff Sessions.可以选择一个 Ediff session 来进入。
+合并文件
+比较文件目录
+与版本控制系统(VC) 一块儿工作
+* map key in init-key.el
+* cua, shift key for select.
+https://www.zhihu.com/question/27478438/answer/59796810
+(defun cua-or-multicursor ()
+  (interactive)
+  (if (use-region-p)
+      (mc/edit-lines)
+    (cua-rectangle-mark-mode)))
+;; http://emacs.stackexchange.com/a/9916/514
+(eval-after-load "multiple-cursors-core"
+  (lambda ()
+     (add-to-list 'mc--default-cmds-to-run-once 'cua-or-multicursor)))
+* CANCELED flymake
+* CANCELED tramp
+* language mode
+** c/c++
+** txt
+** org
+* w3m open link
+* speedbar
+* dictionary
+* CANCELED ido(disable), smex
+** find file
+** grep content
+** switch
 * TODO org
 ** TODO 1 配置
 把下面几行加到 .emacs 文件里。后三行是为命令定义全局快捷键――请改成适合你自己的。
@@ -884,6 +1573,9 @@ Org 支持用 M-TAB 进行缓冲区内部的补全。这种补全不需要利用
 - M-x org-indent-mode
 - (setq org-startup-indented t);;in .emacs config
 ** TODO agenda view
+*** custom agenda;
+*** change status;
+
 Switch to a daily view with d (org-agenda-day-view)
 Switch to a weekly view with w (org-agenda-week-view)
 View earlier or later days/weeks with your left and right arrow keys (org-agenda-earlier, org-agenda-later)
@@ -912,7 +1604,14 @@ R: reading 正在读的书
 B: book 计划读的书
 
 ** TODO remember or capture mode
+*** add log or capture info for remember; 
 ** TODO plannerMode
+*** add schedule;
+** TODO list or find something by label(attribute) or key(organize by projectile?)
+** save and display pictures
+** save web page and view offline.
+
+
 
 [[http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html][org-mode: 最好的文档编辑利器，没有之一]]
 [[http://holbrook.github.io/2012/04/14/emacs_orgmode_task.html][[Emacs学习笔记(10):Org-mode,最强的任务管理利器，没有之一]]
@@ -923,71 +1622,4 @@ B: book 计划读的书
 [[http://doc.norang.ca/org-mode.html][Org Mode - Organize Your Life In Plain Text!]]
 [[https://github.com/marboo/orgmode-cn/blob/master/org.org][Org-Manual 7.8]]
 [[[[https://dl.dropboxusercontent.com/u/3968124/sacha-emacs.html#unnumbered-46]]][Sacha Chua's Emacs configuration]]
-
-
-
-* switch window
-* switch buffer
-* jump or back to recent postion (in buffer or between buffers)
-* list
-** file
-** function
-* browse dir(dired)
-* autocomplete
-* find file
-* project(ile)
-http://iqbalansari.github.io/blog/2014/02/22/switching-repositories-with-magit/
-* map key in init-key.el
-* speedbar
-* ido(disable), smex, helm
-** find file
-** grep content
-** switch
-* highlight symbol(prev or next)
-* undo redo
-* ffap, easy find files
-* open recent files
-* theme, stripe
-* shift line up or down
-* change font size
-* cua, shift key for select.
-https://www.zhihu.com/question/27478438/answer/59796810
-(defun cua-or-multicursor ()
-  (interactive)
-  (if (use-region-p)
-      (mc/edit-lines)
-    (cua-rectangle-mark-mode)))
-;; http://emacs.stackexchange.com/a/9916/514
-(eval-after-load "multiple-cursors-core"
-  (lambda ()
-     (add-to-list 'mc--default-cmds-to-run-once 'cua-or-multicursor)))
-* ace jump
-* dictionary
-* flymake
-* session
-* line number
-* server mode
-* tramp
-* plugin(package) manager, update plugin
-M-x package-refresh-contents RET
-M-x package-install RET xxx RET
-* language mode
-** c/c++
-** txt
-* gtags
-** navigate
-** jump back
-** find refrence
-* outline in c/c++
-* covert code between dos and unit
-* ediff
-* outline minor mode
-** hide
-** expand
-** minimap?
-* function list
-* rotate buffer
-* undo/redo layout
-* w3m open link
-
 

@@ -8,3 +8,12 @@ server
 /.emacs.d - 副本/tramp
 /.viminfo
 archives
+.backups
+/.emacs.d/.emacs.desktop.lock
+/.emacs.d/.session
+/.emacs.d/.emacs.desktop
+/.emacs.d/history
+/.emacs.d/places
+/.emacs.d/projectile-bookmarks.eld
+/.emacs.d/projectile.cache
+/.emacs.d/elpa/org-plus-contrib-20160125/*.el~

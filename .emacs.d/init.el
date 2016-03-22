@@ -54,6 +54,7 @@
 (require 'init-ibuffer)
 (require 'init-company)
 (require 'init-org)
+(require 'init-cc-mode)
 
 (server-start) 
 

@@ -50,7 +50,7 @@
 ;;
 ;;To enable caching unconditionally use this snippet of code:
 ;;
-;;(setq projectile-enable-caching t)
+(setq projectile-enable-caching t)
 ;;At this point you can try out a Projectile command such as C-c p f (M-x projectile-find-file RET).
 ;;
 ;;Running C-u C-c p f will invalidate the cache prior to prompting you for a file to jump to.

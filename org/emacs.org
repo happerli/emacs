@@ -215,7 +215,7 @@ C+x d
 * DONE ace jump
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 * DONE shift line up or down
-M-up/down
+M-up/down : don't use in nw by putty
 * DONE line number
 * DONE undo redo
 (global-set-key (kbd "C-/") 'undo)
@@ -693,7 +693,7 @@ While doing helm-swoop press C-c C-e to edit mode, apply changes to original buf
 It's able to use words within a region or a word at symbol as search query when it called. Also use a keybind you set just type like M-i instead of M-x helm-swoop.
 
 *** Edit mode
-While doing helm-swoop type C-c C-e to enter the edit mode. Before enter the edit mode, you can choose some lines marked by C-SPC or M-SPC to edit. Apply changes to original buffer type C-x C-s.
+While doing helm-swoop type C-c C-e to enter the edit mode. Before enter the edit mode, you can choose some lines marked by C-SPC or M-SPC or M-a to edit. Apply changes to original buffer type C-x C-s.
 
 *** Across multiple buffers
 

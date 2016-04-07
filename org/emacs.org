@@ -747,7 +747,11 @@ C-x <n>  jumps to before, and  C-c <n>  jumps to after the highlighted line.
 ** BUG helm-gtags
 helm-gtags-pop-stack cann't work.
 * DONE ace-isearch
-(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "M-s") 'isearch-forward)
+(global-set-key (kbd "M-r") 'isearch-backward)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(define-key isearch-mode-map (kbd "C-'") 'ace-isearch-jump-during-isearch)
 * DONE isearch
 search symbol at current point: C-s C-w / C- r C-w
 * DONE ggtags

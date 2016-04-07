@@ -28,7 +28,10 @@
 (global-ace-isearch-mode +1)
 (custom-set-variables
  '(ace-isearch-input-length 4))
-(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "M-s") 'isearch-forward)
+(global-set-key (kbd "M-r") 'isearch-backward)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (define-key isearch-mode-map (kbd "C-'") 'ace-isearch-jump-during-isearch)
 
 (provide 'init-ace-jump-mode)

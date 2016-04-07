@@ -41,7 +41,6 @@
 (require 'init-git)
 (require 'init-window-buffer)
 (require 'init-highlight-symbol)
-(require 'init-ace-jump-mode)
 (require 'init-linum-mode)
 (require 'init-misc)
 (require 'init-projectile)
@@ -50,11 +49,12 @@
 (require 'init-sessions)
 (require 'init-recentf)
 (require 'init-gtags)
-(require 'init-helm)
 (require 'init-ibuffer)
 (require 'init-company)
 (require 'init-org)
 (require 'init-cc-mode)
+(require 'init-ace-jump-mode)
+(require 'init-helm)
 
 (server-start) 
 

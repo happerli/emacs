@@ -55,6 +55,7 @@
 (require 'init-cc-mode)
 (require 'init-ace-jump-mode)
 (require 'init-helm)
+(require 'init-ignored)
 
 (server-start) 
 

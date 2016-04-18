@@ -229,6 +229,7 @@ Navigate window layouts with "C-c <left>" and "C-c <right>"
 (global-set-key (kbd "C-x 4 u") 'winner-undo)
 (global-set-key (kbd "C-x 4 r") 'winner-redo)
 * DONE project(ile)
+** TODO grep words in project
 https://github.com/bbatsov/projectile
 *** key(Interactive Commands)
 Here's a list of the interactive Emacs Lisp functions, provided by Projectile:
@@ -863,6 +864,8 @@ Ediff Session
 合并文件
 比较文件目录
 与版本控制系统(VC) 一块儿工作
+* eval-last-sexp
+C-x C-e
 * map key in init-key.el
 * cua, shift key for select.
 https://www.zhihu.com/question/27478438/answer/59796810

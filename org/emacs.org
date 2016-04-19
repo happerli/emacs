@@ -229,7 +229,8 @@ Navigate window layouts with "C-c <left>" and "C-c <right>"
 (global-set-key (kbd "C-x 4 u") 'winner-undo)
 (global-set-key (kbd "C-x 4 r") 'winner-redo)
 * DONE project(ile)
-** TODO grep words in project
+** DONE grep words in project
+C-c p s g(modify init-ignored.el for ignored files or dir)
 https://github.com/bbatsov/projectile
 *** key(Interactive Commands)
 Here's a list of the interactive Emacs Lisp functions, provided by Projectile:

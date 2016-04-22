@@ -112,5 +112,6 @@
 ;;; --- 交互式Buffer
 (setq ibuffer-sorting-mode 'recency)    ;用最近打开模式显示
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(require 'vlf-setup)
 
 (provide 'init-ibuffer)

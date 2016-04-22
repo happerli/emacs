@@ -198,6 +198,11 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 ** mode
 * DONE switch window
 M+num
+* DONE skip to match parens(forward/backward-sexp)
+C-M-left/right
+* narrowing
+C-x n n (narrow-to-region) C-x n w (widen)
+* TODO vlf
 * [ ] switch buffer
 ** DONE ace jump buffering(C+x b)
 ** TODO helm-buffers-list(helm-mini)

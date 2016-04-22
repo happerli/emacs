@@ -120,5 +120,7 @@ ARCHIVE is the string name of the package archive.")
 (require-package 'ace-isearch)
 (require-package 'ibuffer-vc)
 (require-package 'zoom-window)
+(require-package 'vlf)
+(require 'vlf-setup)
 
 (provide 'init-elpa)

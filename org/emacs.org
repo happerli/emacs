@@ -202,7 +202,43 @@ M+num
 C-M-left/right
 * narrowing
 C-x n n (narrow-to-region) C-x n w (widen)
-* TODO vlf
+* DONE vlf
+** in vlf buffer:
+C-c C-v n vlf-next-batch
+C-c C-v p vlf-prev-batch
+C-c C-v   vlf-next-batch-from-point
+C-c C-v + vlf-change-batch-size
+C-c C-v - vlf-change-batch-size
+C-c C-v s vlf-re-search-forward
+C-c C-v r vlf-re-search-backward
+C-c C-v % vlf-query-replace
+C-c C-v o vlf-occur
+C-c C-v [ vlf-beginning-of-file
+C-c C-v ] vlf-end-of-file
+C-c C-v j vlf-jump-to-chunk
+C-c C-v l vlf-goto-line
+C-c C-v e vlf-ediff-buffers
+C-c C-v f vlf-toggle-follow
+C-c C-v g vlf-revert
+** in vlf occur buffer:
+RET		vlf-occur-visit
+o		vlf-occur-show(cursor still in occur buffer)
+ESC		Prefix Command
+SPC		scroll-up-command
+<		beginning-of-buffer
+>		end-of-buffer
+?		describe-mode
+g		revert-buffer
+h		describe-mode
+n		vlf-occur-next-match
+p		vlf-occur-prev-match
+q		quit-window
+DEL		scroll-down-command
+S-SPC	scroll-down-command
+<mouse-1>	vlf-occur-visit
+<remap>	Prefix Command
+M-RET	vlf-occur-visit-new-buffer
+<remap> <save-buffer>			vlf-occur-save
 * [ ] switch buffer
 ** DONE ace jump buffering(C+x b)
 ** TODO helm-buffers-list(helm-mini)

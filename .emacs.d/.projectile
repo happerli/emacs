@@ -1,0 +1,14 @@
+-.*
+-.css
+-*.log
+-*.db
+-#*#
+-*~*
+-*.exe
+-*.png
+-*.jpg
+-*.bmp
+-*.filters
+-*.user
+-*.gif
+-*.elc

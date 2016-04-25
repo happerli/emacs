@@ -49,6 +49,7 @@
 (require 'init-sessions)
 (require 'init-recentf)
 (require 'init-gtags)
+(require 'init-vlf)
 (require 'init-ibuffer)
 (require 'init-company)
 (require 'init-org)

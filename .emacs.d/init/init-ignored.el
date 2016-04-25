@@ -5,7 +5,7 @@
   :type 'list
   :group 'my-ignored)
 
-(defcustom my-ignored-files (list "GPATH" "GRTAGS" "GTAGS" "TAGS" ".*" ".css" "*.log" "*.db" "#*#" "*~*" "*.exe" "*.png" "*.jpg" "*.bmp" "*.filters" "*.user" "*.gif" "*.pdb" "*.dll" "*.pb.cc" "*.pb.h" "*.zip" "*.rar" "*vcxproj" "*vcxproj.filters" "*.vcxproj.user")
+(defcustom my-ignored-files (list "GPATH" "GRTAGS" "GTAGS" "TAGS" ".*" ".css" "*.log" "*.db" "#*#" "*~*" "*.exe" "*.png" "*.jpg" "*.bmp" "*.filters" "*.user" "*.gif" "*.pdb" "*.dll" "*.pb.cc" "*.pb.h" "*.zip" "*.rar" "*vcxproj" "*vcxproj.filters" "*.vcxproj.user" "*.elc")
   "my-ignored-files"
   :type 'list
   :group 'my-ignored)

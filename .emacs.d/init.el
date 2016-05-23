@@ -1,5 +1,6 @@
 ;; -*- coding: utf-8 -*-
 
+
 (setq emacs-load-start-time (current-time))
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
@@ -49,7 +50,6 @@
 (require 'init-sessions)
 (require 'init-recentf)
 (require 'init-gtags)
-(require 'init-vlf)
 (require 'init-ibuffer)
 (require 'init-company)
 (require 'init-org)
@@ -57,6 +57,7 @@
 (require 'init-ace-jump-mode)
 (require 'init-helm)
 (require 'init-ignored)
+(require 'init-vlf)
 
 (server-start) 
 

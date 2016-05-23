@@ -1,0 +1,12 @@
+#+FILETAGS: :work:office:project:
+#+TAGS: { client server web} 
+
+* QM
+** PC 
+*** TODO performance index
+** WEB
+*** gateway
+* Monitor
+* Databus
+* AIRS(Analysis of Interest Rate Spread)
+

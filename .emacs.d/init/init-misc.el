@@ -946,7 +946,7 @@ when toggle off input method, switch to evil-normal-state if current state is ev
 
 ;; lang, encoding
 ;;(set-language-environment "English")
-;;(set-default-coding-systems 'utf-8)
+(set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
@@ -1094,17 +1094,18 @@ that was stored with ska-point-to-register."
 (require 'goto-chg)
 (global-set-key (kbd "C-\\") 'goto-last-change) ;;设置跳转快捷键
 
-    
-;;(require 'color-moccur)                 ;人性化的搜索功能http://www.emacswiki.org/emacs/color-moccur.el
-;;(require 'moccur-edit)                  ;搜索编辑 依赖于color-moccur http://www.emacswiki.org/emacs/moccur-edit.el
-;;;;; ### Color moccur ###--- 增强的Buffer搜索
-;;(setq moccur-kill-moccur-buffer t)         ;退出buffer时自动关闭其buffer
-;;(setq moccur-edit-highlight-edited-text t) ;高亮编辑过的内容
-;;(defadvice moccur-edit-change-file         ;编辑过后自动保存buffer
-;;  (after save-after-moccur-edit-buffer activate)
-;;  "Automatically save buffer when edit in moccur."
-;;  (save-buffer))
-;;
+;;----------------------------------------------------------------------------------------
+(require 'color-moccur)                 ;人性化的搜索功能http://www.emacswiki.org/emacs/color-moccur.el
+(require 'moccur-edit)                  ;搜索编辑 依赖于color-moccur http://www.emacswiki.org/emacs/moccur-edit.el
+;;; ### Color moccur ###--- 增强的Buffer搜索
+(setq moccur-kill-moccur-buffer t)         ;退出buffer时自动关闭其buffer
+(setq moccur-edit-highlight-edited-text t) ;高亮编辑过的内容
+(defadvice moccur-edit-change-file         ;编辑过后自动保存buffer
+  (after save-after-moccur-edit-buffer activate)
+  "Automatically save buffer when edit in moccur."
+  (save-buffer))
+;;----------------------------------------------------------------------------------------
+
 (require 'ediff)                        ;文件比较功能 emacs帿http://www.emacswiki.org/emacs/EdiffMode
 ;;Interactively, on the fly:
 ;;Whitespace sensitivity – Toggle with `##’ (‘ediff-toggle-skip-similar’).

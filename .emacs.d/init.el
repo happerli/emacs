@@ -58,7 +58,10 @@
 (require 'init-helm)
 (require 'init-ignored)
 (require 'init-vlf)
+(require 'init-javascript)
+(require 'init-web-mode)
+(require 'init-css)
 
-(server-start) 
+(server-start)
 
 (provide 'init)

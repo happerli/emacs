@@ -1,12 +1,18 @@
 #+FILETAGS: :work:office:project:
-#+TAGS: { client server web} 
+#+TAGS: client server web pc mobile 
 
 * QM
 ** PC 
-*** TODO performance index
+*** TODO performance index                                         :server:
+*** perfromance code review
+*** TODO UAT                                                       :server:
+*** avatar limit size                                              :server:
 ** WEB
+*** architecture
 *** gateway
-* Monitor
+** Monitor
+* AOIRS(Analysis of Interest Rate Spread)
 * Databus
-* AIRS(Analysis of Interest Rate Spread)
+** publish interface adaptor
+** service rebuild
 

@@ -1,5 +1,0 @@
-#+FILETAGS: :work:office:qm:
-#+TAGS: { client server web} 
-
-* aaa                                                            :client:v26:
-* bbb                                                                   :vvv:

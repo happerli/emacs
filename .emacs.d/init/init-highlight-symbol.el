@@ -11,6 +11,9 @@
                'c-mode-hook
                'c++-mode-hook
                'java-mode-hook
+               'javascript-mode-hook
+               'web-mode-hook
+               'css-mode-hook
                'haskell-mode-hook
                'asm-mode-hook
                'emms-tag-editor-mode-hook

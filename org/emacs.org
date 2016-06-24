@@ -198,8 +198,6 @@ User can move between objects in list by using arrow keys, or keys n & p. Beside
 ** mode
 * DONE switch window
 M+num
-* DONE skip to match parens(forward/backward-sexp)
-C-M-left/right
 * narrowing
 C-x n n (narrow-to-region) C-x n w (widen)
 * DONE vlf
@@ -320,7 +318,7 @@ Here's a list of the interactive Emacs Lisp functions, provided by Projectile:
 | ;;C-c p ESC     | Switch to the most recently selected Projectile buffer.                                                    |
 
 If you ever forget any of Projectile's keybindings just do a:
-C-hc p C-h
+C-c p C-h
 You can change the default keymap prefix C-c p like this:
 
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
@@ -838,6 +836,11 @@ M-]
 (show-paren-mode t)
 ** DONE match
 smartparens
+** DONE skip to match parentheses(forward/backward-sexp)
+C-M-left/right
+* DONE format code
+Emacs 里对代码的格式化支持的非常好，可以选中一块代码 indent-region : Ctrl-Alt-\ (or TAB)对这块代码重新进行格式化.
+To convert existing code that uses spaces to using tabs, use M-x tabify or reindent the entire file (C-x h C-M-\). 
 * DONE moccur
 same as helm-swoop, so i do not use it.
 * DONE plugin(package) manager, update plugin
@@ -852,7 +855,20 @@ helm-projectile C-c p h
 C-c i
 * DONE emacs-zoom-window
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
-* ediff
+* DONE Mark(select) all
+mark-whole-buffer: C-x h
+* cua, shift key for select.
+https://www.zhihu.com/question/27478438/answer/59796810
+(defun cua-or-multicursor ()
+  (interactive)
+  (if (use-region-p)
+      (mc/edit-lines)
+    (cua-rectangle-mark-mode)))
+;; http://emacs.stackexchange.com/a/9916/514
+(eval-after-load "multiple-cursors-core"
+  (lambda ()
+     (add-to-list 'mc--default-cmds-to-run-once 'cua-or-multicursor)))
+* DONE ediff
 Ediff 比较的项目有：( 可用 M-x 来启动 )
 | 比较项目                                       | 说明                                                                                                                       |
 | ediff-regions-linewise, ediff-regions-         | 询问两个缓冲区的名字，然后比较相应的区域。不过你只能在每一个缓冲区中选定一个区域，                                         |
@@ -906,28 +922,17 @@ Ediff Session
 合并文件
 比较文件目录
 与版本控制系统(VC) 一块儿工作
-* eval-last-sexp
+* DONE eval-last-sexp
 C-x C-e
 * map key in init-key.el
-* cua, shift key for select.
-https://www.zhihu.com/question/27478438/answer/59796810
-(defun cua-or-multicursor ()
-  (interactive)
-  (if (use-region-p)
-      (mc/edit-lines)
-    (cua-rectangle-mark-mode)))
-;; http://emacs.stackexchange.com/a/9916/514
-(eval-after-load "multiple-cursors-core"
-  (lambda ()
-     (add-to-list 'mc--default-cmds-to-run-once 'cua-or-multicursor)))
 * CANCELED flymake
 * CANCELED tramp
 * language mode
 ** c/c++
 ** txt
 ** org
-* w3m open link
 * speedbar
+* w3m open link
 * dictionary
 * CANCELED ido(disable), smex
 ** find file

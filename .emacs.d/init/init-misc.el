@@ -1007,9 +1007,9 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
     (jump-to-register 8)
     (set-register 8 tmp)))
-    
-    
-;;======================            拷贝代码自动格式势         =====================
+
+
+;;======================            拷贝代码自动格式         =====================
 ;;Emacs 里对代码的格式化支持的非常好，不但可以在编辑的时候自动帮你格式化，还可以选中一块代码，
 ;;抿Ctrl-Alt-\ 对这块代码重新进行格式化.如果要粘贴一块代码的话，粘贴完了紧接着按Ctrl-Alt-\,
 ;;就可以把新加入的代码格式化好。可是，对于这种粘贴加上重新格式化的机械操作，
@@ -1039,7 +1039,7 @@ that was stored with ska-point-to-register."
            (let ((mark-even-if-inactive transient-mark-mode))
              (indent-region (region-beginning) (region-end) nil))))))
 
-;;----------------------            End 拷贝代码自动格式势       --------------------- 
+;;----------------------            End 拷贝代码自动格式       --------------------- 
 
 ;;MMM(多个主模式 multiple mode in one buffer)
 (autoload 'mmm-mode "mmm-mode" "Multiple Major Modes" t)

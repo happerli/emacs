@@ -1,14 +1,14 @@
 * 帮助
-| C-h w               | where-is             | 查看命令菜单位置或者绑定热键 |
-| C-h t               | help-with-tutorial   | 查看?Emacs??教程             |
-| C-h n               | view-emacs-news      | 浏览?Emacs??新闻             |
-| C-h m               | describe-mode        | 查看编辑模式                 |
-| C-h ?               | help-for-help        | 查看帮助列表                 |
-| C-h k?<??命令序列?> | describe-key         | 查看热键详细功能描述         |
-| C-h c?<??命令序列?> | describe-key-briefly | 查看热键简单功能描述         |
-| C-h b               | describe-bindings    | 查看绑定热键                 |
-| C-h C-c             |                      | 查看许可证信息               |
-| C-h i               |                      | 查看在线手册                 |
+| C-h w            | where-is             | 查看命令菜单位置或者绑定热键 |
+| C-h t            | help-with-tutorial   | 查看?Emacs??教程             |
+| C-h n            | view-emacs-news      | 浏览?Emacs??新闻             |
+| C-h m            | describe-mode        | 查看编辑模式                 |
+| C-h ?            | help-for-help        | 查看帮助列表                 |
+| C-h k <命令序列> | describe-key         | 查看热键详细功能描述         |
+| C-h c <命令序列> | describe-key-briefly | 查看热键简单功能描述         |
+| C-h b            | describe-bindings    | 查看绑定热键                 |
+| C-h C-c          |                      | 查看许可证信息               |
+| C-h i            |                      | 查看在线手册                 |
 					
 * 基本
 | M-g g               | Goto-line                | 跳到指定行                         |

@@ -155,24 +155,6 @@
 | C-x v i | vc-register          | 加入文件到版本控制中   |
 | C-x v r | vc-retrieve-snapshot | 取某一版本文件         |
 					
-** project（ile）
-| C-c p C-h     |                                  | projectile help                                                                                         |
-| C-c p f       |                                  | Display a list of all files in the project. With a prefix argument it will clear the cache first.       |
-| C-c p d       |                                  | Display a list of all directories in the project. With a prefix argument it will clear the cache first. |
-| C-c p s g     |                                  | Run grep on the files in the project.                                                                   |
-| M-- C-c p s g |                                  | Run grep on?projectile-grep-default-files?in the project.                                               |
-| C-c p v       |                                  | Run?vc-dir?on the root directory of the project.                                                        |
-| C-c p b       |                                  | Display a list of all project buffers currently open.                                                   |
-| C-c p a       |                                  | Switch between files with the same name but different extensions.                                       |
-| C-c p o       |                                  | Runs?multi-occur?on all project buffers currently open.                                                 |
-| C-c p r       |                                  | Runs interactive query-replace on all files in the projects.                                            |
-| C-c p e       |                                  | Shows a list of recently visited project files.                                                         |
-| C-c p h       | helm-projectile                  | Helm interface to projectile                                                                            |
-|               | helm-projectile-switch-to-buffer |                                                                                                         |
-|               | helm-projectile-find-file        |                                                                                                         |
-|               | helm-projectile-switch-project   |                                                                                                         |
-| C-c p g       | helm-projectile-find-file-dwim   | Find file based on context at point                                                                     |
-					
 * 查找
 ** 普通（isearch）
 | C-r | isearch-backward-regexp | 向前查找（进入查找模式）                     |
@@ -190,7 +172,6 @@
 | M-s     | isearch-forward                 | 向后查找一秒内只输入一个字母进入ace模式，否则进入isearch模式，超过3个字母进入swoop模式）   |
 | C-'     | ace-isearch-jump-during-isearch |                                                                                            |
 | C-c SPC | ace-jump-mode                   |                                                                                            |
-					
 * 替换
 | M-% | query-replace  | 查询替换                                         |
 |     | SPACE或y       | 用新字符串替换原来的，并进入下一个位置           |
@@ -262,6 +243,24 @@
 | C-c p g     | helm-projectile-find-file-dwim   | Find file based on context at point                                                               |
 | C-x <n>     |                                  | jumps to before the hightlighted line.                                                            |
 | C-c <n>     |                                  | jumps to after the highlighted line.                                                              |
+					
+* project（ile）
+| C-c p C-h     |                                  | projectile help                                                                                         |
+| C-c p f       |                                  | Display a list of all files in the project. With a prefix argument it will clear the cache first.       |
+| C-c p d       |                                  | Display a list of all directories in the project. With a prefix argument it will clear the cache first. |
+| C-c p s g     |                                  | Run grep on the files in the project.                                                                   |
+| M-- C-c p s g |                                  | Run grep on?projectile-grep-default-files?in the project.                                               |
+| C-c p v       |                                  | Run?vc-dir?on the root directory of the project.                                                        |
+| C-c p b       |                                  | Display a list of all project buffers currently open.                                                   |
+| C-c p a       |                                  | Switch between files with the same name but different extensions.                                       |
+| C-c p o       |                                  | Runs?multi-occur?on all project buffers currently open.                                                 |
+| C-c p r       |                                  | Runs interactive query-replace on all files in the projects.                                            |
+| C-c p e       |                                  | Shows a list of recently visited project files.                                                         |
+| C-c p h       | helm-projectile                  | Helm interface to projectile                                                                            |
+|               | helm-projectile-switch-to-buffer |                                                                                                         |
+|               | helm-projectile-find-file        |                                                                                                         |
+|               | helm-projectile-switch-project   |                                                                                                         |
+| C-c p g       | helm-projectile-find-file-dwim   | Find file based on context at point                                                                     |
 					
 * 高亮
 | f7   | highlight-symbol-at-point | 高亮当前symbol |

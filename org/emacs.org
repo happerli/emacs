@@ -939,6 +939,8 @@ C-x C-e
 ** grep content
 ** switch
 * TODO org
+** shortcut key
+*** export: C-c C-e then type shortcut key of section, then type you select format.
 ** TODO 1 配置
 把下面几行加到 .emacs 文件里。后三行是为命令定义全局快捷键――请改成适合你自己的。
 #+BEGIN_EXAMPLE

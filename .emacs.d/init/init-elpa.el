@@ -127,5 +127,6 @@ ARCHIVE is the string name of the package archive.")
 ;;(require-package 'flymake-jslint)
 ;;(require-package 'tidy)
 (require-package 'web-mode)
+(require-package 'markdown-mode)
 
 (provide 'init-elpa)

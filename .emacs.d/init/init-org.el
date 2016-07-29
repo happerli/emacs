@@ -6,6 +6,7 @@
 (setq org-startup-indented t)
 (setq org-log-done t)
 (global-visual-line-mode t);;It turns on word-wrapping
+(eval-after-load "org" '(require 'ox-md nil t));; for export markdown
 
 ;;Changing a task state is done with C-c C-t KEY,
 ;;where KEY is the appropriate fast todo state selection key as defined in org-todo-keywords.

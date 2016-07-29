@@ -53,6 +53,7 @@
 (require 'init-ibuffer)
 (require 'init-company)
 (require 'init-org)
+(require 'init-markdown)
 (require 'init-cc-mode)
 (require 'init-ace-jump-mode)
 (require 'init-helm)

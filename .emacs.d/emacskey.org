@@ -364,6 +364,7 @@
 | C-c i   | helm-imenu             | list function                                                                  |
 | C-c h i | helm-semantic-or-imenu | Helm interface to semantic/imenu                                               |
 ** org
+*** export: C-c C-e then type shortcut key of section, then type you select format.
 *** 大纲
 大纲模式可以隐藏缓冲区里的部分正文。Org 用绑定到 TAB 和 S-TAB 上的两个全命令来改变视图。
 

@@ -60,6 +60,9 @@
               ("CANCELLED" :foreground "forest green" :weight bold)
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold))))
+
+(set-face-attribute 'org-level-1 nil :height 1.2)
+(set-face-attribute 'org-level-2 nil :height 1.1)
 			  
 (defun bh/hide-other ()
   (interactive)

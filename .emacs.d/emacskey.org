@@ -261,6 +261,7 @@
 |               | helm-projectile-find-file        |                                                                                                         |
 |               | helm-projectile-switch-project   |                                                                                                         |
 | C-c p g       | helm-projectile-find-file-dwim   | Find file based on context at point                                                                     |
+| C-u C-c p f   |                                  | refresh cache file list                                                                                 |
 					
 * 高亮
 | f7   | highlight-symbol-at-point | 高亮当前symbol |

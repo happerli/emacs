@@ -11,40 +11,41 @@
 | C-h i            |                      | 查看在线手册                 |
 					
 * 基本
-| M-g g               | Goto-line                | 跳到指定行                         |
-| C-\                 | goto-last-change         | 跳到最后编辑处，跳转编辑历史       |
-| C-a                 | beginning-of-line        | 移动到行首                         |
-| C-e                 | end-of-line              | 移动到行尾                         |
-| C-b                 | backward-char            | 向前移动一个字符                   |
-| C-f                 | forward-char             | 向后移动一个字符                   |
-| C-x <               | scroll-left              | 向左移动一屏                       |
-| C-x >               | scroll-right             | 向右移动一屏                       |
-| M-a                 |                          | 移动到块首                         |
-| M-e                 |                          | 移动到块尾                         |
-| C-k                 | kill-line                | 删除一行                           |
-| C-o                 | open-line                | 增加一行                           |
-| C-p                 | previous-line            | 向上移动一行                       |
-| C-n                 | next-line                | 移动到下一行                       |
-| C-v                 | scroll-up                | 向下滚动一屏                       |
-| M-v                 | scroll-down              | 向上滚动一屏                       |
-| C-M-v               | scroll-other-window      | 其他窗口向上滚动一屏               |
-| C-M-V               | scroll-other-window-down | 其他窗口向下滚动一屏               |
-| C-l                 | recenter                 | 刷新显示，使光标所在行变为屏幕中央 |
-| C-_ or C-/ or C-x u | undo                     | 撤销                               |
-| C-?                 | redo                     | 恢复                               |
-| TAB                 | forward-button           | 缩进                               |
-| C-d                 | delete-char              | 删除一个字符                       |
-| C-g                 | keyboard-quit            | 终止当前操作                       |
-| C-x C-x             | exchange-point-and-mark  | 区域的起点改在光标所在处           |
-| C-x C-u             | upcase-region            | 选定区域字母改成大写               |
-| C-x C-l             | downcase-region          | 选定区域字母改成小写               |
-| M-/                 | dabbrev-expand           | 自动补齐（缓冲区中能找得到的串）   |
-| C-x n n             | narrow-to-region         | 暂时隐藏未选中区域                 |
-| C-x n w             | widen                    | 显示隐藏的区域                     |
-| M-up                | move-text-up             | 向上移动选中区域                   |
-| M-down              | move-text-down           | 向下移动选中区域                   |
-| C-M-left/right      | forward/backward-sexp    | skip to match parentheses          |
-					
+| M-g g               | Goto-line                | 跳到指定行                                      |
+| C-\                 | goto-last-change         | 跳到最后编辑处，跳转编辑历史                    |
+| C-a                 | beginning-of-line        | 移动到行首                                      |
+| C-e                 | end-of-line              | 移动到行尾                                      |
+| C-b                 | backward-char            | 向前移动一个字符                                |
+| C-f                 | forward-char             | 向后移动一个字符                                |
+| C-x <               | scroll-left              | 向左移动一屏                                    |
+| C-x >               | scroll-right             | 向右移动一屏                                    |
+| M-a                 |                          | 移动到块首                                      |
+| M-e                 |                          | 移动到块尾                                      |
+| C-k                 | kill-line                | 删除一行                                        |
+| C-o                 | open-line                | 增加一行                                        |
+| C-p                 | previous-line            | 向上移动一行                                    |
+| C-n                 | next-line                | 移动到下一行                                    |
+| C-v                 | scroll-up                | 向下滚动一屏                                    |
+| M-v                 | scroll-down              | 向上滚动一屏                                    |
+| C-M-v               | scroll-other-window      | 其他窗口向上滚动一屏                            |
+| C-M-V               | scroll-other-window-down | 其他窗口向下滚动一屏                            |
+| C-l                 | recenter                 | 刷新显示，使光标所在行变为屏幕中央              |
+| C-_ or C-/ or C-x u | undo                     | 撤销                                            |
+| C-?                 | redo                     | 恢复                                            |
+| TAB                 | forward-button           | 缩进                                            |
+| C-d                 | delete-char              | 删除一个字符                                    |
+| C-g                 | keyboard-quit            | 终止当前操作                                    |
+| C-x C-x             | exchange-point-and-mark  | 区域的起点改在光标所在处                        |
+| C-x C-u             | upcase-region            | 选定区域字母改成大写                            |
+| C-x C-l             | downcase-region          | 选定区域字母改成小写                            |
+| M-/                 | dabbrev-expand           | 自动补齐（缓冲区中能找得到的串）                |
+| C-x n n             | narrow-to-region         | 暂时隐藏未选中区域                              |
+| C-x n w             | widen                    | 显示隐藏的区域                                  |
+| M-up                | move-text-up             | 向上移动选中区域                                |
+| M-down              | move-text-down           | 向下移动选中区域                                |
+| C-M-left/right      | forward/backward-sexp    | skip to match parentheses                       |
+| C-m                 | set-mark-command         | select region(for can't use shift key in putty) |
+
 * 标记
 | C-@     | set-mark-command  | 设置标记       |
 | C-w     | kill-region       | 剪切选定区域   |

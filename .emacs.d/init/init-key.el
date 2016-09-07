@@ -24,7 +24,7 @@
 ;;Terminal->Features:
 ;;  Disable application keypad mode: false
 ;;select region(for can't use shift key in putty)
-(global-set-key (kbd "C-m") 'set-mark-command)
+(global-set-key (kbd "C-@") 'set-mark-command)
 
 
 (provide 'init-key)

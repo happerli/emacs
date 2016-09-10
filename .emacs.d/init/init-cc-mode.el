@@ -111,4 +111,8 @@
               (my-c-mode-hook))
             ))
 
+;; for modern-c++-font-lock-mode
+(add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
+(add-hook 'c-mode-hook #'modern-c++-font-lock-mode)
+
 (provide 'init-cc-mode)

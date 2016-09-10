@@ -128,5 +128,6 @@ ARCHIVE is the string name of the package archive.")
 ;;(require-package 'tidy)
 (require-package 'web-mode)
 (require-package 'markdown-mode)
+(require-package 'modern-cpp-font-lock)
 
 (provide 'init-elpa)

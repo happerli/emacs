@@ -61,7 +61,7 @@
 (require 'init-javascript)
 (require 'init-web-mode)
 (require 'init-css)
-(require 'init-ace-jump-mode)
+(require 'init-ace-jump-mode);; below init-helm for show ace-jump in helm buffers switch(C-x b)
 (require 'init-key)
 
 (server-start)

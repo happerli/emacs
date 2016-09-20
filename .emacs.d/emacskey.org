@@ -44,7 +44,7 @@
 | M-up                | move-text-up             | 向上移动选中区域                                |
 | M-down              | move-text-down           | 向下移动选中区域                                |
 | C-M-left/right      | forward/backward-sexp    | skip to match parentheses                       |
-| C-m                 | set-mark-command         | select region(for can't use shift key in putty) |
+| C-@                 | set-mark-command         | select region(for can't use shift key in putty) |
 
 * 标记
 | C-@     | set-mark-command  | 设置标记       |

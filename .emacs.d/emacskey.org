@@ -205,18 +205,19 @@
 | C-c C-c   |         | 转到出错位置                                                       |
 					
 * debug
-|                                              | gdb             | 进入调试         |
-| 启动gdb?调试器后，光标在源码文件缓冲区中时： |                 |                  |
-|                                              | C-x SPC         | 在当前行设置断点 |
-|                                              | C-c C-c         | 中断             |
-|                                              | C-c C-z         | 中止             |
-|                                              | C-x C-a C-s     | step             |
-|                                              | C-x C-a C-n???? | next             |
-|                                              | C-x C-a C-t     | tbreak           |
-|                                              | C-x C-a C-r     | continue         |
-|                                              | C-x C-a C-d     | 删除当前断点     |
-|                                              | C-x C-a C-l     | 到达最后一行     |
-|                                              | ctrl-d          | 退出调试         |
+|                                              | M-x gdb              | gdb -i=mi path/exe 进入调试 |
+| 启动gdb?调试器后，光标在源码文件缓冲区中时： |                      |                             |
+|                                              | M-x gdb-many-windows | 切换多窗口模式              |
+|                                              | C-x SPC              | 在当前行设置断点            |
+|                                              | C-c C-c              | 中断                        |
+|                                              | C-c C-z              | 中止                        |
+|                                              | C-x C-a C-s          | step                        |
+|                                              | C-x C-a C-n????      | next                        |
+|                                              | C-x C-a C-t          | tbreak                      |
+|                                              | C-x C-a C-r          | continue                    |
+|                                              | C-x C-a C-d          | 删除当前断点                |
+|                                              | C-x C-a C-l          | 到达最后一行                |
+|                                              | ctrl-d               | 退出调试                    |
 					
 * helm
 | M-x         | helm-M-x                         | List commands                                                                                     |

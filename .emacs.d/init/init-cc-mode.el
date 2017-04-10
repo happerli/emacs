@@ -101,8 +101,8 @@
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               ;; indent
-              (fix-c-indent-offset-according-to-syntax-context 'substatement 0)
-              (fix-c-indent-offset-according-to-syntax-context 'func-decl-cont 0)
+              ;; (fix-c-indent-offset-according-to-syntax-context 'substatement 0)
+              ;; (fix-c-indent-offset-according-to-syntax-context 'func-decl-cont 0)
 
               ;; gtags (GNU global) stuff
               (setq gtags-suggested-key-mapping t)

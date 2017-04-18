@@ -26,5 +26,10 @@
 ;;select region(for can't use shift key in putty)
 (global-set-key (kbd "C-@") 'set-mark-command)
 
+;; 逗号后插入空格
+(global-set-key (kbd ",")
+                '(lambda ()
+                    (interactive)
+                    (insert ", ")))
 
 (provide 'init-key)

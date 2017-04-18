@@ -38,7 +38,8 @@ transient-mark-mode t
 )
 
 (show-paren-mode t);; highlight paren
-	   
+(setq show-paren-style 'parenthesis)
+
 (global-auto-revert-mode)
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)

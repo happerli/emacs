@@ -1,0 +1,2 @@
+path = %gitdir%\cmd;%HOME%\soft\bin\grep-2.5.4-bin\bin;%HOME%\soft\bin\glo651wb\bin;%HOME%\soft\bin;
+gitdir = %HOME%\soft\bin\PortableGit

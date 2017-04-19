@@ -1,11 +1,5 @@
 ;;;C/C++ SECTION
 (require 'cc-mode)
-(defun emacs-format-function ()
-  "Format the whole buffer."
-  (c-set-style "google")
-  (indent-region (point-min) (point-max) nil)
-  (untabify (point-min) (point-max))
-  )
 
 ;; for modern-c++-font-lock-mode
 (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
@@ -58,5 +52,42 @@
       (cons '("\\.c$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist
       (cons '("\\.cpp$" . c++-mode) auto-mode-alist))
+
+;;-----------------------------------------------
+;; zap tabs
+;;
+(defun buffer-untabify ()
+  "Untabify an entire buffer"
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+;;
+;; re-indent buffer
+;;
+(defun buffer-indent()
+  "Reindent an entire buffer"
+  (interactive)
+  (indent-region (point-min) (point-max) nil))
+
+;;
+;; Untabify, re-indent, make EOL be '\n' not '\r\n'
+;;   and delete trailing whitespace
+;;
+(defun buffer-cleanup()
+  "Untabify and re-indent an entire buffer"
+  (interactive)
+  (buffer-untabify)
+  (buffer-indent)
+  (delete-trailing-whitespace))
+
+(defun cpp-astyle()
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+        (setq beg (region-beginning)
+              end (region-end))
+      (setq beg (point-min)
+            end (point-max)))
+    (shell-command-on-region beg end "astyle -A3 -U -p -k3" nil t)))
 
 (provide 'init-cc-mode)

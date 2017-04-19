@@ -88,6 +88,6 @@
               end (region-end))
       (setq beg (point-min)
             end (point-max)))
-    (shell-command-on-region beg end "astyle -A3 -U -p -k3" nil t)))
+    (shell-command-on-region beg end "astyle -s4 -A3 -H -U -p -k3" nil t)))
 
 (provide 'init-cc-mode)

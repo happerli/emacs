@@ -11,7 +11,8 @@
     (c-offsets-alist . ((substatement-open . 0)
                         (innamespace . 0)
                         (inline-open . 0)
-                        (block-open     . 0)))
+                        (case-label  . +)
+                        (block-open  . 0)))
     ;;(c-echo-syntactic-information-p t)
     ;;(setq indent-tabs-mode nil)
     )
@@ -52,6 +53,8 @@
       (cons '("\\.c$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist
       (cons '("\\.cpp$" . c++-mode) auto-mode-alist))
+(setq auto-mode-alist
+      (cons '("\\.cc$" . c++-mode) auto-mode-alist))
 
 ;;-----------------------------------------------
 ;; zap tabs
@@ -88,6 +91,6 @@
               end (region-end))
       (setq beg (point-min)
             end (point-max)))
-    (shell-command-on-region beg end "astyle -s4 -A3 -H -U -p -k3" nil t)))
+    (shell-command-on-region beg end "astyle -s4 -S -A14 -H -U -p -k3" nil t)))
 
 (provide 'init-cc-mode)

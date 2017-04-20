@@ -29,7 +29,7 @@
  global-mark-ring-max 1024
  ;;删除minibuffer的重复历史
 history-delete-duplicates t
-;;fill-column 设为 60. 这样的文字更好读
+;;fill-column 设为 80. 这样的文字更好读
 default-fill-column 80
 delete-selection-mode 1
  ;; no annoying beep on errors

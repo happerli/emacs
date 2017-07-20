@@ -21,6 +21,7 @@
 ;;  Initial state of cursor keys: Normal
 ;;  Initial state of numeric keypad: Normal
 ;;  Enable extra keyboard features: all disable
+;;      control-alt is different from altgr: enable
 ;;Terminal->Features:
 ;;  Disable application keypad mode: false
 ;;select region(for can't use shift key in putty)

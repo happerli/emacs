@@ -3,52 +3,53 @@ my emacs config.
 
 my key guick guide.
 * 帮助
-| C-h w               | where-is             | 查看命令菜单位置或者绑定热键 |
-| C-h t               | help-with-tutorial   | 查看?Emacs??教程             |
-| C-h n               | view-emacs-news      | 浏览?Emacs??新闻             |
-| C-h m               | describe-mode        | 查看编辑模式                 |
-| C-h ?               | help-for-help        | 查看帮助列表                 |
-| C-h k?<??命令序列?> | describe-key         | 查看热键详细功能描述         |
-| C-h c?<??命令序列?> | describe-key-briefly | 查看热键简单功能描述         |
-| C-h b               | describe-bindings    | 查看绑定热键                 |
-| C-h C-c             |                      | 查看许可证信息               |
-| C-h i               |                      | 查看在线手册                 |
+| C-h w            | where-is             | 查看命令菜单位置或者绑定热键 |
+| C-h t            | help-with-tutorial   | 查看?Emacs??教程             |
+| C-h n            | view-emacs-news      | 浏览?Emacs??新闻             |
+| C-h m            | describe-mode        | 查看编辑模式                 |
+| C-h ?            | help-for-help        | 查看帮助列表                 |
+| C-h k <命令序列> | describe-key         | 查看热键详细功能描述         |
+| C-h c <命令序列> | describe-key-briefly | 查看热键简单功能描述         |
+| C-h b            | describe-bindings    | 查看绑定热键                 |
+| C-h C-c          |                      | 查看许可证信息               |
+| C-h i            |                      | 查看在线手册                 |
 					
 * 基本
-| M-g g               | Goto-line                | 跳到指定行                         |
-| C-\                 | goto-last-change         | 跳到最后编辑处，跳转编辑历史       |
-| C-a                 | beginning-of-line        | 移动到行首                         |
-| C-e                 | end-of-line              | 移动到行尾                         |
-| C-b                 | backward-char            | 向前移动一个字符                   |
-| C-f                 | forward-char             | 向后移动一个字符                   |
-| C-x <               | scroll-left              | 向左移动一屏                       |
-| C-x >               | scroll-right             | 向右移动一屏                       |
-| M-a                 |                          | 移动到块首                         |
-| M-e                 |                          | 移动到块尾                         |
-| C-k                 | kill-line                | 删除一行                           |
-| C-o                 | open-line                | 增加一行                           |
-| C-p                 | previous-line            | 向上移动一行                       |
-| C-n                 | next-line                | 移动到下一行                       |
-| C-v                 | scroll-up                | 向下滚动一屏                       |
-| M-v                 | scroll-down              | 向上滚动一屏                       |
-| C-M-v               | scroll-other-window      | 其他窗口向上滚动一屏               |
-| C-M-V               | scroll-other-window-down | 其他窗口向下滚动一屏               |
-| C-l                 | recenter                 | 刷新显示，使光标所在行变为屏幕中央 |
-| C-_ or C-/ or C-x u | undo                     | 撤销                               |
-| C-?                 | redo                     | 恢复                               |
-| TAB                 | forward-button           | 缩进                               |
-| C-d                 | delete-char              | 删除一个字符                       |
-| C-g                 | keyboard-quit            | 终止当前操作                       |
-| C-x C-x             | exchange-point-and-mark  | 区域的起点改在光标所在处           |
-| C-x C-u             | upcase-region            | 选定区域字母改成大写               |
-| C-x C-l             | downcase-region          | 选定区域字母改成小写               |
-| M-/                 | dabbrev-expand           | 自动补齐（缓冲区中能找得到的串）   |
-| C-x n n             | narrow-to-region         | 暂时隐藏未选中区域                 |
-| C-x n w             | widen                    | 显示隐藏的区域                     |
-| M-up                | move-text-up             | 向上移动选中区域                   |
-| M-down              | move-text-down           | 向下移动选中区域                   |
-| C-M-left/right      | forward/backward-sexp    | skip to match parentheses          |
-					
+| M-g g               | Goto-line                | 跳到指定行                                      |
+| C-\                 | goto-last-change         | 跳到最后编辑处，跳转编辑历史                    |
+| C-a                 | beginning-of-line        | 移动到行首                                      |
+| C-e                 | end-of-line              | 移动到行尾                                      |
+| C-b                 | backward-char            | 向前移动一个字符                                |
+| C-f                 | forward-char             | 向后移动一个字符                                |
+| C-x <               | scroll-left              | 向左移动一屏                                    |
+| C-x >               | scroll-right             | 向右移动一屏                                    |
+| M-a                 |                          | 移动到块首                                      |
+| M-e                 |                          | 移动到块尾                                      |
+| C-k                 | kill-line                | 删除一行                                        |
+| C-o                 | open-line                | 增加一行                                        |
+| C-p                 | previous-line            | 向上移动一行                                    |
+| C-n                 | next-line                | 移动到下一行                                    |
+| C-v                 | scroll-up                | 向下滚动一屏                                    |
+| M-v                 | scroll-down              | 向上滚动一屏                                    |
+| C-M-v               | scroll-other-window      | 其他窗口向上滚动一屏                            |
+| C-M-V               | scroll-other-window-down | 其他窗口向下滚动一屏                            |
+| C-l                 | recenter                 | 刷新显示，使光标所在行变为屏幕中央              |
+| C-_ or C-/ or C-x u | undo                     | 撤销                                            |
+| C-?                 | redo                     | 恢复                                            |
+| TAB                 | forward-button           | 缩进                                            |
+| C-d                 | delete-char              | 删除一个字符                                    |
+| C-g                 | keyboard-quit            | 终止当前操作                                    |
+| C-x C-x             | exchange-point-and-mark  | 区域的起点改在光标所在处                        |
+| C-x C-u             | upcase-region            | 选定区域字母改成大写                            |
+| C-x C-l             | downcase-region          | 选定区域字母改成小写                            |
+| M-/                 | dabbrev-expand           | 自动补齐（缓冲区中能找得到的串）                |
+| C-x n n             | narrow-to-region         | 暂时隐藏未选中区域                              |
+| C-x n w             | widen                    | 显示隐藏的区域                                  |
+| M-up                | move-text-up             | 向上移动选中区域                                |
+| M-down              | move-text-down           | 向下移动选中区域                                |
+| C-M-left/right      | forward/backward-sexp    | skip to match parentheses                       |
+| C-@                 | set-mark-command         | select region(for can't use shift key in putty) |
+
 * 标记
 | C-@     | set-mark-command  | 设置标记       |
 | C-w     | kill-region       | 剪切选定区域   |
@@ -159,24 +160,6 @@ my key guick guide.
 | C-x v i | vc-register          | 加入文件到版本控制中   |
 | C-x v r | vc-retrieve-snapshot | 取某一版本文件         |
 					
-** project（ile）
-| C-c p C-h     |                                  | projectile help                                                                                         |
-| C-c p f       |                                  | Display a list of all files in the project. With a prefix argument it will clear the cache first.       |
-| C-c p d       |                                  | Display a list of all directories in the project. With a prefix argument it will clear the cache first. |
-| C-c p s g     |                                  | Run grep on the files in the project.                                                                   |
-| M-- C-c p s g |                                  | Run grep on?projectile-grep-default-files?in the project.                                               |
-| C-c p v       |                                  | Run?vc-dir?on the root directory of the project.                                                        |
-| C-c p b       |                                  | Display a list of all project buffers currently open.                                                   |
-| C-c p a       |                                  | Switch between files with the same name but different extensions.                                       |
-| C-c p o       |                                  | Runs?multi-occur?on all project buffers currently open.                                                 |
-| C-c p r       |                                  | Runs interactive query-replace on all files in the projects.                                            |
-| C-c p e       |                                  | Shows a list of recently visited project files.                                                         |
-| C-c p h       | helm-projectile                  | Helm interface to projectile                                                                            |
-|               | helm-projectile-switch-to-buffer |                                                                                                         |
-|               | helm-projectile-find-file        |                                                                                                         |
-|               | helm-projectile-switch-project   |                                                                                                         |
-| C-c p g       | helm-projectile-find-file-dwim   | Find file based on context at point                                                                     |
-					
 * 查找
 ** 普通（isearch）
 | C-r | isearch-backward-regexp | 向前查找（进入查找模式）                     |
@@ -194,7 +177,6 @@ my key guick guide.
 | M-s     | isearch-forward                 | 向后查找一秒内只输入一个字母进入ace模式，否则进入isearch模式，超过3个字母进入swoop模式）   |
 | C-'     | ace-isearch-jump-during-isearch |                                                                                            |
 | C-c SPC | ace-jump-mode                   |                                                                                            |
-					
 * 替换
 | M-% | query-replace  | 查询替换                                         |
 |     | SPACE或y       | 用新字符串替换原来的，并进入下一个位置           |
@@ -227,18 +209,19 @@ my key guick guide.
 | C-c C-c   |         | 转到出错位置                                                       |
 					
 * debug
-|                                              | gdb             | 进入调试         |
-| 启动gdb?调试器后，光标在源码文件缓冲区中时： |                 |                  |
-|                                              | C-x SPC         | 在当前行设置断点 |
-|                                              | C-c C-c         | 中断             |
-|                                              | C-c C-z         | 中止             |
-|                                              | C-x C-a C-s     | step             |
-|                                              | C-x C-a C-n???? | next             |
-|                                              | C-x C-a C-t     | tbreak           |
-|                                              | C-x C-a C-r     | continue         |
-|                                              | C-x C-a C-d     | 删除当前断点     |
-|                                              | C-x C-a C-l     | 到达最后一行     |
-|                                              | ctrl-d          | 退出调试         |
+|                                              | M-x gdb              | gdb -i=mi path/exe 进入调试 |
+| 启动gdb?调试器后，光标在源码文件缓冲区中时： |                      |                             |
+|                                              | M-x gdb-many-windows | 切换多窗口模式              |
+|                                              | C-x SPC              | 在当前行设置断点            |
+|                                              | C-c C-c              | 中断                        |
+|                                              | C-c C-z              | 中止                        |
+|                                              | C-x C-a C-s          | step                        |
+|                                              | C-x C-a C-n????      | next                        |
+|                                              | C-x C-a C-t          | tbreak                      |
+|                                              | C-x C-a C-r          | continue                    |
+|                                              | C-x C-a C-d          | 删除当前断点                |
+|                                              | C-x C-a C-l          | 到达最后一行                |
+|                                              | ctrl-d               | 退出调试                    |
 					
 * helm
 | M-x         | helm-M-x                         | List commands                                                                                     |
@@ -266,6 +249,25 @@ my key guick guide.
 | C-c p g     | helm-projectile-find-file-dwim   | Find file based on context at point                                                               |
 | C-x <n>     |                                  | jumps to before the hightlighted line.                                                            |
 | C-c <n>     |                                  | jumps to after the highlighted line.                                                              |
+					
+* project（ile）
+| C-c p C-h     |                                  | projectile help                                                                                         |
+| C-c p f       |                                  | Display a list of all files in the project. With a prefix argument it will clear the cache first.       |
+| C-c p d       |                                  | Display a list of all directories in the project. With a prefix argument it will clear the cache first. |
+| C-c p s g     |                                  | Run grep on the files in the project.                                                                   |
+| M-- C-c p s g |                                  | Run grep on?projectile-grep-default-files?in the project.                                               |
+| C-c p v       |                                  | Run?vc-dir?on the root directory of the project.                                                        |
+| C-c p b       |                                  | Display a list of all project buffers currently open.                                                   |
+| C-c p a       |                                  | Switch between files with the same name but different extensions.                                       |
+| C-c p o       |                                  | Runs?multi-occur?on all project buffers currently open.                                                 |
+| C-c p r       |                                  | Runs interactive query-replace on all files in the projects.                                            |
+| C-c p e       |                                  | Shows a list of recently visited project files.                                                         |
+| C-c p h       | helm-projectile                  | Helm interface to projectile                                                                            |
+|               | helm-projectile-switch-to-buffer |                                                                                                         |
+|               | helm-projectile-find-file        |                                                                                                         |
+|               | helm-projectile-switch-project   |                                                                                                         |
+| C-c p g       | helm-projectile-find-file-dwim   | Find file based on context at point                                                                     |
+| C-u C-c p f   |                                  | refresh cache file list                                                                                 |
 					
 * 高亮
 | f7   | highlight-symbol-at-point | 高亮当前symbol |
@@ -369,6 +371,7 @@ my key guick guide.
 | C-c i   | helm-imenu             | list function                                                                  |
 | C-c h i | helm-semantic-or-imenu | Helm interface to semantic/imenu                                               |
 ** org
+*** export: C-c C-e then type shortcut key of section, then type you select format.
 *** 大纲
 大纲模式可以隐藏缓冲区里的部分正文。Org 用绑定到 TAB 和 S-TAB 上的两个全命令来改变视图。
 
@@ -576,4 +579,3 @@ Org模式支持三个优先级别：’A‘、’B‘和’C‘。’A‘是最�
 	
 ** javascript
 ** css			
-

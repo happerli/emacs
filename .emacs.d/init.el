@@ -55,6 +55,8 @@
 (require 'init-org)
 (require 'init-markdown)
 (require 'init-cc-mode)
+(require 'init-protobuf)
+(require 'init-srspeedbar)
 (require 'init-ace-jump-mode);; before init-helm for disable ace-jump in helm buffers switch(C-x b)
 (require 'init-helm)
 (require 'init-ignored)

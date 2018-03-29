@@ -64,6 +64,7 @@
 (require 'init-javascript)
 (require 'init-web-mode)
 (require 'init-css)
+(require 'init-cmake)
 (require 'init-key)
 
 (server-start)

@@ -25,7 +25,6 @@
   (require 'google-c-style)
   (add-hook 'c-mode-common-hook 'google-set-c-style)
   (add-hook 'c-mode-common-hook 'google-make-newline-indent)
-  (setq c-default-style "google")
   (c-set-style "MyCppStyle")
 
   (setq indent-tabs-mode nil)

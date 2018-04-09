@@ -1,6 +1,6 @@
 ;; -*- coding: utf-8 -*-
 
-
+(setq ad-redefinition-action 'accept);;Suppressing ad-handle-definition Warnings"xxx got redefined"
 (setq emacs-load-start-time (current-time))
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))

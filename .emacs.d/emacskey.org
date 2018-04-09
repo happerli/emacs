@@ -177,6 +177,10 @@
 在一组文件或者一个目录中查找
 M-x grep 命令会在一组文件或者一个目录中查找所有text出现的地方。默认情况下，grep会在当前文件所属的目录下查找，
 grep -nH -e "ngx_http_ssl" *.c 会在当前目录的所有.c文件中查找ngx_http_ssl出现的地方，将光标定位到某一行再按回车会跳转到该行
+for recursive: grep -nHR -e "ngx_http_ssl" /path/to/root/of/search
+在显示结果的buffer中按n/p浏览相关内容.
+** rgrep
+同上, 但是可以递归查找文件.
 * 替换
 | M-% | query-replace  | 查询替换                                         |
 |     | SPACE或y       | 用新字符串替换原来的，并进入下一个位置           |

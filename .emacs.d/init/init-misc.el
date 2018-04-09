@@ -952,8 +952,8 @@ when toggle off input method, switch to evil-normal-state if current state is ev
 (set-keyboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
-(set-clipboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
+;;为解决"中文window中粘贴乱码"问题而注释(set-clipboard-coding-system 'utf-8)
+;;为解决"中文window中粘贴乱码"问题而注释(set-selection-coding-system 'utf-8)
 
 (setq scroll-margin 3 scroll-conservatively 10000);;防止页面滚动时跳动，
 ;;scroll-margin 3 可以在靠近屏幕边界行时就开始滚动，可以很好的看到上下文

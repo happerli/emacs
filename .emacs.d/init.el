@@ -5,7 +5,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/init"))
-
+(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 ;;----------------------------------------------------------------------------
 ;; Which functionality to enable (use t or nil for true and false)
 ;;----------------------------------------------------------------------------

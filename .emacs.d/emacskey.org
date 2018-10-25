@@ -46,6 +46,8 @@
 | C-M-left/right      | forward/backward-sexp    | skip to match parentheses                       |
 | C-@                 | set-mark-command         | select region(for can't use shift key in putty) |
 | C-M-u               | backward-up-list         | 跳到上层括号                                    |
+| M-g n/C-x `         | next-error               | 跳到下一个错误或查找结果                        |
+| M-g p               | prev-error               | 跳到上一个错误或查找结果                        |
 
 * 标记
 | C-@     | set-mark-command  | 设置标记       |

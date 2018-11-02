@@ -1,6 +1,6 @@
 (require 'projectile)
 
-(defcustom my-ignored-directories (list ".git" ".svn" ".hg" "GeneratedFiles" "buildpdb" "lib" "sln" "log" "bin" "build" "build32" "build64" "build-x64" "build-x86" "build-64" "build-32" "build-vc11" "build-vc11-32" "build-vc11-64" "build-vc11-x86" "build-vc11-x64" ".backups" "debug" "release" "google")
+(defcustom my-ignored-directories (list ".git" ".svn" ".hg" "GeneratedFiles" "buildpdb" "lib" "sln" "build" "build32" "build64" "build-x64" "build-x86" "build-64" "build-32" "build-vc11" "build-vc11-32" "build-vc11-64" "build-vc11-x86" "build-vc11-x64" ".backups" "debug" "release" "google")
   "my-ignored-directories"
   :type 'list
   :group 'my-ignored)

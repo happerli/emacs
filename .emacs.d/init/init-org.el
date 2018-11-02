@@ -61,8 +61,10 @@
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold))))
 
-(set-face-attribute 'org-level-1 nil :height 1.2)
-(set-face-attribute 'org-level-2 nil :height 1.1)
+(set-face-attribute 'org-level-1 nil :height 1.1)
+(set-face-attribute 'org-level-2 nil :height 1.0)
+(set-face-attribute 'org-level-3 nil :height 0.9)
+(set-face-attribute 'org-level-4 nil :height 0.8)
 			  
 (defun bh/hide-other ()
   (interactive)

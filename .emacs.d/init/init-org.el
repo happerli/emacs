@@ -61,11 +61,15 @@
               ("MEETING" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold))))
 
-(set-face-attribute 'org-level-1 nil :height 1.1)
-(set-face-attribute 'org-level-2 nil :height 1.0)
-(set-face-attribute 'org-level-3 nil :height 0.9)
-(set-face-attribute 'org-level-4 nil :height 0.8)
-			  
+(set-face-attribute 'org-level-1 nil :height 1.3)
+(set-face-attribute 'org-level-2 nil :height 1.2)
+(set-face-attribute 'org-level-3 nil :height 1.1)
+(set-face-attribute 'org-level-4 nil :height 1)
+(set-face-attribute 'org-level-5 nil :height 1)
+(set-face-attribute 'org-level-6 nil :height 1)
+(set-face-attribute 'org-level-7 nil :height 1)
+(set-face-attribute 'org-level-8 nil :height 1)
+
 (defun bh/hide-other ()
   (interactive)
   (save-excursion
@@ -87,6 +91,6 @@
 (defun bh/switch-to-scratch ()
   (interactive)
   (switch-to-buffer "*scratch*"))
-  
+
 (provide 'init-org)
 

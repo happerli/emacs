@@ -5,7 +5,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/init"))
-(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
+;;(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 ;;----------------------------------------------------------------------------
 ;; Which functionality to enable (use t or nil for true and false)
 ;;----------------------------------------------------------------------------
@@ -52,6 +52,13 @@
 (require 'init-gtags)
 (require 'init-ibuffer)
 (require 'init-company)
+;;;;WIn7下使用Emacs-25会遇到卡顿，解决方法为使用 Microsoft YaHei Mono 字体。
+;;(custom-set-faces
+;;'(default ((t (:family "Microsoft YaHei Mono" :foundry "outline" :slant normal :weight normal :height 98 :width normal)))))
+;;;;如使用Microsoft YaHei Mono，同时解决org-mode table中英文对齐问题。则可使用如下设置
+;;;; Chinese Font
+;;(dolist (charset '(kana han symbol cjk-misc bopomofo))
+;;(set-fontset-font (frame-parameter nil 'font) charset (font-spec :family "Microsoft YaHei" :size 20)))
 (require 'init-org)
 (require 'init-markdown)
 (require 'init-cc-mode)

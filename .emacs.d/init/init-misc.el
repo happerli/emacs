@@ -947,6 +947,8 @@ when toggle off input method, switch to evil-normal-state if current state is ev
 
 ;; lang, encoding
 ;;(set-language-environment "English")
+;;WIn7下使用Emacs-25会遇到卡顿,下面这句可以解决,而不用设定字体
+(set-language-environment "utf-8")
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
